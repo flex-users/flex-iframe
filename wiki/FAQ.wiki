@@ -14,7 +14,7 @@ Here you will find information about how to implement the Flex IFrame successful
 
 *Basic*
 
-The IFrame is a 'hole' in your Flex application. It is a hole into html-land. You cannot display any Flex/Flash content over the hole (this is the best way to imagine it). So, no pull-down menus over the hole, no pop-ups like alert or dialog boxes. It can't be done so remember this when designing any application that uses the IFrame. As a tip you can put your html view on a different tab from the rest of you application which has buttons to trigger important stuff.
+The IFrame is a 'hole' in your Flex application. It is a hole into html-land. You cannot display any Flex/Flash content over the hole (this is the best way to imagine it). So, no pull-down menus over the hole, no pop-ups like alert or dialog boxes. It can't be done so remember this when designing any application that uses the IFrame. As a tip you can put your html view on a different tab from the rest of your application which has buttons to trigger important stuff.
 
 
 *WMode=Opaque*
