@@ -21,7 +21,9 @@ The IFrame is a 'hole' in your Flex application. It is a hole into html-land. Yo
 
 The IFrame component will do all the gnarly stuff for you except the change to the Flash embedding code for switching the “wmode” to “opaque”. Go to the FlexBuilder demos and examine the ‘index.template.html’ code, do a string search for ‘wmode’. See these changes? Add them to your project.
 
-For a full explanation of what this is and why go here.
+For a full explanation of what this is and why go here
+
+    http://www.communitymx.com/content/article.cfm?cid=e5141
 
 Use of the IFrame is essentially punching a hole straight through your Flex application to the browser. The javascript helper functions are there to orientate the html iframe/div combination so that it always matches the ‘hole’ you have made. Think about this for a minute or two and you will realise what the limitations are and why.
 
