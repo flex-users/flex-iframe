@@ -12,6 +12,11 @@ Here you will find information about how to implement the Flex IFrame successful
 
 *Gotchas
 
+*Basic*
+
+The IFrame is a 'hole' in your Flex application. It is a hole into html-land. You cannot display any Flex/Flash content over the hole (this is the best way to imagine it). So, no pull-down menus over the hole, no pop-ups like alert or dialog boxes. It can't be done so remember this when designing any application that uses the IFrame. As a tip you can put your html view on a different tab from the rest of you application which has buttons to trigger important stuff.
+
+
 *WMode=Opaque*
 
 The IFrame component will do all the gnarly stuff for you except the change to the Flash embedding code for switching the “wmode” to “opaque”. Go to the FlexBuilder demos and examine the ‘index.template.html’ code, do a string search for ‘wmode’. See these changes? Add them to your project.
