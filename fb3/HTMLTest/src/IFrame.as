@@ -10,6 +10,60 @@
 //                             I modified it a little bit so that you can also set 
 //                             a content property instead of source to display a div 
 //                             container instead of iFrame.
+// 1.3       22/09/08  RAB    .Frame will now move with the Flex component
+//                             (for example, dragging a popup TitleWindow parent)
+//                             It does this by seeding a second event listener up
+//                             the displayList for MoveEvent.MOVE
+
+//                            .Fixed issue where frame might not display if it
+//                             was visible at component creation and not a child 
+//                             of a navigator control like TabNavigator,
+//                             ViewStack or Accordion
+
+//                            .IFrame now registers an onLoad callback for its
+//                             iframe element and will dispatch a 'frameLoad' flash
+//                             event when the browser reports iframe content load
+
+//                            .Added callIFrameFunction that allows calling of
+//                             JavaScript functions defined on the IFrame content's
+//                             document object, if everything is in the same domain
+//                             (if the iframe hasn't fully loaded yet, the call will
+//                             be queued and executed once it has loaded)
+
+//                            .Added option for IFrame component to try and detect
+//                             new global objects such as alerts, tooltips and 
+//                             pop up windows that are added on top of it and hide the
+//                             browser iframe temporarily. This option must be
+//                             explicitly enabled with the overlayDetection property
+//                             as it's a total hack with no guarantees of working
+
+//                            .Added 'debug' property to component that can be
+//                             used to switch trace statements on and off and
+//                             changed all traces to go through a logger
+
+//                            .Added property "loadIndicatorClass". If this is
+//                             defined, iframe will create an instance of this
+//                             class and use it to display a centered indicator
+//                             over the iframe container while its contents are
+//                             being loaded by the browser
+
+//                            .IFrame will now ensure that it's using a unique
+//                             id within the application by tracking all IFrame
+//                             component ids in use with a static var and
+//                             appending a unique number to the end if needed.
+//                             This allows use of IFrame within a reusable MXML 
+//                             component that gets instantiated more than once
+
+// 1.3.1     13/10/08  RAB    .Fixed issue where parent document body could be
+//                             accidentally set to invisible when using content
+//                             div mode
+
+// 1.3.2     20/10/08  RAB    .Added checks for cross-domain security violations.
+//                             Fixes a problem with hiding and showing iframes with
+//                             content from a different domain, and will now log
+//                             a warning in debug mode when attempting to call 
+//                             a function inside an iframe in a different domain
+
 //
 // -----------------------------------------------------------------------
 // This component is based on the work of:
@@ -48,26 +102,48 @@
 
 package
 {
-    import flash.geom.Point;
-    import flash.events.Event;
-    import flash.utils.Dictionary;
+    import flash.display.DisplayObject;
     import flash.display.DisplayObjectContainer;
-    
-	import mx.core.Container;
-    import mx.events.IndexChangedEvent;
-
-
+    import flash.events.Event;
     import flash.external.ExternalInterface;
+    import flash.geom.Point;
+    import flash.utils.Dictionary;
+    
+    import mx.core.Application;
+    import mx.core.Container;
+    import mx.core.UIComponent;
+    import mx.events.FlexEvent;
+    import mx.events.IndexChangedEvent;
+    import mx.events.MoveEvent;
+    import mx.logging.ILogger;
+    import mx.logging.Log;
+    import mx.logging.targets.TraceTarget;
+    import mx.managers.BrowserManager;
+    import mx.utils.URLUtil;
+	
+	[Event(name="frameLoad", type="flash.events.Event")] 
 
 	public class IFrame extends Container
 	{
+        public var debug:Boolean = false;
+        public var overlayDetection:Boolean = false;
+        
+        private var logTarget:TraceTarget;
+        
         private var __source: String;
         private var __content: String;
         private var frameId:String;
         private var iframeId:String;
+        
+        private var validForDisplay:Boolean = true;
 
         private var containerDict:Object = null;
         private var settingDict:Object = null;
+
+        private var frameLoaded:Boolean = false;
+        private var functionQueue:Array = [];
+        
+        private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.IFrame");
 
         /**
         * Here we define javascript functions which will be inserted into the DOM
@@ -114,8 +190,20 @@ package
         	"{ " +
 	            "if (document.hideIFrame==null)" +
 	            "{" +
-	                "hideIFrame = function (frameID)" +
+	                "hideIFrame = function (frameID, iframeID)" +
                     "{" +
+                        "var iframeRef = document.getElementById(iframeID);" +
+                        "var iframeDoc;" +
+						"if (iframeRef.contentWindow) {" +
+							"iframeDoc = iframeRef.contentWindow.document;" +
+   						"} else if (iframeRef.contentDocument) {" +
+							"iframeDoc = iframeRef.contentDocument;" +
+						"} else if (iframeRef.document) {" +
+							"iframeDoc = iframeRef.document;" +
+						"}" +
+						"if (iframeDoc) {" +
+							"iframeDoc.body.style.visibility='hidden';" +
+						"}" +
                         "document.getElementById(frameID).style.visibility='hidden';" +
                     "}" +
                 "}" +
@@ -126,13 +214,50 @@ package
         	"{ " +
 	            "if (document.showIFrame==null)" +
 	            "{" +
-	                "showIFrame = function (frameID)" +
+	                "showIFrame = function (frameID, iframeID)" +
+                    "{" +
+                        "var iframeRef = document.getElementById(iframeID);" +
+                        "document.getElementById(frameID).style.visibility='visible';" +
+                        
+                        "var iframeDoc;" +
+						"if (iframeRef.contentWindow) {" +
+							"iframeDoc = iframeRef.contentWindow.document;" +
+   						"} else if (iframeRef.contentDocument) {" +
+							"iframeDoc = iframeRef.contentDocument;" +
+						"} else if (iframeRef.document) {" +
+							"iframeDoc = iframeRef.document;" +
+						"}" +
+						"if (iframeDoc) {" +
+							"iframeDoc.body.style.visibility='visible';" +
+						"}" +
+                    "}" +
+                "}" +
+            "}";
+            
+        private static var FUNCTION_HIDEDIV:String = 
+            "document.insertScript = function ()" +
+        	"{ " +
+	            "if (document.hideDiv==null)" +
+	            "{" +
+	                "hideDiv = function (frameID, iframeID)" +
+                    "{" +
+                        "document.getElementById(frameID).style.visibility='hidden';" +
+                    "}" +
+                "}" +
+            "}";
+
+        private static var FUNCTION_SHOWDIV:String = 
+            "document.insertScript = function ()" +
+        	"{ " +
+	            "if (document.showDiv==null)" +
+	            "{" +
+	                "showDiv = function (frameID, iframeID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='visible';" +
                     "}" +
                 "}" +
             "}";
-		
+            
         private static var FUNCTION_LOADIFRAME:String = 
             "document.insertScript = function ()" +
         	"{ " +
@@ -140,11 +265,12 @@ package
 	            "{" +
 	                "loadIFrame = function (frameID, iframeID, url)" +
                     "{" +
-                        "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' frameborder='0'></iframe>\";" + 
+                        "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
+                        	+ Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
                     "}" +
                 "}" +
             "}";
-        
+            
        	private static var FUNCTION_LOADDIV_CONTENT:String = 
             "document.insertScript = function ()" +
         	"{ " +
@@ -156,6 +282,40 @@ package
                     "}" +
                 "}" +
             "}";
+            
+        private static var FUNCTION_CALLIFRAMEFUNCTION:String = 
+            "document.insertScript = function ()" +
+        	"{ " +
+	            "if (document.callIFrameFunction==null)" +
+	            "{" +
+	                "callIFrameFunction = function (iframeID, functionName, args)" +
+                    "{" +
+                    	"var iframeRef=document.getElementById(iframeID);" +
+                    	"var iframeDoc;" +
+                    	"if (iframeRef.contentDocument) {" +
+							"iframeDoc = iframeRef.contentDocument;" +
+						"} else if (iframeRef.contentWindow) {" +
+							"iframeDoc = iframeRef.contentWindow.document;" +
+						"} else if (iframeRef.document) {" +
+							"iframeDoc = iframeRef.document;" +
+						"}" +
+						"if (iframeDoc.wrappedJSObject != undefined) {" +
+							"iframeDoc = iframeDoc.wrappedJSObject;" +
+						"}" +
+						"return iframeDoc[functionName](args);" +
+                    "}" +
+                "}" +
+            "}";
+        
+        /**
+        * Track IDs in use throughout the app for iframe
+        * instances in order to detect and prevent collisions
+        * 
+        */
+	    public static var idList:Object = new Object();
+	    
+	    private var appHost:String;
+	   	private var iframeContentHost:String;
         
         /**
         * Constructor
@@ -164,6 +324,8 @@ package
 	    public function IFrame()
 	    {
 	        super();
+	        this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
+	        this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
 	    }
 		
         /**
@@ -178,23 +340,59 @@ package
             {
                 throw new Error("ExternalInterface is not available in this container. Internet Explorer ActiveX, Firefox, Mozilla 1.7.5 and greater, or other browsers that support NPRuntime are required.");
             }
+            
+            if (debug)
+            {
+            	logTarget = new TraceTarget();
+            	logTarget.addLogger(logger);
+            }
+            
+            // Get the host info to check for cross-domain issues
+	        BrowserManager.getInstance().initForHistoryManager();
+	        var url:String = BrowserManager.getInstance().url;
+	        appHost = URLUtil.getProtocol(url) + "://" 
+	        	+ URLUtil.getServerNameWithPort(url);
 
             // Generate unique id's for frame div name
-            frameId = id;
+            var idSuffix:int = 0;
+            while (idList[id + idSuffix])
+            {
+            	idSuffix++;
+            }
+            frameId = id + idSuffix;
             iframeId = "iframe_"+frameId;
+            idList[frameId] = true;
+            
+            // Register a uniquely-named load event callback for this frame (for load notification)
+            ExternalInterface.addCallback(frameId + "_load", this.handleFrameLoad);
             
             // Add functions to DOM if they aren't already there
             ExternalInterface.call(FUNCTION_CREATEIFRAME);
             ExternalInterface.call(FUNCTION_MOVEIFRAME);
             ExternalInterface.call(FUNCTION_HIDEIFRAME);
             ExternalInterface.call(FUNCTION_SHOWIFRAME);
+            ExternalInterface.call(FUNCTION_SHOWDIV);
+            ExternalInterface.call(FUNCTION_HIDEDIV);
             ExternalInterface.call(FUNCTION_LOADIFRAME);
             ExternalInterface.call(FUNCTION_LOADDIV_CONTENT);
+            ExternalInterface.call(FUNCTION_CALLIFRAMEFUNCTION);
 
             // Insert frame into DOM using our precreated function 'createIFrame'
             ExternalInterface.call("createIFrame", frameId);
-            
+           	
             buildContainerList();
+
+			if (loadIndicatorClass)
+			{
+				logger.debug("loadIndicatorClass is {0}", loadIndicatorClass);
+				_loadIndicator = UIComponent(new loadIndicatorClass());
+				addChild(_loadIndicator);
+			}
+			else
+			{
+				logger.debug("loadIndicatorClass is null");
+			}
+				
         }
 
         /**
@@ -221,14 +419,14 @@ package
                     {
                     	
                         var childIndex:Number = current.getChildIndex(previous);                
-                        trace("index:" + childIndex);
+                       logger.debug("index: {0}", childIndex);
                         // Store child index against container
                         containerDict[current] = childIndex;
                         settingDict[current] = childIndex;
                         
                         // Tag on a change listener             
                         current.addEventListener(IndexChangedEvent.CHANGE, handleChange);
-                        
+                        current.addEventListener(MoveEvent.MOVE, handleMove);
                     }
                     
                 }        
@@ -236,7 +434,42 @@ package
                 previous = current;
                 current = current.parent;
             }
-            
+            // make sure frame runs visible setter using initial visible state
+            visible = visible;
+        }
+        
+       /**
+        * Triggered by removal of this object from the stage
+        * 
+        * @param event Event trigger
+        *
+        */
+        private function handleRemove(event:Event):void
+        {
+            // Remove systemManager hooks for overlay detection 
+            if (overlayDetection)
+            {
+            	systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
+				systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
+            }
+        	visible = false;
+        }
+        
+       /**
+        * Triggered by addition of this object to the stage
+        * 
+        * @param event Event trigger
+        *
+        */
+        private function handleAdd(event:Event):void
+        {
+        	// Hook the systemManager to provide overlaying object detection
+            if (overlayDetection)
+            {
+            	systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
+				systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
+            }
+        	visible = true;
         }
 
         /**
@@ -259,6 +492,18 @@ package
                 visible = checkDisplay(target, newIndex);
                 
             }
+        }
+        
+       /**
+        * Triggered by one of our listeners seeded all the way up the display
+        * list to catch a 'move' event which might reposition this object.
+        * 
+        * @param event Event trigger
+        *
+        */
+        private function handleMove(event:Event):void
+        {
+            moveIFrame();
         }
         
         /**
@@ -288,12 +533,13 @@ package
                 {
                     var index:Number = lookupIndex(item as Container);
                     var setting:Number = lookupSetting(item as Container);
-                    trace(item);
+                    logger.debug(item.toString());
                     valid = valid&&(index==setting);
                 }
-                
             }
             
+            // Remember this state so we can re-check later without a new IndexChangedEvent
+            validForDisplay = valid;
             return valid;
         }
 		
@@ -316,7 +562,7 @@ package
             {
                 // Error not found, we have to catch this or a silent exception
                 // will be thrown.
-                trace(e);
+                logger.debug(e.toString());
             }
             
             return index;
@@ -341,7 +587,7 @@ package
             {
                 // Error not found, we have to catch this or a silent exception
                 // will be thrown.
-                trace(e);
+                logger.debug(e.toString());
             }
             
             return index;
@@ -358,6 +604,7 @@ package
             var globalPt:Point = this.localToGlobal(localPt);
 
             ExternalInterface.call("moveIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
+            logger.debug("move iframe id {0}", frameId);
         }
 
         /**
@@ -370,19 +617,38 @@ package
 			
             if (source)
             {
+	            frameLoaded = false;
 	            ExternalInterface.call("loadIFrame", frameId, iframeId, source);
-				trace("load Iframe");
+				logger.debug("load Iframe id {0}", frameId);
 				// Trigger re-layout of iframe contents.	            
 	            invalidateDisplayList();
             } 
             else if (content) 
             {
             	ExternalInterface.call("loadDivContent", frameId, iframeId, content);
-				trace("load Content");
+				logger.debug("load Content id {0}", frameId);
 				// Trigger re-layout of iframe contents.	            
 	            invalidateDisplayList();
             }
-		}        
+		}
+		
+		protected function handleFrameLoad():void
+		{			
+			logger.debug("browser reports frame loaded with id {0}", frameId);
+			frameLoaded = true;
+			var queuedCall:Object;
+			var result:Object;
+			// Execute any queued function calls now that the frame is loaded
+			while (functionQueue.length > 0)
+			{
+				queuedCall = functionQueue.pop();
+				logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
+				this.callIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
+			}
+			dispatchEvent(new Event("frameLoad"));
+			
+			invalidateDisplayList();
+		}
 		
         /**
         * Triggered when display contents change. Adjusts frame layout.
@@ -394,6 +660,22 @@ package
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			
+			if (_loadIndicator)
+			{
+				if (frameLoaded)
+				{
+					_loadIndicator.visible = false;
+				}
+				else
+				{
+					_loadIndicator.visible = true;
+					var w:int = _loadIndicator.measuredWidth;
+					var h:int = _loadIndicator.measuredHeight;
+					_loadIndicator.setActualSize(w, h);
+					_loadIndicator.move(this.width / 2 - w, this.height / 2 - h);
+				}
+			}
 			
             moveIFrame();
 		}
@@ -409,8 +691,13 @@ package
             if (source)
             {
                 __source = source;
-
-				invalidateProperties();                
+                // mark unloaded now so calls in this frame will be queued 
+				frameLoaded = false; 
+				invalidateProperties();
+				
+				// Get the host info to check for cross-domain issues
+				iframeContentHost = URLUtil.getProtocol(source) + "://"
+					 + URLUtil.getServerNameWithPort(source);     
             }
         }
 
@@ -452,22 +739,215 @@ package
         * @param visible Boolean flag
         * 
         */
-        override public function set visible(visible: Boolean): void
+        override public function set visible(value: Boolean): void
         {
-            super.visible=visible;
+            super.visible = value;
 
+			// if we have an iframe in the same domain as the app, call the
+			// specialized functions to update visibility inside the iframe
             if (visible)
             {
-                ExternalInterface.call("showIFrame", frameId);
-                trace("show iframe");
+                if (source && iframeContentHost == appHost)
+                	ExternalInterface.call("showIFrame",frameId,iframeId);
+                else
+                	ExternalInterface.call("showDiv",frameId,iframeId);
+                logger.debug("show iframe id {0}", frameId);
             }
             else 
             {
-                ExternalInterface.call("hideIFrame", frameId);
+            	if (source && iframeContentHost == appHost)
+                	ExternalInterface.call("hideIFrame",frameId,iframeId);
+                else
+                	ExternalInterface.call("hideDiv",frameId,iframeId);
+                logger.debug("hide iframe id {0}", frameId);
+            }
+        }
+        
+        /**
+        * Calls a function of the specified name defined on the IFrame document
+        * (like document.functionName = function () {...} ), passing it an array of arguments.
+        * May not work if the iframe contents are in a different domain due to security.
+        * 
+        * If the frame contents are loaded when this method is called, it will return any
+        * results from the function immediately to the caller (as well as to the callback
+        * function, if defined). Otherwise, the call will be queued, this method will return
+        * null, and results will be passed to the callback function after the frame loads
+        * and the queued function call executes.
+        * 
+        * @param functionName String Name of function to call
+        * @param args Array List of arguments to pass as an array
+        * @param callback Function to call (if any) with results of IFrame function execution
+        * 
+        */
+        public function callIFrameFunction(functionName:String, args:Array = null, callback:Function = null):String
+        {
+            if (!source)
+            {
+            	throw new Error("No iframe to call functions on");
+            }
+            if (iframeContentHost != appHost)
+            {
+            	var msg:String = "Warning: attempt to call function " + functionName + 
+            		" on iframe " + frameId + " may fail due to cross-domain security.";
+            	logger.debug(msg);
             }
             
+            if (frameLoaded)
+            {
+            	// Call the function immediately
+            	var result:Object = ExternalInterface.call("callIFrameFunction", iframeId, functionName, args);
+            	if (callback != null)
+            	{
+            		callback(result);
+            	}
+            	return String(result);
+            }
+            else
+            {
+            	// Queue the function for call once the iframe has loaded
+            	var queuedCall:Object = {functionName: functionName, args: args, callback:callback};
+            	functionQueue.push(queuedCall);
+            	return null;
+            }
         }
-                
+        
+        // --------------------------------------------------------------------
+        //  Loading indicator
+        // --------------------------------------------------------------------
+        /**
+        * A UIComponent class to display centered over the iframe container while
+        * the browser is loading its content. Should implement measuredHeight
+        * and measuredWidth in order to be properly sized
+        */
+        public var loadIndicatorClass:Class;
+        
+        protected var _loadIndicator:UIComponent;
+        
+        
+        // --------------------------------------------------------------------
+        //  Overlaying object detection
+        // --------------------------------------------------------------------
+        
+        private var overlappingDict:Dictionary = new Dictionary(true);
+		private var overlapCount:int = 0;
+		
+		protected function systemManager_addedHandler(event:Event):void
+		{
+			// A display object was added somewhere
+			var displayObj:DisplayObject = event.target as DisplayObject;
+			if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
+			{
+				// If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
+				// check to see if it overlaps me after it's been drawn
+				this.callLater(checkOverlay, [displayObj]);
+			}
+		}
+		
+		protected function systemManager_removedHandler(event:Event):void
+		{
+			// A display object was removed somewhere
+			var displayObj:DisplayObject = event.target as DisplayObject;
+			if (displayObj.parent == systemManager && overlappingDict[displayObj])
+			{
+				logger.debug("iframe {0} heard REMOVE for {1}", frameId, displayObj.toString());
+				// If the object is a direct child of systemManager and was an overlapping object, remove it
+				delete overlappingDict[displayObj];
+				if (--overlapCount == 0)
+				{
+					visible = validForDisplay;
+				}
+				
+				if (displayObj is UIComponent)
+				{
+					// Remove listeners for hide and show events on overlappiung UIComponents
+					UIComponent(displayObj).removeEventListener(FlexEvent.HIDE, overlay_hideShowHandler);
+					UIComponent(displayObj).removeEventListener(FlexEvent.SHOW, overlay_hideShowHandler);
+				}
+			}
+		}
+		
+		protected function overlay_hideShowHandler(event:FlexEvent):void
+		{
+			var displayObj:DisplayObject = event.target as DisplayObject;
+			if (event.type == FlexEvent.SHOW && !overlappingDict[displayObj])
+			{
+				logger.debug("iframe {0} heard SHOW for {1}", frameId, displayObj.toString());
+				overlappingDict[displayObj] = displayObj;
+				overlapCount++;
+				visible = false;
+			}
+			else if (event.type == FlexEvent.HIDE && overlappingDict[displayObj])
+			{
+				logger.debug("iframe {0} heard HIDE for {1}", frameId, displayObj.toString());
+				delete overlappingDict[displayObj];
+				if (--overlapCount == 0)
+				{
+					visible = validForDisplay;
+				}
+			}
+		}
+		
+		/**
+        * Check to see if the given DisplayObject overlaps this object.
+        * If so, add it to a dictionary of overlapping objects and update
+        * this object's visibility.
+        * 
+        */
+		protected function checkOverlay(displayObj:DisplayObject):void
+		{			
+			if (this.hitTestStageObject(displayObj))
+			{
+				logger.debug("iframe {0} detected overlap of {1}", frameId, displayObj.toString());
+				overlappingDict[displayObj] = displayObj;
+				overlapCount++;
+				visible = false;
+				
+				if (displayObj is UIComponent)
+				{
+					// Listen for hide and show events on overlapping UIComponents
+					// (ComboBox dropdowns for example aren't removed after use; they're just hidden)
+					UIComponent(displayObj).addEventListener(FlexEvent.HIDE, overlay_hideShowHandler, false, 0, true);
+					UIComponent(displayObj).addEventListener(FlexEvent.SHOW, overlay_hideShowHandler, false, 0, true);
+				}
+			}
+		}
+		
+		/**
+        * The native hitTestObject method seems to have some issues depending on
+        * the situation. This is a custom implementation to work around that.
+        * This method assumes that the passed DisplayObject is a direct child
+        * of the stage and therefore has x and y coordinates that are already global
+        * 
+        */
+		protected function hitTestStageObject(o:DisplayObject):Boolean
+		{
+			var overlapX:Boolean = false;
+			var overlapY:Boolean = false;
+			
+			var localMe:Point = new Point(this.x, this.y);
+			var globalMe:Point = this.parent.localToGlobal(localMe);
+			
+			var myLeft:int = globalMe.x;
+			var myRight:int = globalMe.x + this.width;
+			var oLeft:int = o.x;
+			var oRight:int = o.x + o.width;
+			
+			// Does object's left edge fall between my left and right edges?
+			overlapX = oLeft >= myLeft && oLeft <= myRight;
+			// Or does my left edge fall between object's left and right edges?
+			overlapX ||= oLeft <= myLeft && oRight >= myLeft;
+			
+			var myTop:int = globalMe.y;
+			var myBottom:int = globalMe.y + this.height;
+			var oTop:int = o.y;
+			var oBottom:int = o.y + o.height;
+			
+			// Does object's top edge fall between my top and bottom edges?
+			overlapY = oTop >= myTop && oTop <= myBottom;
+			// Or does my top edge fall between object's top and bottom edges?
+			overlapY ||= oTop <= myTop && oBottom >= myTop;
+			
+			return overlapX && overlapY;
+		}  
 	}
-
 }
