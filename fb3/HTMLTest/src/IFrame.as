@@ -387,8 +387,15 @@ package
             {
             	BrowserManager.getInstance().initForHistoryManager();
 		        var url:String = BrowserManager.getInstance().url;
-		        appHost = URLUtil.getProtocol(url) + "://" 
-		        	+ URLUtil.getServerNameWithPort(url);
+		        if (url)
+		        {
+		        	appHost = URLUtil.getProtocol(url) + "://" 
+		        		+ URLUtil.getServerNameWithPort(url);
+		        }
+		        else
+		        {
+		        	appHost = "unknown";
+		        }
             }
 
             // Generate unique id's for frame div name
