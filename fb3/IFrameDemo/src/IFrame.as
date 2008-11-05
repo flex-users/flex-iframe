@@ -64,6 +64,15 @@
 //                             a warning in debug mode when attempting to call 
 //                             a function inside an iframe in a different domain
 
+// 1.3.3     05/11/08  RAB    .Fixed issue where iframe in nested ViewStacks (or
+//                             related components like TabNavigator) could become 
+//                             visible when it shouldn't.
+//                            .Debug mode can now be turned on or off at any time
+//                             instead of being locked in when createChildren runs
+//                            .Fixed issue with incorrect switching when iframe
+//                             was created in ViewStack child on the fly due to
+//                             creationPolicy="auto"
+
 //
 // -----------------------------------------------------------------------
 // This component is based on the work of:
@@ -125,7 +134,6 @@ package
 
 	public class IFrame extends Container
 	{
-        public var debug:Boolean = false;
         public var overlayDetection:Boolean = false;
         
         private var logTarget:TraceTarget;
@@ -314,7 +322,7 @@ package
         */
 	    public static var idList:Object = new Object();
 	    
-	    private var appHost:String;
+	    private static var appHost:String;
 	   	private var iframeContentHost:String;
         
         /**
@@ -326,6 +334,33 @@ package
 	        super();
 	        this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
 	        this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
+	    }
+	    
+	    private var _debug:Boolean = false;
+	    
+	    public function get debug():Boolean
+	    {
+	    	return _debug;
+	    }
+	    
+	    public function set debug(value:Boolean):void
+	    {
+	    	if (value == debug)
+	    		return;
+	    	
+	    	if (value)
+            {
+            	if (!logTarget)
+            		logTarget = new TraceTarget();
+            	logTarget.addLogger(logger);
+            }
+            else
+            {
+            	if (logTarget)
+            		logTarget.removeLogger(logger);
+            }
+            
+            _debug = value;
 	    }
 		
         /**
@@ -341,17 +376,27 @@ package
                 throw new Error("ExternalInterface is not available in this container. Internet Explorer ActiveX, Firefox, Mozilla 1.7.5 and greater, or other browsers that support NPRuntime are required.");
             }
             
-            if (debug)
-            {
-            	logTarget = new TraceTarget();
-            	logTarget.addLogger(logger);
-            }
+//            if (debug)
+//            {
+//            	logTarget = new TraceTarget();
+//            	logTarget.addLogger(logger);
+//            }
             
             // Get the host info to check for cross-domain issues
-	        BrowserManager.getInstance().initForHistoryManager();
-	        var url:String = BrowserManager.getInstance().url;
-	        appHost = URLUtil.getProtocol(url) + "://" 
-	        	+ URLUtil.getServerNameWithPort(url);
+            if (!appHost)
+            {
+            	BrowserManager.getInstance().initForHistoryManager();
+		        var url:String = BrowserManager.getInstance().url;
+		        if (url)
+		        {
+		        	appHost = URLUtil.getProtocol(url) + "://" 
+		        		+ URLUtil.getServerNameWithPort(url);
+		        }
+		        else
+		        {
+		        	appHost = "unknown";
+		        }
+            }
 
             // Generate unique id's for frame div name
             var idSuffix:int = 0;
@@ -486,11 +531,10 @@ package
             if (event is IndexChangedEvent)
             {
                 var changedEvent:IndexChangedEvent = IndexChangedEvent(event)
-
                 var newIndex:Number = changedEvent.newIndex;
                 
                 visible = checkDisplay(target, newIndex);
-                
+                logger.debug("Frame {0} set visible to {1} on IndexChangedEvent", frameId, visible);
             }
         }
         
@@ -503,7 +547,9 @@ package
         */
         private function handleMove(event:Event):void
         {
-            moveIFrame();
+            //moveIFrame();
+            invalidateDisplayList(); 
+            //this will cause moveIFrame() to be called in the next validation cycle
         }
         
         /**
@@ -519,7 +565,6 @@ package
         private function checkDisplay(target:Object, newIndex:Number):Boolean
         {
             var valid:Boolean = false;
-            
             if (target is Container)
             {
                 var container:DisplayObjectContainer = DisplayObjectContainer(target);
@@ -673,11 +718,14 @@ package
 					var w:int = _loadIndicator.measuredWidth;
 					var h:int = _loadIndicator.measuredHeight;
 					_loadIndicator.setActualSize(w, h);
-					_loadIndicator.move(this.width / 2 - w, this.height / 2 - h);
+					_loadIndicator.move((this.width - w) / 2, (this.height - h) / 2);
 				}
 			}
 			
-            moveIFrame();
+			// make sure we are allowed to display before doing the work of positioning the frame
+			if (validForDisplay)
+            	moveIFrame();
+            	
 		}
 		
         /**
@@ -745,13 +793,17 @@ package
 
 			// if we have an iframe in the same domain as the app, call the
 			// specialized functions to update visibility inside the iframe
-            if (visible)
+            if (visible && validForDisplay)
             {
                 if (source && iframeContentHost == appHost)
                 	ExternalInterface.call("showIFrame",frameId,iframeId);
                 else
                 	ExternalInterface.call("showDiv",frameId,iframeId);
                 logger.debug("show iframe id {0}", frameId);
+                
+                // make sure position and status indicators get updated when revealed
+                invalidateDisplayList();
+                
             }
             else 
             {
