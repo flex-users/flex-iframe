@@ -31,6 +31,7 @@ package com.google.code.flexiframe
     * by the <code>IFrame</code> class.
     * 
     * @author Julien Nicoulaud
+    * @private
     */
     public class IFrameExternalCalls
     {
