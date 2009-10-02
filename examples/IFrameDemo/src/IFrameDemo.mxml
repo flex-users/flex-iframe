@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:local="*"
+	xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
 	creationComplete="init();" 
 	viewSourceURL="srcview/index.html"> 
 
@@ -22,7 +22,7 @@
         </mx:Panel>
 
         <mx:Panel width="100%" height="100%" title="Content" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" >
-			<local:IFrame id="iFrame" source="http://www.adobe.com/devnet/flex/" width="100%" height="100%"/>
+			<flexiframe:IFrame id="iFrame" source="http://www.adobe.com/devnet/flex/" width="100%" height="100%"/>
             <mx:ControlBar>
                 <mx:CheckBox id="cbVisible" label="IFrame Visible" selected="true" click="iFrame.visible=cbVisible.selected"/>
             </mx:ControlBar>

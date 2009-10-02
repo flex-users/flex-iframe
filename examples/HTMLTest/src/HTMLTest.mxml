@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:local="*"
+	xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
 	layout="absolute" viewSourceURL="srcview/index.html">
 	
 	<mx:Script>
@@ -13,14 +13,14 @@
 			width="100%"
 			height="100%">
 			
-			<local:IFrame id="test1"
+			<flexiframe:IFrame id="test1"
 			    label="Google"
 				source="http://www.google.co.uk"
 				width="100%"
 				height="100%"
 				/>
-				
-			<local:IFrame id="test2"
+
+			<flexiframe:IFrame id="test2"
 			    label="Yahoo"
 				source="http://www.yahoo.co.uk"
 				width="100%"
