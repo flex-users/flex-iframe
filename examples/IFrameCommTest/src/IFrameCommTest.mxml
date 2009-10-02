@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:local="*"
+    xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
 	creationComplete="test.visible=true" 
 	viewSourceURL="srcview/index.html">
 
@@ -43,7 +44,7 @@
 		<mx:Button label="Submit to and from" click="onSubmit(event)"/>
 	</mx:HBox>
 	
-	<local:IFrame id="test"
+	<flexiframe:IFrame id="test"
 	    label="Map"
 		source="myHTML.html"
 		width="100%"
