@@ -44,17 +44,52 @@ package com.google.code.flexiframe
     
     /**
     * The event dispatched when the IFrame is loaded.
+    * 
+    * @eventType flash.events.Event
     */
     [Event(name="frameLoad", type="flash.events.Event")] 
 
 
     /**
-    * An IFrame which you can embed into Flex applications to show an html page.
+    * An IFrame which you can embed into Flex applications to show an HTML page.
+    * 
+    * <p><b>Usage:</b><br/>
+    * You must instantiate the IFrame with a unique identifier
+    * (such as <code>&lt;IFrame id="myIFrame"&gt;</code> or
+    * <code>var myIFrame:IFrame = new IFrame();</code>). You can assign a source
+    * (<code>myIFrame.source = "http://www.google.com"</code>) or HTML content
+    * (<code>myIFrame.content = "some html content...";</code>).</p>
+    * 
+    * <p><b>Advanced features:</b>
+    *   <ul>
+    *       <li>The IFrame can detect overlapping objects and hide automatically by activating the
+    * overlay detection system (<code>myIFrame.overlayDetection = true;</code>).</li>
+    *       <li>You can setup a loading indicator that will be displayed while the IFrame is
+    *           loading (<code>myIFrame.loadIndicatorClass = myClass;</code>)</li>
+    *       <li>You can call a function on the IFrame document. See the <code>callIFrameFunction</code>
+    *           method documentation.</li>
+    *   </ul>
+    * </p>
+    * 
+    * @example A simple application with Google embedded
+    * <listing version="3.0">
+    * &lt;mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+    *                 xmlns:flexiframe="http://code.google.com/p/flex-iframe/"&gt;
+    * 
+    *     &lt;flexiframe:IFrame id="googleIFrame"
+    *                        label="Google"
+    *                        source="http://www.google.com"
+    *                        width="80%"
+    *                        height="80%"/&gt;
+    * 
+    * &lt;mx:Application&gt;
+    * </listing>
+    * For more advanced examples, check out the project home page.
     * 
     * @see http://code.google.com/p/flex-iframe
     * @author Alistair Rutherford (www.netthreads.co.uk)
-    * @author Christophe Conraets
-    * @author Brian Deitte
+    * @author Christophe Conraets (http://coenraets.org)
+    * @author Brian Deitte (http://www.deitte.com)
     * @author Ryan Bell
     * @author Max
     * @author Julien Nicoulaud
@@ -113,22 +148,26 @@ package com.google.code.flexiframe
         private var __content:String;
         
         /**
-        * 
+        * The frame ID.
         */
         private var frameId:String;
         
         /**
-        * 
+        * The IFrame ID.
         */
         private var iframeId:String;
         
         /**
         * The validity of the frame for the display.
+        * 
+        * @default true
         */
         private var validForDisplay:Boolean = true;
         
         /**
         * Wether the frame is loaded or not.
+        * 
+        * @default false
         */
         private var frameLoaded:Boolean = false;
         
@@ -618,7 +657,9 @@ package com.google.code.flexiframe
         // =========================================================================================
 
         /**
-        * The state of the overlay detection system.
+        * The state of the overlay detection system (experimental).
+        * 
+        * @default false
         */
         public var overlayDetection:Boolean = false;
                         
