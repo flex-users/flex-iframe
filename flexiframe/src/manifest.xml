@@ -25,6 +25,6 @@
 
 <componentPackage>
  
-    <component id="IFrame" class="IFrame"/>
+    <component id="IFrame" class="com.google.code.flexiframe.IFrame"/>
  
 </componentPackage>

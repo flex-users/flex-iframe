@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties version="1">
-  <includeClasses>
-    <classEntry path="IFrame"/>
-  </includeClasses>
-  <includeResources/>
-  <namespaceManifests>
-    <namespaceManifestEntry manifest="manifest.xml" namespace="http://code.google.com/p/flex-iframe/"/>
-  </namespaceManifests>
+<includeClasses>
+<classEntry path="com.google.code.flexiframe.IFrame"/>
+<classEntry path="com.google.code.flexiframe.IFrameExternalCalls"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests>
+<namespaceManifestEntry manifest="manifest.xml" namespace="http://code.google.com/p/flex-iframe/"/>
+</namespaceManifests>
 </flexLibProperties>
