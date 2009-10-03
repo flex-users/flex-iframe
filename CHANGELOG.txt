@@ -105,3 +105,8 @@
                                      by chrisr, Issue 12).
                                      
            03/10/09  J. Nicoulaud  * Fixed DIVs never removed (Issue 1, fix by alan.plante).
+
+           03/10/09  J. Nicoulaud  * Fixed issue when moving IFrame (Issue 29, fix by
+                                     achim.alin.ion).
+                                     
+           
