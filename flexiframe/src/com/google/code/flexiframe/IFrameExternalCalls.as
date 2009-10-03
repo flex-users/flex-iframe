@@ -274,5 +274,28 @@ package com.google.code.flexiframe
                     "}" +
                 "}" +
             "}";
+
+
+        /**
+        * The name of the JavaScript function that removes an IFrame.
+        */
+        public static var FUNCTION_REMOVEIFRAME:String = "removeIFrame";
+        
+        /**
+        * The JavaScript code to call to insert the function that removes an IFrame in the DOM.
+        */
+        public static var INSERT_FUNCTION_REMOVEIFRAME:String = 
+            "document.insertScript = function ()" +
+            "{ " +
+                "if (document." + FUNCTION_REMOVEIFRAME + "==null)" + 
+                "{" + 
+                    FUNCTION_REMOVEIFRAME + " = function (frameID)" +
+                    "{ " +
+                        "var iFrameDiv = document.getElementById(frameID);" +
+                        "iFrameDiv.parentNode.removeChild(iFrameDiv);" +
+                    "}" +
+                "}" +
+            "}";
+
     }
 }
