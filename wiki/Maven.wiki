@@ -21,6 +21,8 @@ Then, just add a dependency to flex-iframe where you need it, the usual way:
 </dependency>
 }}}
 
+You can browse the repository here: [http://flex-iframe.googlecode.com/svn/maven2].
+
 = For contributors =
 If you want to package a new version of flex-iframe and add it to the repository, install the file locally and copy the result from your repository.
 
