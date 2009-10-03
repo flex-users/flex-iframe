@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrame,com.google.code.flexiframe.IFrame,_loadIndicator,idList,loadIndicatorClass,overlayDetection,content,debug,source,visible,callIFrameFunction,checkOverlay,commitProperties,createChildren,handleFrameLoad,hitTestStageObject,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
+<meta content="IFrame,com.google.code.flexiframe.IFrame,__content,__source,_loadIndicator,appHost,frameId,frameLoaded,functionQueue,idList,iframeContentHost,iframeId,loadIndicatorClass,overlapCount,overlappingDict,overlayDetection,validForDisplay,content,debug,source,visible,buildContainerList,callIFrameFunction,checkDisplay,checkOverlay,commitProperties,createChildren,dispose,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hitTestStageObject,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
 <title>com.google.code.flexiframe.IFrame</title>
 </head>
 <body>
@@ -146,8 +146,63 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#appHost">appHost</a> : String<div class="summaryTableDescription">[static]
+        Application host.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#__content">__content</a> : String<div class="summaryTableDescription">
+        The content of the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#frameId">frameId</a> : String<div class="summaryTableDescription">
+        The frame ID.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#frameLoaded">frameLoaded</a> : Boolean = false<div class="summaryTableDescription">
+        Wether the frame is loaded or not.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#functionQueue">functionQueue</a> : Array<div class="summaryTableDescription">
+        The queued functions waiting for the frame to be loaded.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#iframeContentHost">iframeContentHost</a> : String<div class="summaryTableDescription">
+        IFrame content host.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#iframeId">iframeId</a> : String<div class="summaryTableDescription">
+        The IFrame ID.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_loadIndicator">_loadIndicator</a> : UIComponent<div class="summaryTableDescription">
         The instance of the load indicator class.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#overlapCount">overlapCount</a> : int = 0<div class="summaryTableDescription">
+        The count of the objects overlapping the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#overlappingDict">overlappingDict</a> : Dictionary<div class="summaryTableDescription">
+        A dictionnary holding the objects overlapping the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#__source">__source</a> : String<div class="summaryTableDescription">
+        The source of the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#validForDisplay">validForDisplay</a> : Boolean = true<div class="summaryTableDescription">
+        The validity of the frame for the display.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 </table>
@@ -179,6 +234,14 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#dispose()">dispose</a>():void</div>
+<div class="summaryTableDescription">
+        Removes the IFrame from the DOM.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#lookupIndex()">lookupIndex</a>(target:Container):Number</div>
 <div class="summaryTableDescription">
         Return index of child item on path down to this object.</div>
@@ -200,6 +263,25 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
 <tr>
 <th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#buildContainerList()">buildContainerList</a>():void</div>
+<div class="summaryTableDescription">
+        Build list of container objects on the display list path all the way down
+        to this object.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#checkDisplay()">checkDisplay</a>(target:Object, newIndex:Number):Boolean</div>
+<div class="summaryTableDescription">
+        This function updates the selected view child of the signalling container
+        and then compares the path from our IFrame up the displaylist to see if
+        the index settings match.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
@@ -228,9 +310,43 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#handleAdd()">handleAdd</a>(event:Event):void</div>
+<div class="summaryTableDescription">
+        Triggered by addition of this object to the stage.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#handleChange()">handleChange</a>(event:Event):void</div>
+<div class="summaryTableDescription">
+        Triggered by one of our listeners seeded all the way up the display
+        list to catch a 'changed' event which might hide or display this object.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#handleFrameLoad()">handleFrameLoad</a>():void</div>
 <div class="summaryTableDescription">
         Trigered when the IFrame is loaded.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#handleMove()">handleMove</a>(event:Event):void</div>
+<div class="summaryTableDescription">
+        Triggered by one of our listeners seeded all the way up the display
+        list to catch a 'move' event which might reposition this object.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#handleRemove()">handleRemove</a>(event:Event):void</div>
+<div class="summaryTableDescription">
+        Triggered by removal of this object from the stage.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -308,10 +424,32 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
+<a name="appHost"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">appHost</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected static var appHost:String</code><p>
+        Application host.
+        
+        Used to check potential cross-domain issues.
+        </p></div>
+<a name="__content"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">__content</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var __content:String</code><p>
+        The content of the IFrame.
+        </p></div>
 <a name="content"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">content</td><td class="detailHeaderType">property</td>
+<td class="detailHeaderName">content</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -340,6 +478,38 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set debug(value:Boolean):void</code>
 <br>
 </div>
+<a name="frameId"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">frameId</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var frameId:String</code><p>
+        The frame ID.
+        </p></div>
+<a name="frameLoaded"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">frameLoaded</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var frameLoaded:Boolean = false</code><p>
+        Wether the frame is loaded or not.
+        
+        </p><p>The default value is <code>false</code>.</p>
+</div>
+<a name="functionQueue"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">functionQueue</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var functionQueue:Array</code><p>
+        The queued functions waiting for the frame to be loaded.
+        </p></div>
 <a name="idList"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -350,6 +520,28 @@ showHideInherited();
 <code>public static var idList:Object</code><p>
         Track IDs in use throughout the app for iframe instances in order to detect and
         prevent collisions.
+        </p></div>
+<a name="iframeContentHost"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">iframeContentHost</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var iframeContentHost:String</code><p>
+        IFrame content host.
+        
+        Used to check potential cross-domain issues.
+        </p></div>
+<a name="iframeId"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">iframeId</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var iframeId:String</code><p>
+        The IFrame ID.
         </p></div>
 <a name="_loadIndicator"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
@@ -373,6 +565,26 @@ showHideInherited();
         the browser is loading its content. Should implement measuredHeight
         and measuredWidth in order to be properly sized.
         </p></div>
+<a name="overlapCount"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">overlapCount</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var overlapCount:int = 0</code><p>
+        The count of the objects overlapping the IFrame.
+        </p></div>
+<a name="overlappingDict"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">overlappingDict</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var overlappingDict:Dictionary</code><p>
+        A dictionnary holding the objects overlapping the IFrame.
+        </p></div>
 <a name="overlayDetection"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -385,6 +597,16 @@ showHideInherited();
         
         </p><p>The default value is <code>false</code>.</p>
 </div>
+<a name="__source"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">__source</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var __source:String</code><p>
+        The source of the IFrame.
+        </p></div>
 <a name="source"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -400,6 +622,18 @@ showHideInherited();
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set source(value:String):void</code>
 <br>
+</div>
+<a name="validForDisplay"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">validForDisplay</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var validForDisplay:Boolean = true</code><p>
+        The validity of the frame for the display.
+        
+        </p><p>The default value is <code>true</code>.</p>
 </div>
 <a name="visible"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
@@ -430,10 +664,34 @@ showHideInherited();
         </p></div>
 <a name="methodDetail"></a>
 <div class="detailSectionHeader">Method detail</div>
+<a name="buildContainerList()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">buildContainerList</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function buildContainerList():void</code><p>
+        Build list of container objects on the display list path all the way down
+        to this object. We will seed the container classes we find with an event
+        listener which will be used to test if this object is to be displayed or not.
+        
+        When the component is created the display list is traversed from the 
+        component down to the root element. At each traversal a test is made to 
+        see if current component is a container. If it is a container then the 
+        child of the element which leads back to the component is determined and 
+        a note madeof the appropriate 'index' on the path. The index is stored 
+        against a reference to the Container in a Dictionary. Also the container
+        is 'seeded' with an event handler so that if the container triggers an
+        IndexChangedEvent.CHANGE (i.e. when you click on a tab in a tab navigator)
+        the path of 'index' values down to the component can be checked. If the
+        path indicates that the indexes 'line up' to expose the component then
+        the view is made visible.
+        </p></div>
 <a name="callIFrameFunction()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">callIFrameFunction</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+<td class="detailHeaderName">callIFrameFunction</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -477,6 +735,41 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="checkDisplay()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">checkDisplay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function checkDisplay(target:Object, newIndex:Number):Boolean</code><p>
+        This function updates the selected view child of the signalling container
+        and then compares the path from our IFrame up the displaylist to see if
+        the index settings match. Only an exact match all the way down to our
+        IFrame will satisfy the condition to display the IFrame contents.
+                </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">target</span>:Object</code> &mdash; Object event source
+        </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">newIndex</span>:Number</code> &mdash; Number index from target object.
+        
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
 <a name="checkOverlay()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -515,6 +808,55 @@ showHideInherited();
 <code>protected override function createChildren():void</code><p>
         Generate DOM elements and build display path.
         </p></div>
+<a name="dispose()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">dispose</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function dispose():void</code><p>
+        Removes the IFrame from the DOM.
+        
+        This action is irreversible.
+        </p></div>
+<a name="handleAdd()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">handleAdd</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function handleAdd(event:Event):void</code><p>
+        Triggered by addition of this object to the stage.
+        
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:Event</code> &mdash; Event trigger
+        </td>
+</tr>
+</table>
+</div>
+<a name="handleChange()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">handleChange</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function handleChange(event:Event):void</code><p>
+        Triggered by one of our listeners seeded all the way up the display
+        list to catch a 'changed' event which might hide or display this object.
+        
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:Event</code> &mdash; Event trigger
+        </td>
+</tr>
+</table>
+</div>
 <a name="handleFrameLoad()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -525,6 +867,43 @@ showHideInherited();
 <code>protected function handleFrameLoad():void</code><p>
         Trigered when the IFrame is loaded.
         </p></div>
+<a name="handleMove()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">handleMove</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function handleMove(event:Event):void</code><p>
+        Triggered by one of our listeners seeded all the way up the display
+        list to catch a 'move' event which might reposition this object.
+        
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:Event</code> &mdash; Event trigger
+        </td>
+</tr>
+</table>
+</div>
+<a name="handleRemove()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">handleRemove</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function handleRemove(event:Event):void</code><p>
+        Triggered by removal of this object from the stage.
+        
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">event</span>:Event</code> &mdash; Event trigger
+        </td>
+</tr>
+</table>
+</div>
 <a name="hitTestStageObject()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
