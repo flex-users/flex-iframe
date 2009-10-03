@@ -98,3 +98,10 @@
                                    * Fixed issue with incorrect switching when iframe
                                      was created in ViewStack child on the fly due to
                                      creationPolicy="auto"
+                                     
+           03/10/09  J. Nicoulaud  * Fixed issue where assignment using the content 
+                                     property was causing the DIV to ignore the container 
+                                     size. DIV now uses overflow:auto; with explicit size. (fix
+                                     by chrisr, Issue 12).
+                                     
+           03/10/09  J. Nicoulaud  * Fixed DIVs never removed (Issue 1, fix by alan.plante).
