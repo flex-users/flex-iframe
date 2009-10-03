@@ -234,6 +234,7 @@ package com.google.code.flexiframe
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_LOADIFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_LOADDIV_CONTENT);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_CALLIFRAMEFUNCTION);
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_REMOVEIFRAME);
 
             // Insert frame into DOM using our precreated function 'createIFrame'
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_CREATEIFRAME, frameId);
@@ -526,6 +527,17 @@ package com.google.code.flexiframe
                     ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEDIV,frameId,iframeId);
                 logger.debug("hide iframe id {0}", frameId);
             }
+        }
+
+        /**
+        * Removes the IFrame from the DOM.
+        * 
+        * This action is irreversible.
+        */
+        public function dispose():void
+        {
+        	ExternalInterface.call(IFrameExternalCalls.FUNCTION_REMOVEIFRAME,frameId);
+            logger.debug("remove iframe id {0}", frameId);
         }
 
 
