@@ -57,6 +57,7 @@ package com.google.code.flexiframe
                         "newDiv.style.position ='absolute';" +
                         "newDiv.style.backgroundColor = 'transparent';" + 
                         "newDiv.style.border = '0px';" +
+                        "newDiv.style.overflow = 'auto';" +
                         "newDiv.style.visibility = 'hidden';" +
                         "bodyID.appendChild(newDiv);" +
                     "}" +
@@ -82,6 +83,8 @@ package com.google.code.flexiframe
                         "var frameRef=document.getElementById(frameID);" +
                         "frameRef.style.left=x;" + 
                         "frameRef.style.top=y;" +
+                        "frameRef.style.width=w;" +
+                        "frameRef.style.height=h;" +
                         "var iFrameRef=document.getElementById(iframeID);" +
                         "iFrameRef.width=w;" +
                         "iFrameRef.height=h;" +
