@@ -22,7 +22,7 @@ Then, just add a dependency to flex-iframe where you need it, the usual way:
 }}}
 
 = For contributors =
-If you want to package a new version of flex-iframe and add it to the repository, install the file locally and copy the result from our repository.
+If you want to package a new version of flex-iframe and add it to the repository, install the file locally and copy the result from your repository.
 
 First install the file (change the version number to the right one):
 {{{
