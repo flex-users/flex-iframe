@@ -57,7 +57,7 @@ package com.google.code.flexiframe
     * You must instantiate the IFrame with a unique identifier
     * (such as <code>&lt;IFrame id="myIFrame"&gt;</code> or
     * <code>var myIFrame:IFrame = new IFrame();</code>). You can assign a source
-    * (<code>myIFrame.source = "http://www.google.com"</code>) or HTML content
+    * (<code>myIFrame.source = "http://www.google.com";</code>) or HTML content
     * (<code>myIFrame.content = "some html content...";</code>).</p>
     * 
     * <p><b>Advanced features:</b>
@@ -128,53 +128,53 @@ package com.google.code.flexiframe
         * 
         * Used to check potential cross-domain issues.
         */
-        private static var appHost:String;
+        protected static var appHost:String;
         
         /**
         * IFrame content host.
         * 
         * Used to check potential cross-domain issues.
         */
-        private var iframeContentHost:String;
+        protected var iframeContentHost:String;
         
         /**
         * The source of the IFrame.
         */
-        private var __source:String;
+        protected var __source:String;
         
         /**
         * The content of the IFrame.
         */
-        private var __content:String;
+        protected var __content:String;
         
         /**
         * The frame ID.
         */
-        private var frameId:String;
+        protected var frameId:String;
         
         /**
         * The IFrame ID.
         */
-        private var iframeId:String;
+        protected var iframeId:String;
         
         /**
         * The validity of the frame for the display.
         * 
         * @default true
         */
-        private var validForDisplay:Boolean = true;
+        protected var validForDisplay:Boolean = true;
         
         /**
         * Wether the frame is loaded or not.
         * 
         * @default false
         */
-        private var frameLoaded:Boolean = false;
+        protected var frameLoaded:Boolean = false;
         
         /**
         * The queued functions waiting for the frame to be loaded.
         */
-        private var functionQueue:Array = [];
+        protected var functionQueue:Array = [];
 
 
         // Overriden functions
@@ -314,7 +314,7 @@ package com.google.code.flexiframe
         * 
         * @param event Event trigger
         */
-        private function handleAdd(event:Event):void
+        protected function handleAdd(event:Event):void
         {
             // Hook the systemManager to provide overlaying object detection
             if (overlayDetection)
@@ -330,7 +330,7 @@ package com.google.code.flexiframe
         * 
         * @param event Event trigger
         */
-        private function handleRemove(event:Event):void
+        protected function handleRemove(event:Event):void
         {
             // Remove systemManager hooks for overlay detection 
             if (overlayDetection)
@@ -347,7 +347,7 @@ package com.google.code.flexiframe
         * 
         * @param event Event trigger
         */
-        private function handleChange(event:Event):void
+        protected function handleChange(event:Event):void
         {
             var target:Object = event.target;
             
@@ -367,7 +367,7 @@ package com.google.code.flexiframe
         * 
         * @param event Event trigger
         */
-        private function handleMove(event:Event):void
+        protected function handleMove(event:Event):void
         {
             // This will cause moveIFrame() to be called in the next validation cycle
             invalidateDisplayList(); 
@@ -407,7 +407,7 @@ package com.google.code.flexiframe
         * @param newIndex Number index from target object.
         * 
         */
-        private function checkDisplay(target:Object, newIndex:Number):Boolean
+        protected function checkDisplay(target:Object, newIndex:Number):Boolean
         {
             var valid:Boolean = false;
             if (target is Container)
@@ -547,8 +547,20 @@ package com.google.code.flexiframe
         * Build list of container objects on the display list path all the way down
         * to this object. We will seed the container classes we find with an event
         * listener which will be used to test if this object is to be displayed or not.
+        * 
+        * When the component is created the display list is traversed from the 
+        * component down to the root element. At each traversal a test is made to 
+        * see if current component is a container. If it is a container then the 
+        * child of the element which leads back to the component is determined and 
+        * a note madeof the appropriate 'index' on the path. The index is stored 
+        * against a reference to the Container in a Dictionary. Also the container
+        * is 'seeded' with an event handler so that if the container triggers an
+        * IndexChangedEvent.CHANGE (i.e. when you click on a tab in a tab navigator)
+        * the path of 'index' values down to the component can be checked. If the
+        * path indicates that the indexes 'line up' to expose the component then
+        * the view is made visible.
         */
-        private function buildContainerList():void
+        protected function buildContainerList():void
         {
             // We are going to store containers against index of child which leads down
             // to IFrame item.
@@ -666,12 +678,12 @@ package com.google.code.flexiframe
         /**
         * A dictionnary holding the objects overlapping the IFrame.
         */
-        private var overlappingDict:Dictionary = new Dictionary(true);
+        protected var overlappingDict:Dictionary = new Dictionary(true);
         
         /**
         * The count of the objects overlapping the IFrame.
         */
-        private var overlapCount:int = 0;
+        protected var overlapCount:int = 0;
         
         /**
         * Triggered when the object is added to the stage.
