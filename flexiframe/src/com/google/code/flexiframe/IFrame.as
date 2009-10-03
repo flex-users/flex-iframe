@@ -172,6 +172,13 @@ package com.google.code.flexiframe
         protected var frameLoaded:Boolean = false;
         
         /**
+        * Wether the frame has never been shown yet
+        * 
+        * @default true
+        */
+        protected var firstShow:Boolean = true;
+        
+        /**
         * The queued functions waiting for the frame to be loaded.
         */
         protected var functionQueue:Array = [];
@@ -293,12 +300,20 @@ package com.google.code.flexiframe
             
             if (source)
             {
-                frameLoaded = false;
-                ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, frameId, iframeId, source);
-                logger.debug("load Iframe id {0}", frameId);
+                if (firstShow)
+                {
+	                frameLoaded = false;
+	                ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, frameId, iframeId, source);
+	                logger.debug("load Iframe id {0}", frameId);
+	                firstShow = false;
+                }
+                else
+                {
+                    logger.debug("Iframe id {0} already loaded", frameId);
+                }
                 // Trigger re-layout of iframe contents.                
                 invalidateDisplayList();
-            } 
+            }
             else if (content) 
             {
                 ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADDIV_CONTENT, frameId, iframeId, content);
@@ -457,7 +472,8 @@ package com.google.code.flexiframe
             if (source)
             {
                 __source = source;
-                // mark unloaded now so calls in this frame will be queued 
+                // mark unloaded now so calls in this frame will be queued
+                firstShow = true;
                 frameLoaded = false; 
                 invalidateProperties();
                 

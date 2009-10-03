@@ -108,5 +108,8 @@
 
            03/10/09  J. Nicoulaud  * Fixed issue when moving IFrame (Issue 29, fix by
                                      achim.alin.ion).
+
+           03/10/09  J. Nicoulaud  * Fixed IFrame contents were reloaded at every visibility change
+                                     (Issue 32, fix by Savas Ali Tokmen)
                                      
            
