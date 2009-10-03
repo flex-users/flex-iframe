@@ -31,7 +31,6 @@ package com.google.code.flexiframe
     * by the <code>IFrame</code> class.
     * 
     * @author Julien Nicoulaud
-    * @private
     */
     public class IFrameExternalCalls
     {
@@ -81,10 +80,10 @@ package com.google.code.flexiframe
                     FUNCTION_MOVEIFRAME + " = function(frameID, iframeID, x,y,w,h) " + 
                     "{" +
                         "var frameRef=document.getElementById(frameID);" +
-                        "frameRef.style.left=x;" + 
-                        "frameRef.style.top=y;" +
-                        "frameRef.style.width=w;" +
-                        "frameRef.style.height=h;" +
+                        "frameRef.style.left=x+'px';" + 
+                        "frameRef.style.top=y+'px';" +
+                        "frameRef.style.width=w+'px';" +
+                        "frameRef.style.height=h+'px';" +
                         "var iFrameRef=document.getElementById(iframeID);" +
                         "iFrameRef.width=w;" +
                         "iFrameRef.height=h;" +
