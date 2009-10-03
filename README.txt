@@ -22,18 +22,20 @@
  * $Id$
  ***************************************************************************************************
  
- Find more documentation at the project home: http://code.google.com/p/
+ Find more documentation at the project home page: http://code.google.com/p/flex-iframe/
 
  ===================================================================================================
   How to use flex-iframe
  ===================================================================================================
  
  * First of all, read the FAQ: http://code.google.com/p/flex-iframe/wiki/FAQ
- * Get the library, 2 solutions:
-     - Get a build of the library on the project
+ * Get the library, 3 solutions:
+     - Get a build of the library on the project home page
      - Build it from the sources (see "How to build flex-iframe from the sources")
+     - Use Maven (see http://code.google.com/p/flex-iframe/wiki/Maven)
  * Drop it on your Flex project's libs/ directory
- * Start using it !
+ * Start using it with the namespace ("http://code.google.com/p/flex-iframe/") or by importing the
+   package directly ("import com.google.code.flexiframe.*;").
  
  
  ===================================================================================================
@@ -51,5 +53,17 @@
  
  * First follow "How to build flex-iframe from the sources".
  * Check out the folders in examples/ as separate projects. Each of them is preconfigured to use the
-   "flexiframe" project swc build directly.
+   "flexiframe" project swc build directly (they will look for
+   WORKSPACE/flexiframe/build/flexiframe.swc).
  
+  
+ ===================================================================================================
+  For contributors
+ ===================================================================================================
+ 
+ * Checkout the projects flexiframe/ and all the examples in your workspace, and make sure all the
+   examples work before committing any changes.
+ * There is a preconfigured launch configuration to generate the asdoc (asdoc.launch). Go to: 
+   Run > External Tools > External Tools Configurations, select "asdoc" and run it to update the
+   documentation.
+  
