@@ -1,0 +1,37 @@
+#summary flex-iframe has its own Maven 2 repository.
+#labels Featured
+
+= For users =
+To use it, you must declare flex-iframe's repository in your project's pom.xml:
+{{{
+<repositories>
+  <repository>
+    <id>flex-iframe</id>
+    <url>http://flex-iframe.googlecode.com/svn/maven2</url>
+  </repository>
+</repositories>
+}}}
+
+Then, just add a dependency to flex-iframe where you need it, the usual way:
+{{{
+<dependency>
+  <groupId>com.google.code</groupId>
+  <artifactId>flex-iframe</artifactId>
+  <version>1.3.3</version>
+</dependency>
+}}}
+
+= For contributors =
+If you want to package a new version of flex-iframe and add it to the repository, install the file locally and copy the result from our repository.
+
+First install the file (change the version number to the right one):
+{{{
+mvn install:install-file -Dfile=flexiframe.swc \
+                         -DgroupId=com.google.code \
+                         -DartifactId=flex-iframe \
+                         -Dversion=1.3.3 \
+                         -Dpackaging=swc \
+                         -DcreateChecksum=true
+}}}
+
+Then go to your local repository, copy the generated structure, and commit it in the svn maven2/ folder.
