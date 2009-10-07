@@ -299,5 +299,34 @@ package com.google.code.flexiframe
                 "}" +
             "}";
 
+
+        /**
+        * The name of the JavaScript function that brings an IFrame to the front.
+        */
+        public static var FUNCTION_BRING_IFRAME_TO_FRONT:String = "bringIFrameToFront";
+
+        /**
+        * The JavaScript code to call to insert the function that moves an IFrame in the DOM.
+        */
+        public static var INSERT_FUNCTION_BRING_IFRAME_TO_FRONT:String = 
+            "document.insertScript = function ()" +
+            "{ " +
+                "if (document." + FUNCTION_BRING_IFRAME_TO_FRONT + "==null)" +
+                "{" +
+                    "var oldFrame=null;" +
+                    FUNCTION_BRING_IFRAME_TO_FRONT + " = function(frameID) " + 
+                    "{" +
+                        "var frameRef=document.getElementById(frameID);" +
+                        "if (oldFrame!=frameRef) {" + 
+                            "if (oldFrame) {" + 
+                                "oldFrame.style.zIndex=\"99\";" + 
+                            "}" + 
+                            "frameRef.style.zIndex=\"100\";" + 
+                            "oldFrame = frameRef;" + 
+                        "}" + 
+                    "}" +
+                "}" +
+            "}";
+
     }
 }
