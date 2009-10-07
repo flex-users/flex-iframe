@@ -111,4 +111,6 @@
 
                                    * Fixed IFrame contents were reloaded at every visibility change
                                      (Issue 32, fix by Savas Ali Tokmen)
-
+                                     
+           07/10/09 J. Nicoulaud   * Added a function to bring an IFrame to the front (Issue 35,
+                                     function written by artistinclosure).
