@@ -967,10 +967,19 @@ package com.google.code.flexiframe
         /**
          * Remove the IFrame.
          */
-        protected function removeIFrame():void
+        public function removeIFrame():void
         {
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_REMOVEIFRAME, frameId);
             logger.debug("remove IFrame id {0}", frameId);
+        }
+
+        /**
+         * Bring the IFrame to the front.
+         */
+        public function bringIFrameToFront():void
+        {
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_BRING_IFRAME_TO_FRONT, frameId);
+            logger.debug("bring IFrame to front id {0}", frameId);
         }
 
 
