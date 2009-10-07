@@ -31,6 +31,7 @@ package com.google.code.flexiframe
     import flash.geom.Point;
     import flash.utils.Dictionary;
     
+    import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
     import mx.events.FlexEvent;
@@ -203,8 +204,7 @@ package com.google.code.flexiframe
             // Get the host info to check for cross-domain issues
             if (!appHost)
             {
-                BrowserManager.getInstance().initForHistoryManager();
-                var url:String=BrowserManager.getInstance().url;
+                var url:String=Application.application.url;
                 if (url)
                 {
                     appHost=URLUtil.getProtocol(url) + "://" + URLUtil.getServerNameWithPort(url);
