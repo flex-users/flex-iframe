@@ -114,3 +114,7 @@
                                      
            07/10/09 J. Nicoulaud   * Added a function to bring an IFrame to the front (Issue 35,
                                      function written by artistinclosure).
+                                     
+                                   * Use Application.application.url instead of BrowserManager to
+                                     avoid adding an extra history state to the browser (Issue 19,
+                                     fix by Bruce Schwartz).
