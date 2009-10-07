@@ -192,7 +192,7 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_SHOWDIV + "==null)" +
                 "{" +
-                    "showDiv = function (frameID, iframeID)" +
+                    FUNCTION_SHOWDIV + " = function (frameID, iframeID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='visible';" +
                     "}" +
