@@ -14,7 +14,7 @@ Here you will find information about how to implement the Flex IFrame successful
 
 *Basic*
 
-The IFrame is a 'hole' in your Flex application. It is a hole into html-land. You cannot display any Flex/Flash content over the hole (this is the best way to imagine it). So, no pull-down menus over the hole, no pop-ups like alert or dialog boxes. It can't be done so remember this when designing any application that uses the IFrame. As a tip you can put your html view on a different tab from the rest of your application which has buttons to trigger important stuff.
+The IFrame floats above the flash content. It will hide any flash content that enters the area bounded by the IFrame. So, no pull-down menus over the area, no pop-ups like alert or dialog boxes. It can't be done so remember this when designing any application that uses the IFrame. As a tip you can put your html view on a different tab from the rest of your application which has buttons to trigger important stuff. You can see this technique in action on some of the demos and applications linked to on the main page.
 
 
 *WMode=Opaque*
@@ -25,7 +25,7 @@ For a full explanation of what this is and why go here
 
     http://www.communitymx.com/content/article.cfm?cid=e5141
 
-Use of the IFrame is essentially punching a hole straight through your Flex application to the browser. The javascript helper functions are there to orientate the html iframe/div combination so that it always matches the ‘hole’ you have made. Think about this for a minute or two and you will realise what the limitations are and why.
+The javascript helper functions are there to orientate the html iframe/div combination so that it always matches the frame area. Think about this for a minute or two and you will realise what the limitations are and why.
 
 *Assign an id to your IFrame*.
 
@@ -37,7 +37,11 @@ If you create an IFrame programatically DO NOT FORGET TO ASSIGN AN ID. This is e
 
 Don’t have javascript switched on? Where do I start? It won’t work because the component requires javascript helper functions which it embeds into the holder page when it’s instantiated. The embedded javascript is reused by multiple instances of the component. No javascript support and the IFrame will not work.
 
-*Bugs
+*Communication between Flex and javascript*
+
+I.e. calling back into the Flex app from the page and calling into javascript from the Flex app. The way *I* implemented this was using FABridge. See the IFrameBridgeTest demo. So it's possible but it's not simple. 
+
+*Bugs*
 
 Flexbuilder 2 and IE
 
@@ -50,3 +54,11 @@ Use of wmode=opaque (and there is no way to get round this folks) apparently mes
 *Safari problems*
 
 Some issues. I can confirm that it does work, depends what you intend to use it for. The Social Graph Browser has a page to dispay the contents of a target URL and this seems to work fine with Safari.
+
+*General*
+
+Over time I have seen some genuinely crazy uses for this component. Brian Deitte has a nice post about the IFrame which everyone should read here
+
+http://www.deitte.com/archives/2008/07/dont_use_iframe.htm
+
+I can't really disagree with him. Having said that. There are genuine reasons why this component is useful.
