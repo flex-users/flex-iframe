@@ -118,3 +118,8 @@
                                    * Use Application.application.url instead of BrowserManager to
                                      avoid adding an extra history state to the browser (Issue 19,
                                      fix by Bruce Schwartz).
+                                     
+           11/10/09 J. Nicoulaud   * Workaround for Application.application.id being null on Linux
+                                     (Issue 34).
+                                     
+                                   * Fixed loading indicator not working (Issue 36).
