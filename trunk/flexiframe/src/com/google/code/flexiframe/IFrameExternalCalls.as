@@ -57,7 +57,7 @@ package com.google.code.flexiframe
                         "newDiv.style.backgroundColor = 'transparent';" + 
                         "newDiv.style.border = '0px';" +
                         "newDiv.style.overflow = 'auto';" +
-                        "newDiv.style.visibility = 'hidden';" +
+                        "newDiv.style.display = 'none';" +
                         "bodyID.appendChild(newDiv);" +
                     "}" +
                 "}" +
@@ -117,9 +117,9 @@ package com.google.code.flexiframe
                             "iframeDoc = iframeRef.document;" +
                         "}" +
                         "if (iframeDoc) {" +
-                            "iframeDoc.body.style.visibility='hidden';" +
+                            "iframeDoc.body.style.display = 'none';" +
                         "}" +
-                        "document.getElementById(frameID).style.visibility='hidden';" +
+                        "document.getElementById(frameID).style.display = 'none';" +
                     "}" +
                 "}" +
             "}";
@@ -141,7 +141,7 @@ package com.google.code.flexiframe
                     FUNCTION_SHOWIFRAME + " = function (frameID, iframeID)" +
                     "{" +
                         "var iframeRef = document.getElementById(iframeID);" +
-                        "document.getElementById(frameID).style.visibility='visible';" +
+                        "document.getElementById(frameID).style.display='block';" +
                         "var iframeDoc;" +
                         "if (iframeRef.contentWindow) {" +
                             "iframeDoc = iframeRef.contentWindow.document;" +
@@ -151,7 +151,7 @@ package com.google.code.flexiframe
                             "iframeDoc = iframeRef.document;" +
                         "}" +
                         "if (iframeDoc) {" +
-                            "iframeDoc.body.style.visibility='visible';" +
+                            "iframeDoc.body.style.display='block';" +
                         "}" +
                     "}" +
                 "}" +
@@ -171,9 +171,9 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_HIDEDIV + "==null)" +
                 "{" +
-                    FUNCTION_HIDEDIV + " = function (frameID, iframeID)" +
+                    FUNCTION_HIDEDIV + " = function (frameID)" +
                     "{" +
-                        "document.getElementById(frameID).style.visibility='hidden';" +
+                        "document.getElementById(frameID).style.display='none';" +
                     "}" +
                 "}" +
             "}";
@@ -192,9 +192,9 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_SHOWDIV + "==null)" +
                 "{" +
-                    FUNCTION_SHOWDIV + " = function (frameID, iframeID)" +
+                    FUNCTION_SHOWDIV + " = function (frameID)" +
                     "{" +
-                        "document.getElementById(frameID).style.visibility='visible';" +
+                        "document.getElementById(frameID).style.display = 'block';" +
                     "}" +
                 "}" +
             "}";
@@ -213,10 +213,14 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_LOADIFRAME + "==null)" +
                 "{" +
-                    FUNCTION_LOADIFRAME + " = function (frameID, iframeID, url)" +
+                    FUNCTION_LOADIFRAME + " = function (frameID, iframeID, url, embedID)" +
                     "{" +
-                        "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='" +
-                        Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
+                        "document.getElementById(frameID).innerHTML = " + 
+                            "\"<iframe id='\"+iframeID+\"' " + 
+                                      "src='\"+url+\"' " + 
+                                      "onLoad='\"+embedID+\".\"+frameID+\"_load();' " + 
+                                      "frameborder='0'>" + 
+                              "</iframe>\";" + 
                     "}" +
                 "}" +
             "}";
@@ -328,5 +332,41 @@ package com.google.code.flexiframe
                 "}" +
             "}";
 
+        /**
+         * The name of the the function that prompts the DOM objects to find the SWF object id.
+         */
+        public static var FUNCTION_ASK_FOR_EMBED_OBJECT_ID:String = "askForEmbedObjectId";
+                
+        /**
+         * The Javascript code to call to insert the function that prompts the DOM objects
+         * to find the SWF object id.
+         */
+        public static var INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID:String =
+            "document.insertScript = function ()" +
+            "{ " +
+                "if (document." + FUNCTION_ASK_FOR_EMBED_OBJECT_ID + "==null)" +
+                "{ " +
+                    FUNCTION_ASK_FOR_EMBED_OBJECT_ID + " = function(randomString) " + 
+		            "{ " + 
+                        "try { " + 
+	                        "var embeds = document.getElementsByTagName('embed'); " + 
+			                "for (var i = 0; i < embeds.length; i++) { " + 
+		                        "var isTheGoodOne = embeds[i].checkObjectId(embeds[i].getAttribute('id'),randomString); " + 
+		                        "if(isTheGoodOne) { " + 
+		                            "return embeds[i].getAttribute('id'); " + 
+		                        "} " +
+			                "} " +
+	                        "var objects = document.getElementsByTagName('object'); " + 
+                            "for(i = 0; i < objects.length; i++) { " + 
+                                "var isTheGoodOne = objects[i].checkObjectId(objects[i].getAttribute('id'),randomString); " + 
+                                "if(isTheGoodOne) { " + 
+                                    "return objects[i].getAttribute('id'); " + 
+                                "} " + 
+                            "} " +
+                        "} catch(e) {} " +
+		                "return null; " + 
+		            "} " +
+	            "} " + 
+            "}";
     }
 }
