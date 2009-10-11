@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrameExternalCalls,com.google.code.flexiframe.IFrameExternalCalls,FUNCTION_CALLIFRAMEFUNCTION,FUNCTION_CREATEIFRAME,FUNCTION_HIDEDIV,FUNCTION_HIDEIFRAME,FUNCTION_LOADDIV_CONTENT,FUNCTION_LOADIFRAME,FUNCTION_MOVEIFRAME,FUNCTION_REMOVEIFRAME,FUNCTION_SHOWDIV,FUNCTION_SHOWIFRAME,INSERT_FUNCTION_CALLIFRAMEFUNCTION,INSERT_FUNCTION_CREATEIFRAME,INSERT_FUNCTION_HIDEDIV,INSERT_FUNCTION_HIDEIFRAME,INSERT_FUNCTION_LOADDIV_CONTENT,INSERT_FUNCTION_LOADIFRAME,INSERT_FUNCTION_MOVEIFRAME,INSERT_FUNCTION_REMOVEIFRAME,INSERT_FUNCTION_SHOWDIV,INSERT_FUNCTION_SHOWIFRAME" name="keywords">
+<meta content="IFrameExternalCalls,com.google.code.flexiframe.IFrameExternalCalls,FUNCTION_ASK_FOR_EMBED_OBJECT_ID,FUNCTION_BRING_IFRAME_TO_FRONT,FUNCTION_CALLIFRAMEFUNCTION,FUNCTION_CREATEIFRAME,FUNCTION_HIDEDIV,FUNCTION_HIDEIFRAME,FUNCTION_LOADDIV_CONTENT,FUNCTION_LOADIFRAME,FUNCTION_MOVEIFRAME,FUNCTION_REMOVEIFRAME,FUNCTION_SHOWDIV,FUNCTION_SHOWIFRAME,INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID,INSERT_FUNCTION_BRING_IFRAME_TO_FRONT,INSERT_FUNCTION_CALLIFRAMEFUNCTION,INSERT_FUNCTION_CREATEIFRAME,INSERT_FUNCTION_HIDEDIV,INSERT_FUNCTION_HIDEIFRAME,INSERT_FUNCTION_LOADDIV_CONTENT,INSERT_FUNCTION_LOADIFRAME,INSERT_FUNCTION_MOVEIFRAME,INSERT_FUNCTION_REMOVEIFRAME,INSERT_FUNCTION_SHOWDIV,INSERT_FUNCTION_SHOWIFRAME" name="keywords">
 <title>com.google.code.flexiframe.IFrameExternalCalls</title>
 </head>
 <body>
@@ -54,6 +54,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_ASK_FOR_EMBED_OBJECT_ID">FUNCTION_ASK_FOR_EMBED_OBJECT_ID</a> : String = "askForEmbedObjectId"<div class="summaryTableDescription">[static]
+         The name of the the function that prompts the DOM objects to find the SWF object id.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_BRING_IFRAME_TO_FRONT">FUNCTION_BRING_IFRAME_TO_FRONT</a> : String = "bringIFrameToFront"<div class="summaryTableDescription">[static]
+        The name of the JavaScript function that brings an IFrame to the front.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_CALLIFRAMEFUNCTION">FUNCTION_CALLIFRAMEFUNCTION</a> : String = "callIFrameFunction"<div class="summaryTableDescription">[static]
         The name of the JavaScript function that calls a function on an IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
@@ -101,6 +111,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_SHOWIFRAME">FUNCTION_SHOWIFRAME</a> : String = "showIFrame"<div class="summaryTableDescription">[static]
         The name of the JavaScript function that shows an IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID">INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID</a> : String<div class="summaryTableDescription">[static]
+         The Javascript code to call to insert the function that prompts the DOM objects
+         to find the SWF object id.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_BRING_IFRAME_TO_FRONT">INSERT_FUNCTION_BRING_IFRAME_TO_FRONT</a> : String<div class="summaryTableDescription">[static]
+        The JavaScript code to call to insert the function that moves an IFrame in the DOM.</div>
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
 </tr>
 <tr class="">
@@ -164,10 +185,30 @@ showHideInherited();
 <div class="MainContent">
 <a name="propertyDetail"></a>
 <div class="detailSectionHeader">Property detail</div>
+<a name="FUNCTION_ASK_FOR_EMBED_OBJECT_ID"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">FUNCTION_ASK_FOR_EMBED_OBJECT_ID</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var FUNCTION_ASK_FOR_EMBED_OBJECT_ID:String = "askForEmbedObjectId"</code><p>
+         The name of the the function that prompts the DOM objects to find the SWF object id.
+         </p></div>
+<a name="FUNCTION_BRING_IFRAME_TO_FRONT"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">FUNCTION_BRING_IFRAME_TO_FRONT</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var FUNCTION_BRING_IFRAME_TO_FRONT:String = "bringIFrameToFront"</code><p>
+        The name of the JavaScript function that brings an IFrame to the front.
+        </p></div>
 <a name="FUNCTION_CALLIFRAMEFUNCTION"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
-<td class="detailHeaderName">FUNCTION_CALLIFRAMEFUNCTION</td><td class="detailHeaderType">property</td>
+<td class="detailHeaderName">FUNCTION_CALLIFRAMEFUNCTION</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
 </tr>
 </table>
 <div class="detailBody">
@@ -263,6 +304,27 @@ showHideInherited();
 <div class="detailBody">
 <code>public static var FUNCTION_SHOWIFRAME:String = "showIFrame"</code><p>
         The name of the JavaScript function that shows an IFrame.
+        </p></div>
+<a name="INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID:String</code><p>
+         The Javascript code to call to insert the function that prompts the DOM objects
+         to find the SWF object id.
+         </p></div>
+<a name="INSERT_FUNCTION_BRING_IFRAME_TO_FRONT"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">INSERT_FUNCTION_BRING_IFRAME_TO_FRONT</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var INSERT_FUNCTION_BRING_IFRAME_TO_FRONT:String</code><p>
+        The JavaScript code to call to insert the function that moves an IFrame in the DOM.
         </p></div>
 <a name="INSERT_FUNCTION_CALLIFRAMEFUNCTION"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
