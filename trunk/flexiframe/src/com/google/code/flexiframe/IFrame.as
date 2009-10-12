@@ -191,6 +191,11 @@ package com.google.code.flexiframe
          */
         protected var functionQueue:Array=[];
 
+        /**
+         * The browser zoom ratio
+         */
+        protected var browserScaling:Number = 1;
+
 
         // Overriden functions
 
@@ -232,21 +237,17 @@ package com.google.code.flexiframe
             iframeId="iframe_" + frameId;
             idList[frameId] = true;
 
-            // Add the functions to the DOM
-            insertFunctions();
-            
-            // Resolve the SWF embed object id in the DOM.
-            resolveEmbedObjectId();
-            
-            // Register a uniquely-named load event callback for this frame (for load notification)
-            ExternalInterface.addCallback(frameId + "_load",handleFrameLoad);
+            // Setup the communication with the browser
+            setupExternalInterface();
 
             // Insert frame into DOM
             createIFrame();
 
             // Build the parent containers list
             buildContainerList();
-
+            
+            adjustPosition(true);
+            
             // Setup the load indicator if it was specified.
             if (loadIndicatorClass)
             {
@@ -299,7 +300,9 @@ package com.google.code.flexiframe
 
             // make sure we are allowed to display before doing the work of positioning the frame
             if (validForDisplay)
+            {
                 adjustPosition();
+            }
         }
 
         /**
@@ -313,8 +316,8 @@ package com.google.code.flexiframe
             {
                 if (firstShow)
                 {
-                    frameLoaded=false;
-                    firstShow=false;
+                    frameLoaded = false;
+                    firstShow = false;
                     loadIFrame();
                 }
                 else
@@ -467,11 +470,25 @@ package com.google.code.flexiframe
         /**
          * Adjust frame position to match the exposed area in the application.
          */
-        protected function adjustPosition():void
+        protected function adjustPosition(recalculateBrowserScaling:Boolean=false):void
         {
             var localPt:Point=new Point(0, 0);
             var globalPt:Point=this.localToGlobal(localPt);
-            moveIFrame(globalPt.x, globalPt.y, this.width, this.height);            
+            
+            if (recalculateBrowserScaling)
+            {
+	            var browserMeasuredWidth:Number = getBrowserMeasuredWidth();
+	            
+	            if(browserMeasuredWidth > 0)
+	            {
+	                browserScaling = browserMeasuredWidth / Application.application.width;
+	            }
+            }
+            
+            moveIFrame(globalPt.x * browserScaling,
+                       globalPt.y * browserScaling,
+                       this.width * browserScaling,
+                       this.height * browserScaling);
         }
 
         /**
@@ -903,7 +920,7 @@ package com.google.code.flexiframe
         /**
          * The SWF embed object id.
          */
-        protected static var applicationId : String = null;
+        public static var applicationId : String = null;
         
         /**
          * The random string used to identify the right object.
@@ -953,14 +970,14 @@ package com.google.code.flexiframe
         // =========================================================================================
 
         /**
-         * Inserts the Javascript functions in the DOM.
+         * Inserts the Javascript functions in the DOM, setups the callback and javascripts event
+         * listeners.
          */
-        protected function insertFunctions():void
+        protected function setupExternalInterface():void
         {
             logger.info("Inserting Javascript functions in the DOM.");
-
-            // Add the functions to the DOM if they aren't already there
-            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID);
+            
+            // Add the functions to the DOM if they aren't already there.
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_CREATEIFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_MOVEIFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_HIDEIFRAME);
@@ -971,6 +988,22 @@ package com.google.code.flexiframe
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_LOADDIV_CONTENT);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_CALLIFRAMEFUNCTION);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_REMOVEIFRAME);
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH);
+            
+            // Resolve the SWF embed object id in the DOM.
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID);
+            resolveEmbedObjectId();
+            
+            // Register a uniquely-named load event callback for this frame.
+            ExternalInterface.addCallback(frameId + "_load",handleFrameLoad);
+            
+            // Setup the browser resize event listener.
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId));
+            setupBrowserResizeEventListener();
+            ExternalInterface.addCallback(frameId + "_resize",function():void
+            {
+                adjustPosition(true);
+            });
         }
 
         /**
@@ -1061,6 +1094,28 @@ package com.google.code.flexiframe
         {
             logger.info("Bring to front IFrame with id '{0}'.", frameId);
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_BRING_IFRAME_TO_FRONT, frameId);
+        }
+
+        /**
+         * Get the browser measured width.
+         */
+        public function getBrowserMeasuredWidth():Number
+        {
+            logger.info("Get browser measured width.");
+            var result : Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH);
+            if (result != null) {
+            	return new Number(result);
+            }
+            return new Number(0);
+        }
+
+        /**
+         * Setup the Browser resize event listener.
+         */
+        public function setupBrowserResizeEventListener():void
+        {
+            logger.info("Setup the Browser resize event listener.");
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_SETUP_RESIZE_EVENT_LISTENER);
         }
 
 
