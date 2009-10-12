@@ -333,7 +333,7 @@ package com.google.code.flexiframe
             "}";
 
         /**
-         * The name of the the function that prompts the DOM objects to find the SWF object id.
+         * The name of the function that prompts the DOM objects to find the SWF object id.
          */
         public static var FUNCTION_ASK_FOR_EMBED_OBJECT_ID:String = "askForEmbedObjectId";
                 
@@ -347,16 +347,16 @@ package com.google.code.flexiframe
                 "if (document." + FUNCTION_ASK_FOR_EMBED_OBJECT_ID + "==null)" +
                 "{ " +
                     FUNCTION_ASK_FOR_EMBED_OBJECT_ID + " = function(randomString) " + 
-		            "{ " + 
+                    "{ " + 
                         "try { " + 
-	                        "var embeds = document.getElementsByTagName('embed'); " + 
-			                "for (var i = 0; i < embeds.length; i++) { " + 
-		                        "var isTheGoodOne = embeds[i].checkObjectId(embeds[i].getAttribute('id'),randomString); " + 
-		                        "if(isTheGoodOne) { " + 
-		                            "return embeds[i].getAttribute('id'); " + 
-		                        "} " +
-			                "} " +
-	                        "var objects = document.getElementsByTagName('object'); " + 
+                            "var embeds = document.getElementsByTagName('embed'); " + 
+                            "for (var i = 0; i < embeds.length; i++) { " + 
+                                "var isTheGoodOne = embeds[i].checkObjectId(embeds[i].getAttribute('id'),randomString); " + 
+                                "if(isTheGoodOne) { " + 
+                                    "return embeds[i].getAttribute('id'); " + 
+                                "} " +
+                            "} " +
+                            "var objects = document.getElementsByTagName('object'); " + 
                             "for(i = 0; i < objects.length; i++) { " + 
                                 "var isTheGoodOne = objects[i].checkObjectId(objects[i].getAttribute('id'),randomString); " + 
                                 "if(isTheGoodOne) { " + 
@@ -364,9 +364,63 @@ package com.google.code.flexiframe
                                 "} " + 
                             "} " +
                         "} catch(e) {} " +
-		                "return null; " + 
-		            "} " +
-	            "} " + 
+                        "return null; " + 
+                    "} " +
+                "} " + 
             "}";
+
+        /**
+         * The name of the Javascript function that gets the browser measured width.
+         */
+        public static var FUNCTION_GET_BROWSER_MEASURED_WIDTH:String = "getBrowserMeasuredWidth";
+                
+        /**
+         * The Javascript code to call to insert the function that gets the browser measured width.
+         */
+        public static var INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH:String =
+            "document.insertScript = function ()" +
+            "{ " +
+                "if (document." + FUNCTION_GET_BROWSER_MEASURED_WIDTH + "==null)" +
+                "{ " +
+                    FUNCTION_GET_BROWSER_MEASURED_WIDTH + " = function() " + 
+                    "{ " + 
+                        "return innerWidth; " + 
+                    "} " +
+                "} " + 
+            "}";
+
+        /**
+         * The name of the Javascript function that setups the 'resize' event listener.
+         */
+        public static var FUNCTION_SETUP_RESIZE_EVENT_LISTENER:String = "setupResizeEventListener";
+        
+        /**
+         * The Javascript code to call to insert the function that setups the 'resize' event
+         * listener.
+         */
+        public static function INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId:String):String
+        {
+            return "document.insertScript = function ()" +
+		           "{ " +
+		               "if (document." + FUNCTION_SETUP_RESIZE_EVENT_LISTENER + "==null)" +
+		               "{ " +
+		                   FUNCTION_SETUP_RESIZE_EVENT_LISTENER + " = function() " + 
+		                   "{ " + 
+		                       "if (window.addEventListener) { " +
+		                           "window.addEventListener(\"resize\", notify" + frameId + "Resize, false); " +
+		                       "} else if (window.attachEvent) { " +
+		                           "window.attachEvent(\"onresize\", notify" + frameId + "Resize); " +
+		                       "} " +
+		                   "} " +
+		               "} " + 
+		               "if (document.notify" + frameId + "Resize==null)" +
+		               "{ " +
+		                   "notify" + frameId + "Resize = function() " + 
+		                   "{ " + 
+		                       "document.getElementById('" + IFrame.applicationId + "')." + frameId + "_resize(); " +
+		                   "} " +
+		               "} " + 
+		           "} ";
+        }
     }
 }
