@@ -123,3 +123,5 @@
                                      (Issue 34).
                                      
                                    * Fixed loading indicator not working (Issue 36).
+                                   
+           12/10/09 J. Nicoulaud   * Issue 25/37: Handle the browser zoom (Firefox + Chrome)

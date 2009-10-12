@@ -2,44 +2,25 @@ body {
 	font-family: Courier New, Courier, monospace;
 }
 
-.CSS@font-face {
-	color: #990000;
-	font-weight: bold;
+.MXMLComment {
+	color: #800000;
 }
 
-.CSS@import {
-	color: #006666;
-	font-weight: bold;
+.MXMLComponent_Tag {
+	color: #0000ff;
 }
 
-.CSS@media {
-	color: #663333;
-	font-weight: bold;
+.MXMLDefault_Text {
 }
 
-.CSSComment {
-	color: #999999;
+.MXMLProcessing_Instruction {
 }
 
-.CSSDefault_Text {
+.MXMLSpecial_Tag {
+	color: #006633;
 }
 
-.CSSDelimiters {
-}
-
-.CSSProperty_Name {
-	color: #330099;
-}
-
-.CSSProperty_Value {
-	color: #3333cc;
-}
-
-.CSSSelector {
-	color: #ff00ff;
-}
-
-.CSSString {
+.MXMLString {
 	color: #990000;
 }
 
@@ -106,25 +87,44 @@ body {
 	font-weight: bold;
 }
 
-.MXMLComment {
-	color: #800000;
+.CSS@font-face {
+	color: #990000;
+	font-weight: bold;
 }
 
-.MXMLComponent_Tag {
-	color: #0000ff;
+.CSS@import {
+	color: #006666;
+	font-weight: bold;
 }
 
-.MXMLDefault_Text {
+.CSS@media {
+	color: #663333;
+	font-weight: bold;
 }
 
-.MXMLProcessing_Instruction {
+.CSSComment {
+	color: #999999;
 }
 
-.MXMLSpecial_Tag {
-	color: #006633;
+.CSSDefault_Text {
 }
 
-.MXMLString {
+.CSSDelimiters {
+}
+
+.CSSProperty_Name {
+	color: #330099;
+}
+
+.CSSProperty_Value {
+	color: #3333cc;
+}
+
+.CSSSelector {
+	color: #ff00ff;
+}
+
+.CSSString {
 	color: #990000;
 }
 
