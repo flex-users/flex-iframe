@@ -989,6 +989,7 @@ package com.google.code.flexiframe
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_CALLIFRAMEFUNCTION);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_REMOVEIFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH);
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_PRINT_IFRAME);
             
             // Resolve the SWF embed object id in the DOM.
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID);
@@ -1099,7 +1100,7 @@ package com.google.code.flexiframe
         /**
          * Get the browser measured width.
          */
-        public function getBrowserMeasuredWidth():Number
+        protected function getBrowserMeasuredWidth():Number
         {
             logger.info("Get browser measured width.");
             var result : Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH);
@@ -1112,10 +1113,19 @@ package com.google.code.flexiframe
         /**
          * Setup the Browser resize event listener.
          */
-        public function setupBrowserResizeEventListener():void
+        protected function setupBrowserResizeEventListener():void
         {
             logger.info("Setup the Browser resize event listener.");
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_SETUP_RESIZE_EVENT_LISTENER);
+        }
+        
+        /**
+        * Print the content of the IFrame.
+        */
+        public function printIFrame():void
+        {
+            logger.info("Print the iFrame with id '{0}'.",iframeId);
+        	ExternalInterface.call(IFrameExternalCalls.FUNCTION_PRINT_IFRAME, iframeId);
         }
 
 
