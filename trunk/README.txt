@@ -66,4 +66,5 @@
  * There is a preconfigured launch configuration to generate the asdoc (asdoc.launch). Go to: 
    Run > External Tools > External Tools Configurations, select "asdoc" and run it to update the
    documentation.
-  
+ * Before tagging a release, please make sure to generate the asdoc, and update the example builds.
+ 

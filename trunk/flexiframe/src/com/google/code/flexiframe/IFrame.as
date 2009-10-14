@@ -32,6 +32,7 @@ package com.google.code.flexiframe
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
     
+    import mx.controls.Alert;
     import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
@@ -107,12 +108,44 @@ package com.google.code.flexiframe
 
         /**
          * Build a new IFrame.
+         * 
+         * @param id: a String identifying the IFrame. Must be unique for every instance of the
+         *            IFrame class.
+         * 
+         * @example Declare an IFrame in MXML.
+         * <listing version="3.0">
+         * &lt;mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+         *                 xmlns:flexiframe="http://code.google.com/p/flex-iframe/"&gt;
+         *
+         *     &lt;flexiframe:IFrame id="googleIFrame"
+         *                        label="Google"
+         *                        source="http://www.google.com"
+         *                        width="80%"
+         *                        height="80%"/&gt;
+         *
+         * &lt;mx:Application&gt;
+         * </listing>
+         * 
+         * @example Declare an IFrame in ActionScript.
+         * <listing version="3.0">
+         * import com.google.code.flexiframe.IFrame;
+         * 
+         * ...
+         * 
+         * var frame : IFrame = new IFrame("aUniqueIdForThisIFrameInstance");
+         * </listing>
          */
-        public function IFrame()
+        public function IFrame(id:String=null)
         {
             // Call super class constructor
             super();
-
+            
+            // Assign the unique id
+            if (id != null)
+            {
+                this.id = id;
+            }
+            
             // Listen to the stage events
             this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
             this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
