@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrame,com.google.code.flexiframe.IFrame,__content,__source,_loadIndicator,appHost,applicationId,firstShow,frameId,frameLoaded,functionQueue,idList,iframeContentHost,iframeId,loadIndicatorClass,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,validForDisplay,content,debug,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,hitTestStageObject,insertFunctions,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,removeIFrame,resolveEmbedObjectId,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
+<meta content="IFrame,com.google.code.flexiframe.IFrame,__content,__source,_loadIndicator,appHost,applicationId,browserScaling,firstShow,frameId,frameLoaded,functionQueue,idList,iframeContentHost,iframeId,loadIndicatorClass,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,validForDisplay,content,debug,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,getBrowserMeasuredWidth,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,hitTestStageObject,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,printIFrame,removeIFrame,resolveEmbedObjectId,setupBrowserResizeEventListener,setupExternalInterface,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
 <title>com.google.code.flexiframe.IFrame</title>
 </head>
 <body>
@@ -92,6 +92,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#applicationId">applicationId</a> : String = "null"<div class="summaryTableDescription">[static]
+         The SWF embed object id.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#content">content</a> : String<div class="summaryTableDescription">
          Return content string of div contents
          </div>
@@ -145,8 +150,9 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#applicationId">applicationId</a> : String = "null"<div class="summaryTableDescription">[static]
-         The SWF embed object id.</div>
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#browserScaling">browserScaling</a> : Number = 1<div class="summaryTableDescription">
+         The browser zoom ratio
+         </div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -268,6 +274,14 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#printIFrame()">printIFrame</a>():void</div>
+<div class="summaryTableDescription">
+        Print the content of the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#removeIFrame()">removeIFrame</a>():void</div>
 <div class="summaryTableDescription">
          Remove the IFrame.</div>
@@ -285,7 +299,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#adjustPosition()">adjustPosition</a>():void</div>
+<a class="signatureLink" href="#adjustPosition()">adjustPosition</a>(recalculateBrowserScaling:Boolean = false):void</div>
 <div class="summaryTableDescription">
          Adjust frame position to match the exposed area in the application.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
@@ -347,6 +361,14 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#createIFrame()">createIFrame</a>():void</div>
 <div class="summaryTableDescription">
          Create the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getBrowserMeasuredWidth()">getBrowserMeasuredWidth</a>():Number</div>
+<div class="summaryTableDescription">
+         Get the browser measured width.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -419,14 +441,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#insertFunctions()">insertFunctions</a>():void</div>
-<div class="summaryTableDescription">
-         Inserts the Javascript functions in the DOM.</div>
-</td><td class="summaryTableOwnerCol">IFrame</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
 <a class="signatureLink" href="#loadDivContent()">loadDivContent</a>():void</div>
 <div class="summaryTableDescription">
          Load content into a div.</div>
@@ -462,6 +476,23 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#resolveEmbedObjectId()">resolveEmbedObjectId</a>():void</div>
 <div class="summaryTableDescription">
          Get the embed object id.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setupBrowserResizeEventListener()">setupBrowserResizeEventListener</a>():void</div>
+<div class="summaryTableDescription">
+         Setup the Browser resize event listener.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setupExternalInterface()">setupExternalInterface</a>():void</div>
+<div class="summaryTableDescription">
+         Inserts the Javascript functions in the DOM, setups the callback and javascripts event
+         listeners.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -548,8 +579,18 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>protected static var applicationId:String = "null"</code><p>
+<code>public static var applicationId:String = "null"</code><p>
          The SWF embed object id.
+         </p></div>
+<a name="browserScaling"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">browserScaling</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var browserScaling:Number = 1</code><p>
+         The browser zoom ratio
          </p></div>
 <a name="__content"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
@@ -802,9 +843,15 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>protected function adjustPosition():void</code><p>
+<code>protected function adjustPosition(recalculateBrowserScaling:Boolean = false):void</code><p>
          Adjust frame position to match the exposed area in the application.
-         </p></div>
+         </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">recalculateBrowserScaling</span>:Boolean</code> (default = <code>false</code>)<code></code></td>
+</tr>
+</table>
+</div>
 <a name="bringIFrameToFront()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -994,6 +1041,23 @@ showHideInherited();
 <code>protected function createIFrame():void</code><p>
          Create the IFrame.
          </p></div>
+<a name="getBrowserMeasuredWidth()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getBrowserMeasuredWidth</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function getBrowserMeasuredWidth():Number</code><p>
+         Get the browser measured width.
+         </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code></td>
+</tr>
+</table>
+</div>
 <a name="handleAdd()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1120,16 +1184,6 @@ showHideInherited();
 </tr>
 </table>
 </div>
-<a name="insertFunctions()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">insertFunctions</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected function insertFunctions():void</code><p>
-         Inserts the Javascript functions in the DOM.
-         </p></div>
 <a name="loadDivContent()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1250,6 +1304,16 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="printIFrame()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">printIFrame</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function printIFrame():void</code><p>
+        Print the content of the IFrame.
+        </p></div>
 <a name="removeIFrame()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1269,6 +1333,27 @@ showHideInherited();
 <div class="detailBody">
 <code>protected function resolveEmbedObjectId():void</code><p>
          Get the embed object id.
+         </p></div>
+<a name="setupBrowserResizeEventListener()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setupBrowserResizeEventListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function setupBrowserResizeEventListener():void</code><p>
+         Setup the Browser resize event listener.
+         </p></div>
+<a name="setupExternalInterface()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setupExternalInterface</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function setupExternalInterface():void</code><p>
+         Inserts the Javascript functions in the DOM, setups the callback and javascripts event
+         listeners.
          </p></div>
 <a name="showDiv()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
