@@ -218,6 +218,7 @@ package com.google.code.flexiframe
                         "document.getElementById(frameID).innerHTML = " + 
                             "\"<iframe id='\"+iframeID+\"' " + 
                                       "src='\"+url+\"' " + 
+                                      "name='\"+iframeID+\"' " + 
                                       "onLoad='\"+embedID+\".\"+frameID+\"_load();' " + 
                                       "frameborder='0'>" + 
                               "</iframe>\";" + 
@@ -332,6 +333,7 @@ package com.google.code.flexiframe
                 "}" +
             "}";
 
+
         /**
          * The name of the function that prompts the DOM objects to find the SWF object id.
          */
@@ -369,6 +371,7 @@ package com.google.code.flexiframe
                 "} " + 
             "}";
 
+
         /**
          * The name of the Javascript function that gets the browser measured width.
          */
@@ -393,6 +396,7 @@ package com.google.code.flexiframe
                     "} " +
                 "} " + 
             "}";
+
 
         /**
          * The name of the Javascript function that setups the 'resize' event listener.
@@ -427,5 +431,49 @@ package com.google.code.flexiframe
 		               "} " + 
 		           "} ";
         }
+
+
+        /**
+         * The name of the Javascript function that prints the IFrame.
+         */
+        public static var FUNCTION_PRINT_IFRAME:String = "printIFrame";
+
+        /**
+         *  The Javascript code to call to insert the function that prints the IFrame.
+         */
+        public static var INSERT_FUNCTION_PRINT_IFRAME:String =
+           "document.insertScript = function ()" +
+           "{" +
+               "if (document." + FUNCTION_PRINT_IFRAME + "==null)" + 
+               "{" +
+                   FUNCTION_PRINT_IFRAME + " = function (iframeID)" +
+                   "{" +
+                       "try" +
+                       "{" +
+                           "if (navigator.appName.indexOf('Microsoft') != -1)" +
+                           "{" +
+                               "document[iframeID].focus();" +
+                               "document[iframeID].print();" +                         
+                           "}" +
+                           "else" +
+                           "{" +
+                               "for (var i=0; i < window.frames.length; i++)" +
+                               "{" +
+                                   "if (window.frames[i].name == iframeID)" +
+                                   "{" +
+                                       "window.frames[i].focus();" +
+                                       "window.frames[i].print();" +
+                                   "}" +
+                               "}" +
+                           "}" +
+                       "}" +
+                       "catch(e)" +
+                       "{" +
+                           "alert(e.name + ': ' + e.message);" +
+                       "}" +
+                   "}" +
+                "}" +
+            "}";
+
     }
 }
