@@ -71,32 +71,29 @@
                     layoutmanager.addItemAt(pod, i, false);
                 }
                 
-                var content:IFrame = new IFrame();
+                var content:IFrame = new IFrame("frame0");
                 content.percentHeight = 100;
                 content.percentWidth = 100;                    
                 content.source = "http://www.google.com";
-                content.overlayDetection = true;
                 podHash["pod0"].addChild(content);
 
-                var content2:IFrame = new IFrame();
+                var content2:IFrame = new IFrame("frame1");
                 content2.percentHeight = 100;
                 content2.percentWidth = 100;                 
                 content2.source = "http://www.yahoo.com";
-                content2.overlayDetection = true;
                 podHash["pod1"].addChild(content2);
 
-                var content3:IFrame = new IFrame();
+                var content3:IFrame = new IFrame("frame2");
                 content3.percentHeight = 100;
                 content3.percentWidth = 100;                 
                 content3.source = "http://code.google.com/p/flex-iframe";
-                content3.overlayDetection = true;
+                content3.debug = true;
                 podHash["pod2"].addChild(content3);
 
-                var content4:IFrame = new IFrame();
+                var content4:IFrame = new IFrame("frame3");
                 content4.percentHeight = 100;
                 content4.percentWidth = 100;                 
                 content4.source = "http://code.google.com/p/flex-iframe/updates/list";
-                content4.overlayDetection = true;
                 podHash["pod3"].addChild(content4);
                 
                 // Listen for the last pod to complete so the layout from the ContainerWindowManager is done correctly. 
