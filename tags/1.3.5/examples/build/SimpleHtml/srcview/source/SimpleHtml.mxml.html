@@ -1,0 +1,69 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SimpleHtml.mxml</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="MXMLProcessing_Instruction">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="MXMLComment">&lt;!--</span><span class="MXMLComment"> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - Copyright (c) 2009 flex-iframe
+ -
+ - Permission is hereby granted, free of charge, to any person obtaining a copy
+ - of this software and associated documentation files (the &quot;Software&quot;), to deal
+ - in the Software without restriction, including without limitation the rights
+ - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ - copies of the Software, and to permit persons to whom the Software is
+ - furnished to do so, subject to the following conditions:
+ -
+ - The above copyright notice and this permission notice shall be included in
+ - all copies or substantial portions of the Software.
+ -
+ - THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ -  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ - THE SOFTWARE.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - $Id: SimpleHtml.mxml 54 2009-10-11 11:41:53Z juliennicoulaud $
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ </span><span class="MXMLComment">--&gt;</span>
+<span class="MXMLComment">&lt;!--</span><span class="MXMLComment">-
+    A basic example application showing how to embed a local html page in a Flex application.
+    
+    @author Alistair Rutherford
+</span><span class="MXMLComment">--&gt;</span>
+<span class="MXMLComponent_Tag">&lt;mx:Application</span><span class="MXMLDefault_Text"> xmlns:mx=&quot;</span><span class="MXMLString">http://www.adobe.com/2006/mxml</span><span class="MXMLDefault_Text">&quot; 
+                xmlns:flexiframe=&quot;</span><span class="MXMLString">http://code.google.com/p/flex-iframe/</span><span class="MXMLDefault_Text">&quot;
+                horizontalAlign=&quot;</span><span class="MXMLString">center</span><span class="MXMLDefault_Text">&quot;
+                verticalAlign=&quot;</span><span class="MXMLString">middle</span><span class="MXMLDefault_Text">&quot;
+                viewSourceURL=&quot;</span><span class="MXMLString">srcview/index.html</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">&gt;</span>
+
+    <span class="MXMLComment">&lt;!--</span><span class="MXMLComment"> Example project presentation </span><span class="MXMLComment">--&gt;</span>
+    <span class="MXMLComponent_Tag">&lt;mx:ApplicationControlBar</span><span class="MXMLDefault_Text"> dock=&quot;</span><span class="MXMLString">true</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">&gt;</span>
+        <span class="MXMLComponent_Tag">&lt;mx:Image</span><span class="MXMLDefault_Text"> source=&quot;</span><span class="MXMLString">http://flex-iframe.googlecode.com/svn/trunk/flexiframe/src/com/google/code/flexiframe/assets/flex-iframe-logo-48.png</span><span class="MXMLDefault_Text">&quot;
+                  width=&quot;</span><span class="MXMLString">48</span><span class="MXMLDefault_Text">&quot;
+                  height=&quot;</span><span class="MXMLString">48</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">/&gt;</span>
+        <span class="MXMLComponent_Tag">&lt;mx:Text</span><span class="MXMLDefault_Text"> selectable=&quot;</span><span class="MXMLString">false</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">&gt;</span>
+            <span class="MXMLComponent_Tag">&lt;mx:htmlText&gt;</span><span class="MXMLDefault_Text">&lt;![CDATA[</span><span class="MXMLDefault_Text">&lt;font color=&quot;#000000&quot; size=&quot;12&quot;&gt;&lt;b&gt;Flex-IFrame - Simple html example&lt;/b&gt;&lt;br&gt;This example shows how to embed a simple Html page in Flex application.&lt;/font&gt;</span><span class="MXMLDefault_Text">]]&gt;</span><span class="MXMLComponent_Tag">&lt;/mx:htmlText&gt;</span>
+        <span class="MXMLComponent_Tag">&lt;/mx:Text&gt;</span>
+    <span class="MXMLComponent_Tag">&lt;/mx:ApplicationControlBar&gt;</span>
+
+    <span class="MXMLComment">&lt;!--</span><span class="MXMLComment"> A local Html page embedded </span><span class="MXMLComment">--&gt;</span>
+    <span class="MXMLComponent_Tag">&lt;mx:Panel</span><span class="MXMLDefault_Text"> title=&quot;</span><span class="MXMLString">A simple Html page embedded</span><span class="MXMLDefault_Text">&quot;
+              width=&quot;</span><span class="MXMLString">80%</span><span class="MXMLDefault_Text">&quot;
+              height=&quot;</span><span class="MXMLString">80%</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">&gt;</span>
+
+        <span class="MXMLComponent_Tag">&lt;flexiframe:IFrame</span><span class="MXMLDefault_Text"> id=&quot;</span><span class="MXMLString">myFrame</span><span class="MXMLDefault_Text">&quot;
+                           width=&quot;</span><span class="MXMLString">100%</span><span class="MXMLDefault_Text">&quot;
+                           height=&quot;</span><span class="MXMLString">100%</span><span class="MXMLDefault_Text">&quot;
+                           source=&quot;</span><span class="MXMLString">about.html</span><span class="MXMLDefault_Text">&quot;</span><span class="MXMLComponent_Tag">/&gt;</span>
+
+    <span class="MXMLComponent_Tag">&lt;/mx:Panel&gt;</span>
+
+<span class="MXMLComponent_Tag">&lt;/mx:Application&gt;</span></pre></body>
+</html>

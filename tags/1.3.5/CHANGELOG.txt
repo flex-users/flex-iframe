@@ -1,0 +1,133 @@
+ ***************************************************************************************************
+ * Copyright (c) 2009 flex-iframe
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * -------------------------------------------------------------------------------------------------
+ * $Id$
+ ***************************************************************************************************
+
+ Revision  Date      Who           Notes
+ --------  ----      ---           -----
+ 1.0       16/09/07  AJR           * Initial version
+ 
+ 1.1       29/09/07  AJR           * Fixed bug where the frame wasn't resizing itself when
+                                     the source url was assigned.
+                              
+ 1.2       14/12/07  Max           * http://16-bits.com/HTMLTest/HTMLTest.html
+                                     I modified it a little bit so that you can also set 
+                                     a content property instead of source to display a div 
+                                     container instead of iFrame.
+                              
+ 1.3       22/09/08  RAB           * Frame will now move with the Flex component
+                                     (for example, dragging a popup TitleWindow parent)
+                                     It does this by seeding a second event listener up
+                                     the displayList for MoveEvent.MOVE
+
+                                   * Fixed issue where frame might not display if it
+                                     was visible at component creation and not a child 
+                                     of a navigator control like TabNavigator,
+                                     ViewStack or Accordion
+
+                                   * IFrame now registers an onLoad callback for its
+                                     iframe element and will dispatch a 'frameLoad' flash
+                                     event when the browser reports iframe content load
+
+                                   * Added callIFrameFunction that allows calling of
+                                     JavaScript functions defined on the IFrame content's
+                                     document object, if everything is in the same domain
+                                     (if the iframe hasn't fully loaded yet, the call will
+                                     be queued and executed once it has loaded)
+
+                                   * Added option for IFrame component to try and detect
+                                     new global objects such as alerts, tooltips and 
+                                     pop up windows that are added on top of it and hide the
+                                     browser iframe temporarily. This option must be
+                                     explicitly enabled with the overlayDetection property
+                                     as it's a total hack with no guarantees of working
+
+                                   * Added 'debug' property to component that can be
+                                     used to switch trace statements on and off and
+                                     changed all traces to go through a logger
+
+                                   * Added property "loadIndicatorClass". If this is
+                                     defined, iframe will create an instance of this
+                                     class and use it to display a centered indicator
+                                     over the iframe container while its contents are
+                                     being loaded by the browser
+
+                                   * IFrame will now ensure that it's using a unique
+                                     id within the application by tracking all IFrame
+                                     component ids in use with a static var and
+                                     appending a unique number to the end if needed.
+                                     This allows use of IFrame within a reusable MXML 
+                                     component that gets instantiated more than once
+
+ 1.3.1     13/10/08  RAB           * Fixed issue where parent document body could be
+                                     accidentally set to invisible when using content
+                                     div mode
+
+ 1.3.2     20/10/08  RAB           * Added checks for cross-domain security violations.
+                                     Fixes a problem with hiding and showing iframes with
+                                     content from a different domain, and will now log
+                                     a warning in debug mode when attempting to call 
+                                     a function inside an iframe in a different domain
+
+ 1.3.3     05/11/08  RAB           * Fixed issue where iframe in nested ViewStacks (or
+                                     related components like TabNavigator) could become 
+                                     visible when it shouldn't.
+                              
+                                   * Debug mode can now be turned on or off at any time
+                                     instead of being locked in when createChildren runs
+                            
+                                   * Fixed issue with incorrect switching when iframe
+                                     was created in ViewStack child on the fly due to
+                                     creationPolicy="auto"
+
+ 1.3.4     03/10/09  J. Nicoulaud  * Fixed issue where assignment using the content 
+                                     property was causing the DIV to ignore the container 
+                                     size. DIV now uses overflow:auto; with explicit size. (fix
+                                     by chrisr, Issue 12).
+
+                                   * Fixed DIVs never removed (Issue 1, fix by alan.plante).
+
+                                   * Fixed issue when moving IFrame (Issue 29, fix by
+                                     achim.alin.ion).
+
+                                   * Fixed IFrame contents were reloaded at every visibility change
+                                     (Issue 32, fix by Savas Ali Tokmen)
+                                     
+           07/10/09 J. Nicoulaud   * Added a function to bring an IFrame to the front (Issue 35,
+                                     function written by artistinclosure).
+                                     
+                                   * Use Application.application.url instead of BrowserManager to
+                                     avoid adding an extra history state to the browser (Issue 19,
+                                     fix by Bruce Schwartz).
+                                     
+           11/10/09 J. Nicoulaud   * Workaround for Application.application.id being null on Linux
+                                     (Issue 34).
+                                     
+                                   * Fixed loading indicator not working (Issue 36).
+                                   
+           12/10/09 J. Nicoulaud   * Issue 25/37: Handle the browser zoom (Firefox + Chrome).
+
+           14/10/09 J. Nicoulaud   * Issue 25/37: Handle the browser zoom (Firefox, Chrome, IE8,
+                                     Opera, Safari).
+                                   
+ 1.3.5                             * Add a function to print the IFrame (Issue 23, contribution of
+                                     Jeffery Fernandez).
