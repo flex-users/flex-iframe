@@ -378,13 +378,18 @@ package com.google.code.flexiframe
          * The Javascript code to call to insert the function that gets the browser measured width.
          */
         public static var INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH:String =
-            "document.insertScript = function ()" +
+            "document.insertScript = function () " +
             "{ " +
-                "if (document." + FUNCTION_GET_BROWSER_MEASURED_WIDTH + "==null)" +
+                "if (document." + FUNCTION_GET_BROWSER_MEASURED_WIDTH + "==null) " +
                 "{ " +
                     FUNCTION_GET_BROWSER_MEASURED_WIDTH + " = function() " + 
                     "{ " + 
-                        "return innerWidth; " + 
+                        "if (typeof self != 'undefined' && typeof self.document != 'undefined' && typeof self.document.body != 'undefined' && typeof self.document.body.parentElement != 'undefined' && typeof self.document.body.parentElement.offsetWidth != 'undefined') { " +
+                            "return self.document.body.parentElement.offsetWidth; " +
+                        "} else if (typeof innerWidth != 'undefined') { " +
+                            "return innerWidth; " +
+                        "}" +
+                        "return 0; " +
                     "} " +
                 "} " + 
             "}";
