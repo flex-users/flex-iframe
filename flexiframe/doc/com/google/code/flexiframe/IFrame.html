@@ -233,7 +233,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
-<a class="signatureLink" href="#IFrame()">IFrame</a>()</div>
+<a class="signatureLink" href="#IFrame()">IFrame</a>(id:String = null)</div>
 <div class="summaryTableDescription">
          Build a new IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
@@ -831,9 +831,42 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function IFrame()</code><p>
+<code>public function IFrame(id:String = null)</code><p>
          Build a new IFrame.
-         </p></div>
+         
+         </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">id</span>:String</code> (default = <code>null</code>)<code></code> &mdash; a String identifying the IFrame. Must be unique for every instance of the
+                    IFrame class.
+         
+         </td>
+</tr>
+</table>
+<br>
+<span class="label">Example</span>
+<br>Declare an IFrame in MXML.
+         <div class='listing'><pre>
+         &lt;mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                         xmlns:flexiframe="http://code.google.com/p/flex-iframe/"&gt;
+                      &lt;flexiframe:IFrame id="googleIFrame"
+                                label="Google"
+                                source="http://www.google.com"
+                                width="80%"
+                                height="80%"/&gt;
+                  &lt;mx:Application&gt;
+         </pre></div>
+         
+         <p></p>Declare an IFrame in ActionScript.
+         <div class='listing'><pre>
+         import com.google.code.flexiframe.IFrame;
+         
+         ...
+         
+         var frame : IFrame = new IFrame("aUniqueIdForThisIFrameInstance");
+         </pre></div>
+         <p></p>
+</div>
 <a name="methodDetail"></a>
 <div class="detailSectionHeader">Method detail</div>
 <a name="adjustPosition()"></a>
