@@ -129,5 +129,5 @@
            14/10/09 J. Nicoulaud   * Issue 25/37: Handle the browser zoom (Firefox, Chrome, IE8,
                                      Opera, Safari).
                                    
-                                   * Add a function to print the IFrame (Issue 23, contribution of
+ 1.3.5                             * Add a function to print the IFrame (Issue 23, contribution of
                                      Jeffery Fernandez).
