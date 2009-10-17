@@ -141,4 +141,8 @@
                                    * Add a function to print the IFrame (Issue 23, contribution of
  1.3.5                               Jeffery Fernandez).
  ---------------------------------------------------------------------------------------------------
- 
+
+           14/10/09  J. Nicoulaud  * Add functions for history back and forward.
+
+                                   * Add the 'hidden' attribute that forces the IFrame to stay
+                                     hidden whatever happens.

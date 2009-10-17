@@ -54,7 +54,7 @@ package com.google.code.flexiframe
                         "var newDiv = document.createElement('div');" +
                         "newDiv.id = frameID;" +
                         "newDiv.style.position ='absolute';" +
-                        "newDiv.style.backgroundColor = 'transparent';" + 
+                        "newDiv.style.backgroundColor = '#FFFFFF';" + 
                         "newDiv.style.border = '0px';" +
                         "newDiv.style.overflow = 'auto';" +
                         "newDiv.style.display = 'none';" +
@@ -410,26 +410,26 @@ package com.google.code.flexiframe
         public static function INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId:String):String
         {
             return "document.insertScript = function ()" +
-		           "{ " +
-		               "if (document." + FUNCTION_SETUP_RESIZE_EVENT_LISTENER + "==null)" +
-		               "{ " +
-		                   FUNCTION_SETUP_RESIZE_EVENT_LISTENER + " = function() " + 
-		                   "{ " + 
-		                       "if (window.addEventListener) { " +
-		                           "window.addEventListener(\"resize\", notify" + frameId + "Resize, false); " +
-		                       "} else if (window.attachEvent) { " +
-		                           "window.attachEvent(\"onresize\", notify" + frameId + "Resize); " +
-		                       "} " +
-		                   "} " +
-		               "} " + 
-		               "if (document.notify" + frameId + "Resize==null)" +
-		               "{ " +
-		                   "notify" + frameId + "Resize = function() " + 
-		                   "{ " + 
-		                       "document.getElementById('" + IFrame.applicationId + "')." + frameId + "_resize(); " +
-		                   "} " +
-		               "} " + 
-		           "} ";
+                   "{ " +
+                       "if (document." + FUNCTION_SETUP_RESIZE_EVENT_LISTENER + "==null)" +
+                       "{ " +
+                           FUNCTION_SETUP_RESIZE_EVENT_LISTENER + " = function() " + 
+                           "{ " + 
+                               "if (window.addEventListener) { " +
+                                   "window.addEventListener(\"resize\", notify" + frameId + "Resize, false); " +
+                               "} else if (window.attachEvent) { " +
+                                   "window.attachEvent(\"onresize\", notify" + frameId + "Resize); " +
+                               "} " +
+                           "} " +
+                       "} " + 
+                       "if (document.notify" + frameId + "Resize==null)" +
+                       "{ " +
+                           "notify" + frameId + "Resize = function() " + 
+                           "{ " + 
+                               "document.getElementById('" + IFrame.applicationId + "')." + frameId + "_resize(); " +
+                           "} " +
+                       "} " + 
+                   "} ";
         }
 
 
@@ -439,7 +439,7 @@ package com.google.code.flexiframe
         public static var FUNCTION_PRINT_IFRAME:String = "printIFrame";
 
         /**
-         *  The Javascript code to call to insert the function that prints the IFrame.
+         * The Javascript code to call to insert the function that prints the IFrame.
          */
         public static var INSERT_FUNCTION_PRINT_IFRAME:String =
            "document.insertScript = function ()" +
@@ -471,6 +471,50 @@ package com.google.code.flexiframe
                        "{" +
                            "alert(e.name + ': ' + e.message);" +
                        "}" +
+                   "}" +
+                "}" +
+            "}";
+
+
+        /**
+         * The name of the Javascript function that loads the IFrame's last page in the history.
+         */
+        public static var FUNCTION_HISTORY_BACK:String = "historyBack";
+
+        /**
+         * The Javascript code to call to insert the function that loads the IFrame's last page
+         * in the history.
+         */
+        public static var INSERT_FUNCTION_HISTORY_BACK:String =
+           "document.insertScript = function ()" +
+           "{" +
+               "if (document." + FUNCTION_HISTORY_BACK + "==null)" + 
+               "{" +
+                   FUNCTION_HISTORY_BACK + " = function (iframeID)" +
+                   "{" +
+                        "frames[iframeID].history.go(-1); " +
+                   "}" +
+                "}" +
+            "}";
+
+
+        /**
+         * The name of the Javascript function that loads the IFrame's next page in the history.
+         */
+        public static var FUNCTION_HISTORY_FORWARD:String = "historyForward";
+
+        /**
+         * The Javascript code to call to insert the function that loads the IFrame's next page
+         * in the history.
+         */
+        public static var INSERT_FUNCTION_HISTORY_FORWARD:String =
+           "document.insertScript = function ()" +
+           "{" +
+               "if (document." + FUNCTION_HISTORY_FORWARD + "==null)" + 
+               "{" +
+                   FUNCTION_HISTORY_FORWARD + " = function (iframeID)" +
+                   "{" +
+                        "frames[iframeID].history.go(1); " +
                    "}" +
                 "}" +
             "}";
