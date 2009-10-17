@@ -145,6 +145,5 @@
            17/10/09  J. Nicoulaud  * Add functions for history back and forward.
 
                                    * Add the 'hidden' attribute that forces the IFrame to stay
-                                     hidden whatever happens.
- 1.4
+ 1.4                                 hidden whatever happens.
  ---------------------------------------------------------------------------------------------------

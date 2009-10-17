@@ -2,13 +2,14 @@
 <metadata>
   <groupId>com.google.code</groupId>
   <artifactId>flex-iframe</artifactId>
-  <version>1.3.5</version>
+  <version>1.4</version>
   <versioning>
     <versions>
       <version>1.3.3</version>
       <version>1.3.4</version>
       <version>1.3.5</version>
+      <version>1.4</version>
     </versions>
-    <lastUpdated>20091014173420</lastUpdated>
+    <lastUpdated>20091017120811</lastUpdated>
   </versioning>
 </metadata>
