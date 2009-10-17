@@ -32,7 +32,7 @@ package com.google.code.flexiframe
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
     
-    import mx.controls.Alert;
+    import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
@@ -169,65 +169,65 @@ package com.google.code.flexiframe
          *
          * Used to check potential cross-domain issues.
          */
-        protected static var appHost:String;
+        protected static var _appHost:String;
 
         /**
          * IFrame content host.
          *
          * Used to check potential cross-domain issues.
          */
-        protected var iframeContentHost:String;
+        protected var _iframeContentHost:String;
 
         /**
          * The source of the IFrame.
          */
-        protected var __source:String;
+        protected var _source:String;
 
         /**
          * The content of the IFrame.
          */
-        protected var __content:String;
+        protected var _content:String;
 
         /**
          * The frame ID.
          */
-        protected var frameId:String;
+        protected var _frameId:String;
 
         /**
          * The IFrame ID.
          */
-        protected var iframeId:String;
+        protected var _iframeId:String;
 
         /**
          * The validity of the frame for the display.
          *
          * @default true
          */
-        protected var validForDisplay:Boolean=true;
+        protected var _validForDisplay:Boolean = true;
 
         /**
          * Wether the frame is loaded or not.
          *
          * @default false
          */
-        protected var frameLoaded:Boolean=false;
+        protected var _frameLoaded:Boolean = false;
 
         /**
-         * Wether the frame has never been shown yet
+         * Force the iFrame to stay hidden whatever happens.
          *
-         * @default true
+         * @default false
          */
-        protected var firstShow:Boolean=true;
+        protected var _hidden:Boolean = false;
 
         /**
          * The queued functions waiting for the frame to be loaded.
          */
-        protected var functionQueue:Array=[];
+        protected var _functionQueue:Array = [];
 
         /**
          * The browser zoom ratio
          */
-        protected var browserScaling:Number = 1;
+        protected var _browserScaling:Number = 1;
 
 
         // Overriden functions
@@ -247,16 +247,16 @@ package com.google.code.flexiframe
             }
 
             // Get the host info to check for cross-domain issues
-            if (!appHost)
+            if (!_appHost)
             {
                 var url:String=Application.application.url;
                 if (url)
                 {
-                    appHost=URLUtil.getProtocol(url) + "://" + URLUtil.getServerNameWithPort(url);
+                    _appHost=URLUtil.getProtocol(url) + "://" + URLUtil.getServerNameWithPort(url);
                 }
                 else
                 {
-                    appHost="unknown";
+                    _appHost="unknown";
                 }
             }
 
@@ -266,9 +266,9 @@ package com.google.code.flexiframe
             {
                 idSuffix++;
             }
-            frameId=id + idSuffix;
-            iframeId="iframe_" + frameId;
-            idList[frameId] = true;
+            _frameId=id + idSuffix;
+            _iframeId="iframe_" + _frameId;
+            idList[_frameId] = true;
 
             // Setup the communication with the browser
             setupExternalInterface();
@@ -279,6 +279,7 @@ package com.google.code.flexiframe
             // Build the parent containers list
             buildContainerList();
             
+            // Place and size the iframe
             adjustPosition(true);
             
             // Setup the load indicator if it was specified.
@@ -305,34 +306,27 @@ package com.google.code.flexiframe
         {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-            if (_loadIndicator)
+            if (_frameLoaded)
             {
-                if (frameLoaded)
+                if (_loadIndicator)
                 {
-                	logger.debug("Frame with id '{0}' loaded, hiding the load indicator.", frameId);
-                    _loadIndicator.visible=false;
-                    visible = true;
+                    logger.debug("Frame with id '{0}' loaded, hiding the load indicator.", _frameId);
+                    _loadIndicator.visible = false;
                 }
-                else
-                {
-                	logger.debug("Frame with id '{0}' not loaded, showing the load indicator.", frameId);
-                    _loadIndicator.visible=true;
-                    var w:int=_loadIndicator.measuredWidth;
-                    var h:int=_loadIndicator.measuredHeight;
-                    _loadIndicator.setActualSize(w, h);
-                    _loadIndicator.move((this.width - w) / 2, (this.height - h) / 2);
-                }
+                visible = !hidden;
             }
-            else
+            else if (_loadIndicator)
             {
-            	if (frameLoaded)
-                {
-                	visible = true;
-                }
-            } 
+                logger.debug("Frame with id '{0}' not loaded, showing the load indicator.", _frameId);
+                _loadIndicator.visible = true;
+                var w:int=_loadIndicator.measuredWidth;
+                var h:int=_loadIndicator.measuredHeight;
+                _loadIndicator.setActualSize(w, h);
+                _loadIndicator.move((this.width - w) / 2, (this.height - h) / 2);
+            }
 
             // make sure we are allowed to display before doing the work of positioning the frame
-            if (validForDisplay)
+            if (_validForDisplay)
             {
                 adjustPosition();
             }
@@ -347,15 +341,14 @@ package com.google.code.flexiframe
 
             if (source)
             {
-                if (firstShow)
+                if (!_frameLoaded)
                 {
-                    frameLoaded = false;
-                    firstShow = false;
+                    _frameLoaded = false;
                     loadIFrame();
                 }
                 else
                 {
-                    logger.debug("The IFrame with id '{0}' is already loaded.", frameId);
+                    logger.debug("The IFrame with id '{0}' is already loaded.", _frameId);
                 }
                 // Trigger re-layout of iframe contents.                
                 invalidateDisplayList();
@@ -378,16 +371,16 @@ package com.google.code.flexiframe
          */
         protected function handleAdd(event:Event=null):void
         {
-            logger.debug("The component for the IFrame with id '{0}' has been added from the stage.",frameId);
+            logger.debug("The component for the IFrame with id '{0}' has been added from the stage.", _frameId);
 
             // Hook the systemManager to provide overlaying object detection
             if (overlayDetection)
             {
-            	logger.info("Listening to the stage component additions to detect overlapping objects.");
+                logger.info("Listening to the stage component additions to detect overlapping objects.");
                 systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
                 systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
             }
-            visible = true;
+            visible = !hidden;
         }
 
         /**
@@ -397,7 +390,7 @@ package com.google.code.flexiframe
          */
         protected function handleRemove(event:Event=null):void
         {
-            logger.debug("The component for the IFrame with id '{0}' has been removed from the stage.",frameId);
+            logger.debug("The component for the IFrame with id '{0}' has been removed from the stage.", _frameId);
             
             // Remove systemManager hooks for overlay detection 
             if (overlayDetection)
@@ -423,8 +416,8 @@ package com.google.code.flexiframe
                 var changedEvent:IndexChangedEvent=IndexChangedEvent(event)
                 var newIndex:Number=changedEvent.newIndex;
 
-                visible=checkDisplay(target, newIndex);
-                logger.debug("Frame {0} set visible to {1} on IndexChangedEvent", frameId, visible);
+                visible = !hidden && checkDisplay(target, newIndex);
+                logger.debug("Frame {0} set visible to {1} on IndexChangedEvent", _frameId, visible);
             }
         }
 
@@ -445,16 +438,16 @@ package com.google.code.flexiframe
          */
         protected function handleFrameLoad():void
         {
-            logger.info("Browser reports frame with id {0} loaded.", frameId);
-            frameLoaded = true;
-            visible = true;
+            logger.info("Browser reports frame with id {0} loaded.", _frameId);
+            _frameLoaded = true;
+            visible = !hidden;
             
             // Execute any queued function calls now that the frame is loaded
             var queuedCall:Object;
-            while (functionQueue.length > 0)
+            while (_functionQueue.length > 0)
             {
-                queuedCall=functionQueue.pop();
-                logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
+                queuedCall = _functionQueue.pop();
+                logger.debug("frame id {0} calling queued function {1}", _frameId, queuedCall.functionName);
                 this.callIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
             }
             dispatchEvent(new Event("frameLoad"));
@@ -477,7 +470,7 @@ package com.google.code.flexiframe
          */
         protected function checkDisplay(target:Object, newIndex:Number):Boolean
         {
-            var valid:Boolean=false;
+            var valid:Boolean = false;
             if (target is Container)
             {
                 var container:DisplayObjectContainer=DisplayObjectContainer(target);
@@ -485,18 +478,18 @@ package com.google.code.flexiframe
                 // Update current setting
                 settingDict[container]=newIndex;
 
-                valid=true;
+                valid = true;
 
                 for (var item:Object in containerDict)
                 {
                     var index:Number=lookupIndex(item as Container);
                     var setting:Number=lookupSetting(item as Container);
-                    valid=valid && (index == setting);
+                    valid = valid && (index == setting);
                 }
             }
 
             // Remember this state so we can re-check later without a new IndexChangedEvent
-            validForDisplay=valid;
+            _validForDisplay = valid;
             return valid;
         }
 
@@ -508,20 +501,22 @@ package com.google.code.flexiframe
             var localPt:Point=new Point(0, 0);
             var globalPt:Point=this.localToGlobal(localPt);
             
+            // If needed, recalculate the browser zoom
             if (recalculateBrowserScaling)
             {
-	            var browserMeasuredWidth:Number = getBrowserMeasuredWidth();
-	            
-	            if(browserMeasuredWidth > 0)
-	            {
-	                browserScaling = browserMeasuredWidth / Application.application.width;
-	            }
+                var browserMeasuredWidth:Number = getBrowserMeasuredWidth();
+                
+                if(browserMeasuredWidth > 0)
+                {
+                    _browserScaling = browserMeasuredWidth / Application.application.width;
+                }
             }
             
-            moveIFrame(globalPt.x * browserScaling,
-                       globalPt.y * browserScaling,
-                       this.width * browserScaling,
-                       this.height * browserScaling);
+            // Place the iframe
+            moveIFrame(globalPt.x * _browserScaling,
+                       globalPt.y * _browserScaling,
+                       this.width * _browserScaling,
+                       this.height * _browserScaling);
         }
 
         /**
@@ -533,14 +528,14 @@ package com.google.code.flexiframe
         {
             if (source)
             {
-                __source=source;
+                _source=source;
+                
                 // mark unloaded now so calls in this frame will be queued
-                firstShow=true;
-                frameLoaded=false;
+                _frameLoaded=false;
                 invalidateProperties();
 
                 // Get the host info to check for cross-domain issues
-                iframeContentHost=URLUtil.getProtocol(source) + "://" + URLUtil.getServerNameWithPort(source);
+                _iframeContentHost=URLUtil.getProtocol(source) + "://" + URLUtil.getServerNameWithPort(source);
             }
         }
 
@@ -549,17 +544,17 @@ package com.google.code.flexiframe
          */
         public function get source():String
         {
-            return __source;
+            return _source;
         }
 
         /**
          * Set content string
          */
-        public function set content(content:String):void
+        public function set content(value:String):void
         {
-            if (content)
+            if (value)
             {
-                __content=content;
+                _content = value;
 
                 invalidateProperties();
             }
@@ -570,7 +565,7 @@ package com.google.code.flexiframe
          */
         public function get content():String
         {
-            return __content;
+            return _content;
         }
 
         /**
@@ -580,15 +575,15 @@ package com.google.code.flexiframe
          */
         override public function set visible(value:Boolean):void
         {
-        	logger.debug("IFrame with id '{0}' visibility set to '{1}'",frameId,value);
-        	
-            super.visible=value;
+            logger.debug("IFrame with id '{0}' visibility set to '{1}'", _frameId, value);
+            
+            super.visible = value;
 
             // if we have an iframe in the same domain as the app, call the
             // specialized functions to update visibility inside the iframe
-            if (visible && validForDisplay && (frameLoaded || (!frameLoaded && loadIndicatorClass == null)))
+            if (visible && _validForDisplay && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
-                if (source && iframeContentHost == appHost)
+                if (source && _iframeContentHost == _appHost)
                 {
                     showIFrame();
                 }
@@ -603,7 +598,7 @@ package com.google.code.flexiframe
             }
             else
             {
-                if (source && iframeContentHost == appHost)
+                if (source && _iframeContentHost == _appHost)
                 {
                     hideIFrame();
                 }
@@ -612,6 +607,36 @@ package com.google.code.flexiframe
                     hideDiv();
                 }
             }
+        }
+        
+        /**
+         * Force the IFrame to stay hidden, whatever happens.
+         */
+        public function set hidden(value:Boolean):void
+        {
+            _hidden = value;
+            
+            if (value)
+            {
+                if (visible)
+                {
+                    visible = false;
+                }
+            }
+            else
+            {
+                visible = _validForDisplay &&
+                          _frameLoaded &&
+                          (!overlayDetection || (overlayDetection && overlapCount == 0));
+            }
+        }
+        
+        /**
+         * Get the state of the "hidden" mode.
+         */
+        public function get hidden():Boolean
+        {
+            return _hidden;
         }
 
 
@@ -662,7 +687,6 @@ package com.google.code.flexiframe
                 {
                     if (current.contains(previous))
                     {
-
                         var childIndex:Number=current.getChildIndex(previous);
 
                         // Store child index against container
@@ -775,10 +799,12 @@ package com.google.code.flexiframe
         {
             // A display object was added somewhere
             var displayObj:DisplayObject=event.target as DisplayObject;
-            if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
+            if (displayObj.parent == systemManager &&
+                displayObj.name != "cursorHolder" &&
+                !(displayObj is ToolTip))
             {
                 // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
-                // check to see if it overlaps me after it's been drawn
+                // or a tooltip, check to see if it overlaps me after it's been drawn
                 this.callLater(checkOverlay, [displayObj]);
             }
         }
@@ -792,12 +818,12 @@ package com.google.code.flexiframe
             var displayObj:DisplayObject=event.target as DisplayObject;
             if (displayObj.parent == systemManager && overlappingDict[displayObj])
             {
-                logger.debug("iframe {0} heard REMOVE for {1}", frameId, displayObj.toString());
+                logger.debug("iframe {0} heard REMOVE for {1}", _frameId, displayObj.toString());
                 // If the object is a direct child of systemManager and was an overlapping object, remove it
                 delete overlappingDict[displayObj];
                 if (--overlapCount == 0)
                 {
-                    visible=validForDisplay;
+                    visible = !hidden && _validForDisplay;
                 }
 
                 if (displayObj is UIComponent)
@@ -817,18 +843,18 @@ package com.google.code.flexiframe
             var displayObj:DisplayObject=event.target as DisplayObject;
             if (event.type == FlexEvent.SHOW && !overlappingDict[displayObj])
             {
-                logger.debug("iframe {0} heard SHOW for {1}", frameId, displayObj.toString());
+                logger.debug("iframe {0} heard SHOW for {1}", _frameId, displayObj.toString());
                 overlappingDict[displayObj]=displayObj;
                 overlapCount++;
-                visible=false;
+                visible = false;
             }
             else if (event.type == FlexEvent.HIDE && overlappingDict[displayObj])
             {
-                logger.debug("iframe {0} heard HIDE for {1}", frameId, displayObj.toString());
+                logger.debug("iframe {0} heard HIDE for {1}", _frameId, displayObj.toString());
                 delete overlappingDict[displayObj];
                 if (--overlapCount == 0)
                 {
-                    visible=validForDisplay;
+                    visible = !hidden && _validForDisplay;
                 }
             }
         }
@@ -842,10 +868,10 @@ package com.google.code.flexiframe
         {
             if (this.hitTestStageObject(displayObj))
             {
-                logger.debug("iframe {0} detected overlap of {1}", frameId, displayObj.toString());
+                logger.debug("iframe {0} detected overlap of {1}", _frameId, displayObj.toString());
                 overlappingDict[displayObj]=displayObj;
                 overlapCount++;
-                visible=false;
+                visible = false;
 
                 if (displayObj is UIComponent)
                 {
@@ -921,15 +947,15 @@ package com.google.code.flexiframe
                 throw new Error("No IFrame to call functions on");
             }
             
-            if (iframeContentHost != appHost)
+            if (_iframeContentHost != _appHost)
             {
-                logger.warn("Warning: attempt to call function '{0}' on IFrame '{1}' may fail due to cross-domain security.",functionName,frameId);
+                logger.warn("Warning: attempt to call function '{0}' on IFrame '{1}' may fail due to cross-domain security.", functionName, _frameId);
             }
 
-            if (frameLoaded)
+            if (_frameLoaded)
             {
                 // Call the function immediately
-                var result:Object=ExternalInterface.call(IFrameExternalCalls.FUNCTION_CALLIFRAMEFUNCTION, iframeId, functionName, args);
+                var result:Object=ExternalInterface.call(IFrameExternalCalls.FUNCTION_CALLIFRAMEFUNCTION, _iframeId, functionName, args);
                 if (callback != null)
                 {
                     callback(result);
@@ -940,7 +966,7 @@ package com.google.code.flexiframe
             {
                 // Queue the function for call once the iframe has loaded
                 var queuedCall:Object={functionName: functionName, args: args, callback: callback};
-                functionQueue.push(queuedCall);
+                _functionQueue.push(queuedCall);
                 return null;
             }
         }
@@ -965,24 +991,24 @@ package com.google.code.flexiframe
          */
         protected function resolveEmbedObjectId():void
         {
-        	if (applicationId == null) {
-	            try{
-	                randomIdentificationString = Math.ceil(Math.random()*9999*1000);
-	                ExternalInterface.addCallback('checkObjectId', checkObjectId);
-	                var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_ASK_FOR_EMBED_OBJECT_ID,randomIdentificationString.toString());
-	                if (result != null)
-	                {
-	                	applicationId = String(result);
-	                    logger.info("Resolved the SWF embed object id to '{0}'.", applicationId);
-	                }
-	                else
-	                {
-	                	logger.error('Could not resolve the SWF embed object Id.');
-	                }
-	            } catch(error:Error) {
-	                logger.error(error.errorID + ": " + error.name + " - " + error.message);              
-	            }
-	        }
+            if (applicationId == null) {
+                try{
+                    randomIdentificationString = Math.ceil(Math.random()*9999*1000);
+                    ExternalInterface.addCallback('checkObjectId', checkObjectId);
+                    var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_ASK_FOR_EMBED_OBJECT_ID,randomIdentificationString.toString());
+                    if (result != null)
+                    {
+                        applicationId = String(result);
+                        logger.info("Resolved the SWF embed object id to '{0}'.", applicationId);
+                    }
+                    else
+                    {
+                        logger.error('Could not resolve the SWF embed object Id.');
+                    }
+                } catch(error:Error) {
+                    logger.error(error.errorID + ": " + error.name + " - " + error.message);              
+                }
+            }
         }
         
         /**
@@ -1023,18 +1049,20 @@ package com.google.code.flexiframe
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_REMOVEIFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_PRINT_IFRAME);
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_HISTORY_BACK);
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_HISTORY_FORWARD);
             
             // Resolve the SWF embed object id in the DOM.
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID);
             resolveEmbedObjectId();
             
             // Register a uniquely-named load event callback for this frame.
-            ExternalInterface.addCallback(frameId + "_load",handleFrameLoad);
+            ExternalInterface.addCallback(_frameId + "_load",handleFrameLoad);
             
             // Setup the browser resize event listener.
-            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId));
+            ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(_frameId));
             setupBrowserResizeEventListener();
-            ExternalInterface.addCallback(frameId + "_resize",function():void
+            ExternalInterface.addCallback(_frameId + "_resize",function():void
             {
                 adjustPosition(true);
             });
@@ -1045,8 +1073,8 @@ package com.google.code.flexiframe
          */
         protected function createIFrame():void
         {
-            logger.info("Creating IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_CREATEIFRAME, frameId);
+            logger.info("Creating IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_CREATEIFRAME, _frameId);
         }
 
         /**
@@ -1054,8 +1082,8 @@ package com.google.code.flexiframe
          */
         protected function moveIFrame(x:int,y:int,width:int,height:int):void
         {
-            logger.info("Moving IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_MOVEIFRAME, frameId, iframeId, x, y, width, height);
+            logger.info("Moving IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_MOVEIFRAME, _frameId, _iframeId, x, y, width, height);
         }
 
         /**
@@ -1063,8 +1091,8 @@ package com.google.code.flexiframe
          */
         protected function hideIFrame():void
         {
-            logger.info("Hiding IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEIFRAME, frameId, iframeId);
+            logger.info("Hiding IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEIFRAME, _frameId, _iframeId);
         }
 
         /**
@@ -1072,8 +1100,8 @@ package com.google.code.flexiframe
          */
         protected function showIFrame():void
         {
-            logger.info("Showing IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_SHOWIFRAME, frameId, iframeId);
+            logger.info("Showing IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_SHOWIFRAME, _frameId, _iframeId);
         }
 
         /**
@@ -1081,8 +1109,8 @@ package com.google.code.flexiframe
          */
         protected function hideDiv():void
         {
-            logger.info("Hiding div with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEDIV, frameId);
+            logger.info("Hiding div with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEDIV, _frameId);
         }
 
         /**
@@ -1090,8 +1118,8 @@ package com.google.code.flexiframe
          */
         protected function showDiv():void
         {
-            logger.info("Showing div id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_SHOWDIV, frameId);
+            logger.info("Showing div id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_SHOWDIV, _frameId);
         }
 
         /**
@@ -1099,8 +1127,8 @@ package com.google.code.flexiframe
          */
         protected function loadIFrame():void
         {
-            logger.info("Loading IFrame with id '{0}', on SWF embed object with id '{1}'.", frameId, applicationId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, frameId, iframeId, source, applicationId);
+            logger.info("Loading IFrame with id '{0}', on SWF embed object with id '{1}'.", _frameId, applicationId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, _frameId, _iframeId, source, applicationId);
         }
 
         /**
@@ -1108,8 +1136,8 @@ package com.google.code.flexiframe
          */
         protected function loadDivContent():void
         {
-            logger.info("Loading content on IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADDIV_CONTENT, frameId, iframeId, content);
+            logger.info("Loading content on IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADDIV_CONTENT, _frameId, _iframeId, content);
         }
 
         /**
@@ -1117,8 +1145,8 @@ package com.google.code.flexiframe
          */
         public function removeIFrame():void
         {
-            logger.info("Removing IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_REMOVEIFRAME, frameId);
+            logger.info("Removing IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_REMOVEIFRAME, _frameId);
         }
 
         /**
@@ -1126,8 +1154,8 @@ package com.google.code.flexiframe
          */
         public function bringIFrameToFront():void
         {
-            logger.info("Bring to front IFrame with id '{0}'.", frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_BRING_IFRAME_TO_FRONT, frameId);
+            logger.info("Bring to front IFrame with id '{0}'.", _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_BRING_IFRAME_TO_FRONT, _frameId);
         }
 
         /**
@@ -1138,7 +1166,7 @@ package com.google.code.flexiframe
             logger.info("Get browser measured width.");
             var result : Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH);
             if (result != null) {
-            	return new Number(result);
+                return new Number(result);
             }
             return new Number(0);
         }
@@ -1157,8 +1185,26 @@ package com.google.code.flexiframe
         */
         public function printIFrame():void
         {
-            logger.info("Print the iFrame with id '{0}'.",iframeId);
-        	ExternalInterface.call(IFrameExternalCalls.FUNCTION_PRINT_IFRAME, iframeId);
+            logger.info("Print the iFrame with id '{0}'.", _iframeId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_PRINT_IFRAME, _iframeId);
+        }
+        
+        /**
+        * Load the IFrame's last page in the navigation history.
+        */
+        public function historyBack():void
+        {
+            logger.info("History back for the iFrame with id '{0}'.", _iframeId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HISTORY_BACK, _iframeId);
+        }
+        
+        /**
+        * Load the IFrame's next page in the navigation history.
+        */
+        public function historyForward():void
+        {
+            logger.info("History forward for the iFrame with id '{0}'.", _iframeId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_HISTORY_FORWARD, _iframeId);
         }
 
 
@@ -1179,7 +1225,7 @@ package com.google.code.flexiframe
         /**
          * The class logger.
          */
-        private var logger:ILogger=Log.getLogger("Flex-IFrame");
+        protected var logger:ILogger=Log.getLogger("Flex-IFrame");
 
         /**
          * Get the state of the debug mode.
