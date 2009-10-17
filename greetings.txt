@@ -8,3 +8,4 @@ Contributors:
  * Ryan Bell
  * Max
  * Julien Nicoulaud
+ * Several bug fixes by users (see changelog)

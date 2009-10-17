@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrameExternalCalls,com.google.code.flexiframe.IFrameExternalCalls,FUNCTION_ASK_FOR_EMBED_OBJECT_ID,FUNCTION_BRING_IFRAME_TO_FRONT,FUNCTION_CALLIFRAMEFUNCTION,FUNCTION_CREATEIFRAME,FUNCTION_GET_BROWSER_MEASURED_WIDTH,FUNCTION_HIDEDIV,FUNCTION_HIDEIFRAME,FUNCTION_LOADDIV_CONTENT,FUNCTION_LOADIFRAME,FUNCTION_MOVEIFRAME,FUNCTION_PRINT_IFRAME,FUNCTION_REMOVEIFRAME,FUNCTION_SETUP_RESIZE_EVENT_LISTENER,FUNCTION_SHOWDIV,FUNCTION_SHOWIFRAME,INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID,INSERT_FUNCTION_BRING_IFRAME_TO_FRONT,INSERT_FUNCTION_CALLIFRAMEFUNCTION,INSERT_FUNCTION_CREATEIFRAME,INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH,INSERT_FUNCTION_HIDEDIV,INSERT_FUNCTION_HIDEIFRAME,INSERT_FUNCTION_LOADDIV_CONTENT,INSERT_FUNCTION_LOADIFRAME,INSERT_FUNCTION_MOVEIFRAME,INSERT_FUNCTION_PRINT_IFRAME,INSERT_FUNCTION_REMOVEIFRAME,INSERT_FUNCTION_SHOWDIV,INSERT_FUNCTION_SHOWIFRAME,INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER" name="keywords">
+<meta content="IFrameExternalCalls,com.google.code.flexiframe.IFrameExternalCalls,FUNCTION_ASK_FOR_EMBED_OBJECT_ID,FUNCTION_BRING_IFRAME_TO_FRONT,FUNCTION_CALLIFRAMEFUNCTION,FUNCTION_CREATEIFRAME,FUNCTION_GET_BROWSER_MEASURED_WIDTH,FUNCTION_HIDEDIV,FUNCTION_HIDEIFRAME,FUNCTION_HISTORY_BACK,FUNCTION_HISTORY_FORWARD,FUNCTION_LOADDIV_CONTENT,FUNCTION_LOADIFRAME,FUNCTION_MOVEIFRAME,FUNCTION_PRINT_IFRAME,FUNCTION_REMOVEIFRAME,FUNCTION_SETUP_RESIZE_EVENT_LISTENER,FUNCTION_SHOWDIV,FUNCTION_SHOWIFRAME,INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID,INSERT_FUNCTION_BRING_IFRAME_TO_FRONT,INSERT_FUNCTION_CALLIFRAMEFUNCTION,INSERT_FUNCTION_CREATEIFRAME,INSERT_FUNCTION_GET_BROWSER_MEASURED_WIDTH,INSERT_FUNCTION_HIDEDIV,INSERT_FUNCTION_HIDEIFRAME,INSERT_FUNCTION_HISTORY_BACK,INSERT_FUNCTION_HISTORY_FORWARD,INSERT_FUNCTION_LOADDIV_CONTENT,INSERT_FUNCTION_LOADIFRAME,INSERT_FUNCTION_MOVEIFRAME,INSERT_FUNCTION_PRINT_IFRAME,INSERT_FUNCTION_REMOVEIFRAME,INSERT_FUNCTION_SHOWDIV,INSERT_FUNCTION_SHOWIFRAME,INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER" name="keywords">
 <title>com.google.code.flexiframe.IFrameExternalCalls</title>
 </head>
 <body>
@@ -89,6 +89,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_HISTORY_BACK">FUNCTION_HISTORY_BACK</a> : String = "historyBack"<div class="summaryTableDescription">[static]
+         The name of the Javascript function that loads the IFrame's last page in the history.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_HISTORY_FORWARD">FUNCTION_HISTORY_FORWARD</a> : String = "historyForward"<div class="summaryTableDescription">[static]
+         The name of the Javascript function that loads the IFrame's next page in the history.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#FUNCTION_LOADDIV_CONTENT">FUNCTION_LOADDIV_CONTENT</a> : String = "loadDivContent"<div class="summaryTableDescription">[static]
         The name of the JavaScript function that loads content into a Div.</div>
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
@@ -166,6 +176,18 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_HISTORY_BACK">INSERT_FUNCTION_HISTORY_BACK</a> : String<div class="summaryTableDescription">[static]
+         The Javascript code to call to insert the function that loads the IFrame's last page
+         in the history.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_HISTORY_FORWARD">INSERT_FUNCTION_HISTORY_FORWARD</a> : String<div class="summaryTableDescription">[static]
+         The Javascript code to call to insert the function that loads the IFrame's next page
+         in the history.</div>
+</td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_LOADDIV_CONTENT">INSERT_FUNCTION_LOADDIV_CONTENT</a> : String<div class="summaryTableDescription">[static]
         The JavaScript code to call to insert the function that loads content into a Div in the
         DOM.</div>
@@ -183,7 +205,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#INSERT_FUNCTION_PRINT_IFRAME">INSERT_FUNCTION_PRINT_IFRAME</a> : String<div class="summaryTableDescription">[static]
-          The Javascript code to call to insert the function that prints the IFrame.</div>
+         The Javascript code to call to insert the function that prints the IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrameExternalCalls</td>
 </tr>
 <tr class="">
@@ -298,6 +320,26 @@ showHideInherited();
 <code>public static var FUNCTION_HIDEIFRAME:String = "hideIFrame"</code><p>
         The name of the JavaScript function that hides an IFrame.
         </p></div>
+<a name="FUNCTION_HISTORY_BACK"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">FUNCTION_HISTORY_BACK</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var FUNCTION_HISTORY_BACK:String = "historyBack"</code><p>
+         The name of the Javascript function that loads the IFrame's last page in the history.
+         </p></div>
+<a name="FUNCTION_HISTORY_FORWARD"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">FUNCTION_HISTORY_FORWARD</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var FUNCTION_HISTORY_FORWARD:String = "historyForward"</code><p>
+         The name of the Javascript function that loads the IFrame's next page in the history.
+         </p></div>
 <a name="FUNCTION_LOADDIV_CONTENT"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -450,6 +492,28 @@ showHideInherited();
 <code>public static var INSERT_FUNCTION_HIDEIFRAME:String</code><p>
         The JavaScript code to call to insert the function that hides an IFrame in the DOM.
         </p></div>
+<a name="INSERT_FUNCTION_HISTORY_BACK"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">INSERT_FUNCTION_HISTORY_BACK</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var INSERT_FUNCTION_HISTORY_BACK:String</code><p>
+         The Javascript code to call to insert the function that loads the IFrame's last page
+         in the history.
+         </p></div>
+<a name="INSERT_FUNCTION_HISTORY_FORWARD"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">INSERT_FUNCTION_HISTORY_FORWARD</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static var INSERT_FUNCTION_HISTORY_FORWARD:String</code><p>
+         The Javascript code to call to insert the function that loads the IFrame's next page
+         in the history.
+         </p></div>
 <a name="INSERT_FUNCTION_LOADDIV_CONTENT"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -489,7 +553,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public static var INSERT_FUNCTION_PRINT_IFRAME:String</code><p>
-          The Javascript code to call to insert the function that prints the IFrame.
+         The Javascript code to call to insert the function that prints the IFrame.
          </p></div>
 <a name="INSERT_FUNCTION_REMOVEIFRAME"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
