@@ -642,12 +642,12 @@ package com.google.code.flexiframe
         /**
          * The dictionnary of the hierarchy of the parent containers.
          */
-        private var containerDict:Object = null;
+        protected var containerDict:Object = null;
 
         /**
          * The dictionnary of the child indexes in the hierarchy of the parent containers.
          */
-        private var settingDict:Object = null;
+        protected var settingDict:Object = null;
 
         /**
          * Build list of container objects on the display list path all the way down
@@ -686,7 +686,7 @@ package com.google.code.flexiframe
 
                         // Store child index against container
                         containerDict[current] = childIndex;
-                        settingDict[current] = childIndex;
+                        settingDict[current] = current.hasOwnProperty("selectedIndex") ? current["selectedIndex"] : childIndex;
 
                         // Tag on a change listener             
                         current.addEventListener(IndexChangedEvent.CHANGE, handleChange);
@@ -1213,12 +1213,12 @@ package com.google.code.flexiframe
         /**
          * The state of the debug mode.
          */
-        private var _debug:Boolean = false;
+        protected var _debug:Boolean = false;
 
         /**
          * The target for the logger.
          */
-        private var logTarget:TraceTarget;
+        protected var logTarget:TraceTarget;
 
         /**
          * The class logger.
