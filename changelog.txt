@@ -147,3 +147,7 @@
                                    * Add the 'hidden' attribute that forces the IFrame to stay
  1.4                                 hidden whatever happens.
  ---------------------------------------------------------------------------------------------------
+
+           02/11/09  J. Nicoulaud  * Fix settingDict incorrectly filled when child of a container
+                                     with creationPolicy="all" (Issue 43, fix by andr.fel).
+ 
