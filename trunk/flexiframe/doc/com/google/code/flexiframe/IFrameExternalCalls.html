@@ -597,6 +597,10 @@ showHideInherited();
 <code>public static function INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId:String):String</code><p>
          The Javascript code to call to insert the function that setups the 'resize' event
          listener.
+         
+         When a 'resize' event is received, it is queued and the Flex application is not notified
+         unless there is no new 'resize' event in the next 10 milliseconds. This is to prevent
+         unexpected behaviours with elovedInternet Explorer sending bursts of events.
          </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
