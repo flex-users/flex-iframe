@@ -155,4 +155,5 @@
                                    
                                    * Issues 45/47: Fix wrong layout when resizing/maximizing/
                                      restoring the browser, by queueing bursts of 'resize' events.
- 
+ 1.4.1
+ ---------------------------------------------------------------------------------------------------
