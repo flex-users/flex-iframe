@@ -406,6 +406,10 @@ package com.google.code.flexiframe
         /**
          * The Javascript code to call to insert the function that setups the 'resize' event
          * listener.
+         * 
+         * When a 'resize' event is received, it is queued and the Flex application is not notified
+         * unless there is no new 'resize' event in the next 10 milliseconds. This is to prevent
+         * unexpected behaviours with *beloved* Internet Explorer sending bursts of events.
          */
         public static function INSERT_FUNCTION_SETUP_RESIZE_EVENT_LISTENER(frameId:String):String
         {
@@ -416,11 +420,20 @@ package com.google.code.flexiframe
                            FUNCTION_SETUP_RESIZE_EVENT_LISTENER + " = function() " + 
                            "{ " + 
                                "if (window.addEventListener) { " +
-                                   "window.addEventListener(\"resize\", notify" + frameId + "Resize, false); " +
+                                   "window.addEventListener(\"resize\", on" + frameId + "Resize, false); " +
                                "} else if (window.attachEvent) { " +
-                                   "window.attachEvent(\"onresize\", notify" + frameId + "Resize); " +
+                                   "window.attachEvent(\"onresize\", on" + frameId + "Resize); " +
                                "} " +
                            "} " +
+                       "} " + 
+                       "if (document.on" + frameId + "Resize==null)" +
+                       "{ " +
+                            "var resizeTimeout" + frameId + "; " +
+                            "function on" + frameId + "Resize(e) " + 
+                            "{ " +
+							     "window.clearTimeout(resizeTimeout" + frameId + ");" +
+							     "resizeTimeout" + frameId + " = window.setTimeout('notify" + frameId + "Resize();', 10); " +
+							"} " +
                        "} " + 
                        "if (document.notify" + frameId + "Resize==null)" +
                        "{ " +
