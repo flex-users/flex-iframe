@@ -2,47 +2,6 @@ body {
 	font-family: Courier New, Courier, monospace;
 }
 
-.CSS@font-face {
-	color: #990000;
-	font-weight: bold;
-}
-
-.CSS@import {
-	color: #006666;
-	font-weight: bold;
-}
-
-.CSS@media {
-	color: #663333;
-	font-weight: bold;
-}
-
-.CSSComment {
-	color: #999999;
-}
-
-.CSSDefault_Text {
-}
-
-.CSSDelimiters {
-}
-
-.CSSProperty_Name {
-	color: #330099;
-}
-
-.CSSProperty_Value {
-	color: #3333cc;
-}
-
-.CSSSelector {
-	color: #ff00ff;
-}
-
-.CSSString {
-	color: #990000;
-}
-
 .ActionScriptASDoc {
 	color: #3f5fbf;
 }
@@ -104,6 +63,47 @@ body {
 .ActionScriptvar {
 	color: #6699cc;
 	font-weight: bold;
+}
+
+.CSS@font-face {
+	color: #990000;
+	font-weight: bold;
+}
+
+.CSS@import {
+	color: #006666;
+	font-weight: bold;
+}
+
+.CSS@media {
+	color: #663333;
+	font-weight: bold;
+}
+
+.CSSComment {
+	color: #999999;
+}
+
+.CSSDefault_Text {
+}
+
+.CSSDelimiters {
+}
+
+.CSSProperty_Name {
+	color: #330099;
+}
+
+.CSSProperty_Value {
+	color: #3333cc;
+}
+
+.CSSSelector {
+	color: #ff00ff;
+}
+
+.CSSString {
+	color: #990000;
 }
 
 .MXMLComment {
