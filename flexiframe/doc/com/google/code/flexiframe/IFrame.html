@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrame,com.google.code.flexiframe.IFrame,_appHost,_browserScaling,_content,_frameId,_frameLoaded,_functionQueue,_hidden,_iframeContentHost,_iframeId,_loadIndicator,_source,_validForDisplay,applicationId,idList,loadIndicatorClass,logger,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,content,debug,hidden,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,getBrowserMeasuredWidth,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,historyBack,historyForward,hitTestStageObject,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,printIFrame,removeIFrame,resolveEmbedObjectId,setupBrowserResizeEventListener,setupExternalInterface,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
+<meta content="IFrame,com.google.code.flexiframe.IFrame,_appHost,_browserScaling,_content,_debug,_frameId,_frameLoaded,_functionQueue,_hidden,_iframeContentHost,_iframeId,_loadIndicator,_source,_validForDisplay,applicationId,containerDict,idList,loadIndicatorClass,logTarget,logger,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,settingDict,content,debug,hidden,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,getBrowserMeasuredWidth,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,historyBack,historyForward,hitTestStageObject,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,printIFrame,removeIFrame,resolveEmbedObjectId,setupBrowserResizeEventListener,setupExternalInterface,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
 <title>com.google.code.flexiframe.IFrame</title>
 </head>
 <body>
@@ -161,8 +161,18 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#containerDict">containerDict</a> : Object = null<div class="summaryTableDescription">
+         The dictionnary of the hierarchy of the parent containers.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_content">_content</a> : String<div class="summaryTableDescription">
          The content of the IFrame.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_debug">_debug</a> : Boolean = false<div class="summaryTableDescription">
+         The state of the debug mode.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -206,6 +216,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#logTarget">logTarget</a> : TraceTarget<div class="summaryTableDescription">
+         The target for the logger.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#overlapCount">overlapCount</a> : int = 0<div class="summaryTableDescription">
          The count of the objects overlapping the IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
@@ -218,6 +233,11 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#randomIdentificationString">randomIdentificationString</a> : Number<div class="summaryTableDescription">
          The random string used to identify the right object.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#settingDict">settingDict</a> : Object = null<div class="summaryTableDescription">
+         The dictionnary of the child indexes in the hierarchy of the parent containers.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -269,7 +289,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#historyBack()">historyBack</a>():void</div>
 <div class="summaryTableDescription">
-        Load the IFrame's last page in the navigation history.</div>
+         Load the IFrame's last page in the navigation history.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -277,7 +297,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#historyForward()">historyForward</a>():void</div>
 <div class="summaryTableDescription">
-        Load the IFrame's next page in the navigation history.</div>
+         Load the IFrame's next page in the navigation history.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -301,7 +321,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#printIFrame()">printIFrame</a>():void</div>
 <div class="summaryTableDescription">
-        Print the content of the IFrame.</div>
+         Print the content of the IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -353,7 +373,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <div class="summarySignature">
 <a class="signatureLink" href="#checkObjectId()">checkObjectId</a>(id:String, randomCode:Number):Boolean</div>
 <div class="summaryTableDescription">
-        Receive information about a DOM object and test if this is this SWF object.</div>
+         Receive information about a DOM object and test if this is this SWF object.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -617,6 +637,16 @@ showHideInherited();
 <code>protected var _browserScaling:Number = 1</code><p>
          The browser zoom ratio
          </p></div>
+<a name="containerDict"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">containerDict</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var containerDict:Object = null</code><p>
+         The dictionnary of the hierarchy of the parent containers.
+         </p></div>
 <a name="_content"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -643,6 +673,16 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set content(value:String):void</code>
 <br>
 </div>
+<a name="_debug"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_debug</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _debug:Boolean = false</code><p>
+         The state of the debug mode.
+         </p></div>
 <a name="debug"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -781,6 +821,16 @@ showHideInherited();
 <code>protected var logger:ILogger</code><p>
          The class logger.
          </p></div>
+<a name="logTarget"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">logTarget</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var logTarget:TraceTarget</code><p>
+         The target for the logger.
+         </p></div>
 <a name="overlapCount"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -821,6 +871,16 @@ showHideInherited();
 <div class="detailBody">
 <code>protected var randomIdentificationString:Number</code><p>
          The random string used to identify the right object.
+         </p></div>
+<a name="settingDict"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">settingDict</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var settingDict:Object = null</code><p>
+         The dictionnary of the child indexes in the hierarchy of the parent containers.
          </p></div>
 <a name="_source"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
@@ -884,14 +944,12 @@ showHideInherited();
 <div class="detailBody">
 <code>public function IFrame(id:String = null)</code><p>
          Build a new IFrame.
-         
-         </p><span class="label">Parameters</span>
+                  </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">id</span>:String</code> (default = <code>null</code>)<code></code> &mdash; a String identifying the IFrame. Must be unique for every instance of the
                     IFrame class.
-         
-         </td>
+                  </td>
 </tr>
 </table>
 <br>
@@ -907,14 +965,11 @@ showHideInherited();
                                 height="80%"/&gt;
                   &lt;mx:Application&gt;
          </pre></div>
-         
-         <p></p>Declare an IFrame in ActionScript.
+                  <p></p>Declare an IFrame in ActionScript.
          <div class='listing'><pre>
          import com.google.code.flexiframe.IFrame;
-         
-         ...
-         
-         var frame : IFrame = new IFrame("aUniqueIdForThisIFrameInstance");
+                  ...
+                  var frame : IFrame = new IFrame("aUniqueIdForThisIFrameInstance");
          </pre></div>
          <p></p>
 </div>
@@ -1056,8 +1111,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>protected function checkObjectId(id:String, randomCode:Number):Boolean</code><p>
-        Receive information about a DOM object and test if this is this SWF object.
-        </p><span class="label">Parameters</span>
+         Receive information about a DOM object and test if this is this SWF object.
+         </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20px"></td><td><code><span class="label">id</span>:String</code></td>
@@ -1250,8 +1305,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function historyBack():void</code><p>
-        Load the IFrame's last page in the navigation history.
-        </p></div>
+         Load the IFrame's last page in the navigation history.
+         </p></div>
 <a name="historyForward()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1260,8 +1315,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function historyForward():void</code><p>
-        Load the IFrame's next page in the navigation history.
-        </p></div>
+         Load the IFrame's next page in the navigation history.
+         </p></div>
 <a name="hitTestStageObject()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1416,8 +1471,8 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>public function printIFrame():void</code><p>
-        Print the content of the IFrame.
-        </p></div>
+         Print the content of the IFrame.
+         </p></div>
 <a name="removeIFrame()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
