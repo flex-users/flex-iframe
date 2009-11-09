@@ -74,7 +74,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer",
 		"wmode", "opaque",
-        "style", "margin-left:50px; margin-top:40px; padding-left: 50px; padding-right: 40px;"
+        "style", "margin-left:50px; margin-top:40px;"
 	);
 } else if (hasRequestedVersion) {
 	// if we've detected an acceptable version
@@ -92,7 +92,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer",
 		    "wmode", "opaque",
-		    "style", "margin-left:50px; margin-top:40px; padding-left: 50px; padding-right: 40px;"
+		    "style", "margin-left:50px; margin-top:40px;"
 	);
   } else {  // flash is too old or we can't detect the plugin
     var alternateContent = 'Alternate HTML content should be placed here. '
@@ -119,7 +119,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				allowScriptAccess="sameDomain"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer"
-				style="margin-left:50px; margin-top:40px; padding-left: 50px; padding-right: 40px;">
+				style="margin-left:50px; margin-top:40px;">
 			</embed>
 	</object>
 </noscript>
