@@ -31,7 +31,7 @@ package com.google.code.flexiframe
     import flash.geom.Point;
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
-
+    
     import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
@@ -513,7 +513,7 @@ package com.google.code.flexiframe
             }
 
             // Place the iframe
-            moveIFrame(globalPt.x * _browserScaling, globalPt.y * _browserScaling, this.width * _browserScaling, this.height * _browserScaling);
+            moveIFrame(Math.round(globalPt.x * _browserScaling), Math.round(globalPt.y * _browserScaling), Math.round(this.width * _browserScaling), Math.round(this.height * _browserScaling));
         }
 
         /**
