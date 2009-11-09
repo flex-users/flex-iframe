@@ -1080,7 +1080,7 @@ package com.google.code.flexiframe
         protected function moveIFrame(x:int, y:int, width:int, height:int):void
         {
             logger.info("Moving IFrame with id '{0}'.", _frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_MOVEIFRAME, _frameId, _iframeId, x, y, width, height);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_MOVEIFRAME, _frameId, _iframeId, x, y, width, height, applicationId);
         }
 
         /**
@@ -1161,7 +1161,7 @@ package com.google.code.flexiframe
         protected function getBrowserMeasuredWidth():Number
         {
             logger.info("Get browser measured width.");
-            var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH);
+            var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH,applicationId);
             if (result != null)
             {
                 return new Number(result);

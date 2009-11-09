@@ -73,20 +73,21 @@ package com.google.code.flexiframe
         * The JavaScript code to call to insert the function that moves an IFrame in the DOM.
         */
         public static var INSERT_FUNCTION_MOVEIFRAME:String = 
-            "document.insertScript = function ()" +
+            "document.insertScript = function () " +
             "{ " +
-                "if (document." + FUNCTION_MOVEIFRAME + "==null)" +
-                "{" +
-                    FUNCTION_MOVEIFRAME + " = function(frameID, iframeID, x,y,w,h) " + 
+                "if (document." + FUNCTION_MOVEIFRAME + "==null) " +
+                "{ " +
+                    FUNCTION_MOVEIFRAME + " = function(frameID,iframeID,x,y,w,h,objectID) " + 
                     "{" +
-                        "var frameRef=document.getElementById(frameID);" +
-                        "frameRef.style.left=x+'px';" + 
-                        "frameRef.style.top=y+'px';" +
-                        "frameRef.style.width=w+'px';" +
-                        "frameRef.style.height=h+'px';" +
-                        "var iFrameRef=document.getElementById(iframeID);" +
-                        "iFrameRef.width=w;" +
-                        "iFrameRef.height=h;" +
+                        "var frameRef = document.getElementById(frameID); " +
+                        "var swfObject = document.getElementById(objectID); " +
+                        "frameRef.style.left = x + swfObject.offsetLeft + 'px'; " + 
+                        "frameRef.style.top = y + swfObject.offsetTop + 'px'; " +
+                        "frameRef.style.width = w + 'px'; " +
+                        "frameRef.style.height = h + 'px'; " +
+                        "var iFrameRef = document.getElementById(iframeID); " +
+                        "iFrameRef.width = w;" +
+                        "iFrameRef.height = h;" +
                     "}" +
                 "}" +
             "}";
@@ -385,14 +386,9 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_GET_BROWSER_MEASURED_WIDTH + "==null) " +
                 "{ " +
-                    FUNCTION_GET_BROWSER_MEASURED_WIDTH + " = function() " + 
+                    FUNCTION_GET_BROWSER_MEASURED_WIDTH + " = function(objectID) " + 
                     "{ " + 
-                        "if (typeof self != 'undefined' && typeof self.document != 'undefined' && typeof self.document.body != 'undefined' && typeof self.document.body.parentElement != 'undefined' && typeof self.document.body.parentElement.offsetWidth != 'undefined') { " +
-                            "return self.document.body.parentElement.offsetWidth; " +
-                        "} else if (typeof innerWidth != 'undefined') { " +
-                            "return innerWidth; " +
-                        "}" +
-                        "return 0; " +
+                        "return document.getElementById(objectID).offsetWidth; " +
                     "} " +
                 "} " + 
             "}";
