@@ -156,3 +156,9 @@
                                    * Issues 45/47: Fix wrong layout when resizing/maximizing/
  1.4.1                               restoring the browser, by queueing bursts of 'resize' events.
  ---------------------------------------------------------------------------------------------------
+
+           10/11/09  J. Nicoulaud  * Issue 20: iFrame positioned relative to the swf container and
+                                     not the document.
+                                     
+ 1.4.2                             * Issue 40: fix iFrame shifted.
+ ---------------------------------------------------------------------------------------------------
