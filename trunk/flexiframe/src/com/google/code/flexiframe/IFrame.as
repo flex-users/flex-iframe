@@ -611,19 +611,24 @@ package com.google.code.flexiframe
          */
         public function set hidden(value:Boolean):void
         {
-            _hidden = value;
+            // If the value has changed
+            if (_hidden != value)
+            {
+	            if (value)
+	            {
+	                if (visible)
+	                {
+	                    visible = false;
+	                }
+	            }
+	            else
+	            {
+	                visible = _validForDisplay && _frameLoaded && (!overlayDetection || (overlayDetection && overlapCount == 0));
+	            }
+            }
 
-            if (value)
-            {
-                if (visible)
-                {
-                    visible = false;
-                }
-            }
-            else
-            {
-                visible = _validForDisplay && _frameLoaded && (!overlayDetection || (overlayDetection && overlapCount == 0));
-            }
+            // Assign the value
+            _hidden = value;
         }
 
         /**
