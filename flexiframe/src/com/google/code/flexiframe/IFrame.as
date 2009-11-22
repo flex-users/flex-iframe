@@ -31,7 +31,7 @@ package com.google.code.flexiframe
     import flash.geom.Point;
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
-    
+
     import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
@@ -222,10 +222,10 @@ package com.google.code.flexiframe
          * The browser zoom ratio
          */
         protected var _browserScaling:Number = 1;
-        
+
         /**
          * Manually-set visibility value
-         * 
+         *
          * @default true
          */
         protected var explicitVisibleValue:Boolean = true;
@@ -296,7 +296,7 @@ package com.google.code.flexiframe
             }
 
         }
-        
+
 
         /**
          * Triggered when display contents change. Adjusts frame layout.
@@ -352,31 +352,31 @@ package com.google.code.flexiframe
                 {
                     logger.debug("The IFrame with id '{0}' is already loaded.", _frameId);
                 }
-                // Trigger re-layout of iframe contents.                
+                // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
             }
             else if (content)
             {
                 loadDivContent();
 
-                // Trigger re-layout of iframe contents.                
+                // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
             }
         }
-        
+
         /**
          * Sets actual size
-         * 
+         *
          * When component is sized by its parent, and overlay
          * detection is enabled, checks for existing pop-ups
          */
         override public function setActualSize(w:Number, h:Number):void
         {
-        	super.setActualSize(w, h);
-        	
-        	// check for existing popups I may be appearing underneath
-        	if (overlayDetection)
-				checkExistingPopUps();
+            super.setActualSize(w, h);
+
+            // check for existing popups I may be appearing underneath
+            if (overlayDetection)
+                checkExistingPopUps();
         }
 
         // Event handlers
@@ -409,7 +409,7 @@ package com.google.code.flexiframe
         {
             logger.debug("The component for the IFrame with id '{0}' has been removed from the stage.", _frameId);
 
-            // Remove systemManager hooks for overlay detection 
+            // Remove systemManager hooks for overlay detection
             if (overlayDetection)
             {
                 systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
@@ -595,15 +595,12 @@ package com.google.code.flexiframe
             // - the calling code is trying to show it
             // - all parent navigators are set to correct index for this child to show
             // - overlay detection, if enabled, is not tracking any overlapping popups
-           	// - .visible has not explicitly been set to false (or .hidden to true) on this component
-           	// - if there's a load indicator defined, the iframe content has finished loading
-            if (value && _validForDisplay
-            	&& (!overlayDetection || overlapCount == 0)
-            	&& explicitVisibleValue == true
-            	&& (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
+            // - .visible has not explicitly been set to false (or .hidden to true) on this component
+            // - if there's a load indicator defined, the iframe content has finished loading
+            if (value && _validForDisplay && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
-            	// if we have an iframe in the same domain as the app, call the
-            	// specialized functions to update visibility inside the iframe
+                // if we have an iframe in the same domain as the app, call the
+                // specialized functions to update visibility inside the iframe
                 if (source && _iframeContentHost == _appHost)
                 {
                     showIFrame();
@@ -615,7 +612,7 @@ package com.google.code.flexiframe
 
                 // make sure position and status indicators get updated when revealed
                 invalidateDisplayList();
-				return true;
+                return true;
             }
             else
             {
@@ -630,7 +627,7 @@ package com.google.code.flexiframe
                 return false;
             }
         }
-        
+
         /**
          * Manually sets visibility of html iframe.
          *
@@ -638,29 +635,12 @@ package com.google.code.flexiframe
          */
         override public function set visible(value:Boolean):void
         {
-        	if (explicitVisibleValue != value)
-        	{
-        		super.visible = value;
-				explicitVisibleValue = value;
-				updateFrameVisibility(value);
-        	}
-        }
-
-        /**
-         * Force the IFrame to stay hidden, whatever happens.
-         * (This is just a logical negation of setting "visible")
-         */
-        public function set hidden(value:Boolean):void
-        {
-        	visible = !hidden;
-        }
-
-        /**
-         * Get the state of the "hidden" mode.
-         */
-        public function get hidden():Boolean
-        {
-            return !explicitVisibleValue;
+            if (explicitVisibleValue != value)
+            {
+                super.visible = value;
+                explicitVisibleValue = value;
+                updateFrameVisibility(value);
+            }
         }
 
 
@@ -717,7 +697,7 @@ package com.google.code.flexiframe
                         containerDict[current] = childIndex;
                         settingDict[current] = current.hasOwnProperty("selectedIndex") ? current["selectedIndex"] : childIndex;
 
-                        // Tag on a change listener             
+                        // Tag on a change listener
                         current.addEventListener(IndexChangedEvent.CHANGE, handleChange);
                         current.addEventListener(MoveEvent.MOVE, handleMove);
                     }
@@ -815,25 +795,25 @@ package com.google.code.flexiframe
          * The count of the objects overlapping the IFrame.
          */
         protected var overlapCount:int = 0;
-        
+
         /**
          * Called to check for existing pop-ups when the component
          * appears or changes size
          */
         protected function checkExistingPopUps():void
-		{
-			// run through each child of systemManager and if it's a popup, check it for overlay
-			var sm:ISystemManager = systemManager;
-			var n:int = sm.rawChildren.numChildren;
-			for (var i:int = 0; i < n; i++)
-			{
-				var child:UIComponent = sm.rawChildren.getChildAt(i) as UIComponent;
-				if (child && child.isPopUp)
-				{
-					checkOverlay(child);
-				}
-			}
-		}
+        {
+            // run through each child of systemManager and if it's a popup, check it for overlay
+            var sm:ISystemManager = systemManager;
+            var n:int = sm.rawChildren.numChildren;
+            for (var i:int = 0; i < n; i++)
+            {
+                var child:UIComponent = sm.rawChildren.getChildAt(i) as UIComponent;
+                if (child && child.isPopUp)
+                {
+                    checkOverlay(child);
+                }
+            }
+        }
 
         /**
          * Triggered when the object is added to the stage.
@@ -844,7 +824,7 @@ package com.google.code.flexiframe
             var displayObj:DisplayObject = event.target as DisplayObject;
             if (displayObj.parent == systemManager && displayObj.name != "cursorHolder" && !(displayObj is ToolTip))
             {
-                // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
+                // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor,
                 // or a tooltip, check to see if it overlaps me after it's been drawn
                 this.callLater(checkOverlay, [ displayObj ]);
             }
@@ -910,15 +890,15 @@ package com.google.code.flexiframe
             if (this.hitTestStageObject(displayObj) && !isAncestor(displayObj))
             {
                 if (displayObj.visible)
-				{
-	                if (!overlappingDict[displayObj])
-					{
-		                logger.debug("iframe {0} detected overlap of {1}", _frameId, displayObj.toString());
-		                overlappingDict[displayObj] = displayObj;
-		                overlapCount++;
-		   			}
-	                updateFrameVisibility(false);
-	   			}
+                {
+                    if (!overlappingDict[displayObj])
+                    {
+                        logger.debug("iframe {0} detected overlap of {1}", _frameId, displayObj.toString());
+                        overlappingDict[displayObj] = displayObj;
+                        overlapCount++;
+                    }
+                    updateFrameVisibility(false);
+                }
 
                 if (displayObj is UIComponent)
                 {
@@ -929,21 +909,21 @@ package com.google.code.flexiframe
                 }
             }
         }
-        
+
         /**
          * Use display object ancestry table already built
          * to check whether an object is a container of this
          * component or one of its ancestors
          */
         protected function isAncestor(obj:DisplayObject):Boolean
-		{		
-			for (var item:Object in containerDict)
+        {
+            for (var item:Object in containerDict)
             {
                 if (obj == item)
-                	return true;
+                    return true;
             }
             return false;
-		}
+        }
 
         /**
          * The native hitTestObject method seems to have some issues depending on
@@ -1230,7 +1210,7 @@ package com.google.code.flexiframe
         protected function getBrowserMeasuredWidth():Number
         {
             logger.info("Get browser measured width.");
-            var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH,applicationId);
+            var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_BROWSER_MEASURED_WIDTH, applicationId);
             if (result != null)
             {
                 return new Number(result);
