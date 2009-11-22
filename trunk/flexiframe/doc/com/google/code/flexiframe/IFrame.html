@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="IFrame,com.google.code.flexiframe.IFrame,_appHost,_browserScaling,_content,_debug,_frameId,_frameLoaded,_functionQueue,_hidden,_iframeContentHost,_iframeId,_loadIndicator,_source,_validForDisplay,applicationId,containerDict,idList,loadIndicatorClass,logTarget,logger,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,settingDict,content,debug,hidden,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,getBrowserMeasuredWidth,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,historyBack,historyForward,hitTestStageObject,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,printIFrame,removeIFrame,resolveEmbedObjectId,setupBrowserResizeEventListener,setupExternalInterface,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList" name="keywords">
+<meta content="IFrame,com.google.code.flexiframe.IFrame,_appHost,_browserScaling,_content,_debug,_frameId,_frameLoaded,_functionQueue,_iframeContentHost,_iframeId,_loadIndicator,_source,_validForDisplay,applicationId,containerDict,explicitVisibleValue,idList,loadIndicatorClass,logTarget,logger,overlapCount,overlappingDict,overlayDetection,randomIdentificationString,settingDict,content,debug,source,visible,adjustPosition,bringIFrameToFront,buildContainerList,callIFrameFunction,checkDisplay,checkExistingPopUps,checkObjectId,checkOverlay,commitProperties,createChildren,createIFrame,getBrowserMeasuredWidth,handleAdd,handleChange,handleFrameLoad,handleMove,handleRemove,hideDiv,hideIFrame,historyBack,historyForward,hitTestStageObject,isAncestor,loadDivContent,loadIFrame,lookupIndex,lookupSetting,moveIFrame,overlay_hideShowHandler,printIFrame,removeIFrame,resolveEmbedObjectId,setActualSize,setupBrowserResizeEventListener,setupExternalInterface,showDiv,showIFrame,systemManager_addedHandler,systemManager_removedHandler,updateDisplayList,updateFrameVisibility" name="keywords">
 <title>com.google.code.flexiframe.IFrame</title>
 </head>
 <body>
@@ -108,11 +108,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#hidden">hidden</a> : Boolean<div class="summaryTableDescription">
-         Get the state of the "hidden" mode.</div>
-</td><td class="summaryTableOwnerCol">IFrame</td>
-</tr>
-<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#idList">idList</a> : Object<div class="summaryTableDescription">[static]
          Track IDs in use throughout the app for iframe instances in order to detect and
          prevent collisions.</div>
@@ -137,7 +132,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#visible">visible</a> : Boolean<div class="summaryTableDescription">[write-only]
-         Sets visibility of html iframe.</div>
+         Manually sets visibility of html iframe.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 </table>
@@ -176,6 +171,12 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#explicitVisibleValue">explicitVisibleValue</a> : Boolean = true<div class="summaryTableDescription">
+         Manually-set visibility value
+                  </div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_frameId">_frameId</a> : String<div class="summaryTableDescription">
          The frame ID.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
@@ -188,11 +189,6 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_functionQueue">_functionQueue</a> : Array<div class="summaryTableDescription">
          The queued functions waiting for the frame to be loaded.</div>
-</td><td class="summaryTableOwnerCol">IFrame</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_hidden">_hidden</a> : Boolean = false<div class="summaryTableDescription">
-         Force the iFrame to stay hidden whatever happens.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -332,6 +328,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
          Remove the IFrame.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#setActualSize()">setActualSize</a>(w:Number, h:Number):void</div>
+<div class="summaryTableDescription">
+         Sets actual size
+                  When component is sized by its parent, and overlay
+         detection is enabled, checks for existing pop-ups
+         </div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
 </table>
 </div>
 <a name="protectedMethodSummary"></a>
@@ -366,6 +373,16 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
          This function updates the selected view child of the signalling container
          and then compares the path from our IFrame up the displaylist to see if
          the index settings match.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#checkExistingPopUps()">checkExistingPopUps</a>():void</div>
+<div class="summaryTableDescription">
+         Called to check for existing pop-ups when the component
+         appears or changes size
+         </div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 <tr class="">
@@ -486,6 +503,17 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#isAncestor()">isAncestor</a>(obj:DisplayObject):Boolean</div>
+<div class="summaryTableDescription">
+         Use display object ancestry table already built
+         to check whether an object is a container of this
+         component or one of its ancestors
+         </div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#loadDivContent()">loadDivContent</a>():void</div>
 <div class="summaryTableDescription">
          Load content into a div.</div>
@@ -578,6 +606,14 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#updateDisplayList()">updateDisplayList</a>(unscaledWidth:Number, unscaledHeight:Number):void</div>
 <div class="summaryTableDescription">
          Triggered when display contents change.</div>
+</td><td class="summaryTableOwnerCol">IFrame</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#updateFrameVisibility()">updateFrameVisibility</a>(value:Boolean):Boolean</div>
+<div class="summaryTableDescription">
+         Request visibility update of html frame.</div>
 </td><td class="summaryTableOwnerCol">IFrame</td>
 </tr>
 </table>
@@ -699,6 +735,17 @@ showHideInherited();
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set debug(value:Boolean):void</code>
 <br>
 </div>
+<a name="explicitVisibleValue"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">explicitVisibleValue</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var explicitVisibleValue:Boolean = true</code><p>
+         Manually-set visibility value
+                  </p><p>The default value is <code>true</code>.</p>
+</div>
 <a name="_frameId"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -730,33 +777,6 @@ showHideInherited();
 <code>protected var _functionQueue:Array</code><p>
          The queued functions waiting for the frame to be loaded.
          </p></div>
-<a name="_hidden"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">_hidden</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected var _hidden:Boolean = false</code><p>
-         Force the iFrame to stay hidden whatever happens.
-                  </p><p>The default value is <code>false</code>.</p>
-</div>
-<a name="hidden"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">hidden</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>hidden:Boolean</code>&nbsp;&nbsp;[read-write]<p>
-         Get the state of the "hidden" mode.
-         </p><span class="label">Implementation</span>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get hidden():Boolean</code>
-<br>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set hidden(value:Boolean):void</code>
-<br>
-</div>
 <a name="idList"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -927,7 +947,7 @@ showHideInherited();
 </table>
 <div class="detailBody">
 <code>visible:Boolean</code>&nbsp;&nbsp;[write-only]<p>
-         Sets visibility of html iframe. Rtn calls inserted javascript functions.
+         Manually sets visibility of html iframe.
                   </p><span class="label">Implementation</span>
 <br>
 <code>&nbsp;&nbsp;&nbsp;&nbsp;public function set visible(value:Boolean):void</code>
@@ -1103,6 +1123,17 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="checkExistingPopUps()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">checkExistingPopUps</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function checkExistingPopUps():void</code><p>
+         Called to check for existing pop-ups when the component
+         appears or changes size
+         </p></div>
 <a name="checkObjectId()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1343,6 +1374,31 @@ showHideInherited();
 </tr>
 </table>
 </div>
+<a name="isAncestor()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isAncestor</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function isAncestor(obj:DisplayObject):Boolean</code><p>
+         Use display object ancestry table already built
+         to check whether an object is a container of this
+         component or one of its ancestors
+         </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">obj</span>:DisplayObject</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code></td>
+</tr>
+</table>
+</div>
 <a name="loadDivContent()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1493,6 +1549,30 @@ showHideInherited();
 <code>protected function resolveEmbedObjectId():void</code><p>
          Get the embed object id.
          </p></div>
+<a name="setActualSize()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">setActualSize</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function setActualSize(w:Number, h:Number):void</code><p>
+         Sets actual size
+                  When component is sized by its parent, and overlay
+         detection is enabled, checks for existing pop-ups
+         </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">w</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">h</span>:Number</code></td>
+</tr>
+</table>
+</div>
 <a name="setupBrowserResizeEventListener()"></a>
 <table cellspacing="0" cellpadding="0" class="detailHeader">
 <tr>
@@ -1585,6 +1665,31 @@ showHideInherited();
 </tr>
 <tr>
 <td width="20px"></td><td><code><span class="label">unscaledHeight</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="updateFrameVisibility()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">updateFrameVisibility</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function updateFrameVisibility(value:Boolean):Boolean</code><p>
+         Request visibility update of html frame.
+                  </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">value</span>:Boolean</code> &mdash; Boolean desired visibility state
+         </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash; The actual resulting visibility after applying rules
+         </td>
 </tr>
 </table>
 </div>
