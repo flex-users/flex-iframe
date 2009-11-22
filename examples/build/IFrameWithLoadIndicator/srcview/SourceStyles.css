@@ -1,5 +1,6 @@
 body {
 	font-family: Courier New, Courier, monospace;
+	font-size: medium;
 }
 
 .ActionScriptASDoc {
@@ -80,6 +81,10 @@ body {
 	font-weight: bold;
 }
 
+.CSS@namespace {
+	color: #923196;
+}
+
 .CSSComment {
 	color: #999999;
 }
@@ -104,6 +109,10 @@ body {
 
 .CSSString {
 	color: #990000;
+}
+
+.MXMLASDoc {
+	color: #3f5fbf;
 }
 
 .MXMLComment {

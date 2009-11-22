@@ -37,7 +37,7 @@ var requiredMajorVersion = 9;
 // Minor version of Flash required
 var requiredMinorVersion = 0;
 // Minor version of Flash required
-var requiredRevision = 28;
+var requiredRevision = 60;
 // -----------------------------------------------------------------------------
 // -->
 </script>
@@ -63,8 +63,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	AC_FL_RunContent(
 		"src", "playerProductInstall",
 		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-		"width", "100%",
-		"height", "100%",
+		"width", "75%",
+		"height", "75%",
 		"align", "middle",
 		"id", "SimpleHtml",
 		"quality", "high",
@@ -73,15 +73,16 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"allowScriptAccess","sameDomain",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer",
-		"wmode","opaque"
+		"wmode", "opaque",
+        "style", "margin-left:50px; margin-top:40px;"
 	);
 } else if (hasRequestedVersion) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "SimpleHtml",
-			"width", "100%",
-			"height", "100%",
+			"width", "75%",
+			"height", "75%",
 			"align", "middle",
 			"id", "SimpleHtml",
 			"quality", "high",
@@ -90,7 +91,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"allowScriptAccess","sameDomain",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer",
-		    "wmode","opaque"
+		    "wmode", "opaque",
+		    "style", "margin-left:50px; margin-top:40px;"
 	);
   } else {  // flash is too old or we can't detect the plugin
     var alternateContent = 'Alternate HTML content should be placed here. '
@@ -109,14 +111,15 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			<param name="bgcolor" value="#869ca7" />
 			<param name="allowScriptAccess" value="sameDomain" />
 			<embed src="SimpleHtml.swf" quality="high" bgcolor="#869ca7"
-				width="100%" height="100%" name="SimpleHtml" align="middle"
+				width="75%" height="75%" name="SimpleHtml" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
                 wmode="opaque"
 				allowScriptAccess="sameDomain"
 				type="application/x-shockwave-flash"
-				pluginspage="http://www.adobe.com/go/getflashplayer">
+				pluginspage="http://www.adobe.com/go/getflashplayer"
+				style="margin-left:50px; margin-top:40px;">
 			</embed>
 	</object>
 </noscript>
