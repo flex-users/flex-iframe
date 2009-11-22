@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index>
-	<title>Source of IFrameCommTest</title>
+	<title>Source de IFrameCommTest</title>
 	<nodes>
+		<node label="bin-release1">
+			<node label="bridge">
+				<node label="FABridge.js" url="source/bin-release1/bridge/FABridge.js.txt"/>
+			</node>
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/bin-release1/history/history.css.html"/>
+				<node label="history.js" url="source/bin-release1/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/bin-release1/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/bin-release1/AC_OETags.js.txt"/>
+			<node label="IFrameCommTest.html" icon="htmlIcon" url="source/bin-release1/IFrameCommTest.html"/>
+			<node label="IFrameCommTest.swf" icon="swfIcon" url="source/bin-release1/IFrameCommTest.swf"/>
+			<node label="myHTML.html" icon="htmlIcon" url="source/bin-release1/myHTML.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/bin-release1/playerProductInstall.swf"/>
+		</node>
 		<node label="html-template">
 			<node label="bridge">
 				<node label="FABridge.js" url="source/html-template/bridge/FABridge.js.txt"/>
@@ -18,7 +33,7 @@
 		</node>
 		<node label="libs">
 		</node>
-		<node label="src" icon="classpathIcon" expanded="true">
+		<node label="src">
 			<node label="bridge" icon="packageIcon" expanded="true">
 				<node label="FABridge.as" icon="actionScriptIcon" url="source/bridge/FABridge.as.html"/>
 			</node>

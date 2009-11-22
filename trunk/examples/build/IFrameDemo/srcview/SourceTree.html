@@ -17,7 +17,7 @@ var requiredMajorVersion = 9;
 // Minor version of Flash required
 var requiredMinorVersion = 0;
 // Minor version of Flash required
-var requiredRevision = 0;
+var requiredRevision = 124;
 // -----------------------------------------------------------------------------
 // -->
 
@@ -47,7 +47,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// DO NOT MODIFY THE FOLLOWING FOUR LINES
 	// Location visited after installation is complete if installation is required
 	var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
-	var MMredirectURL = window.location;
+	var MMredirectURL = encodeURI(window.location);
     document.title = document.title.slice(0, 47) + " - Flash Player Installation";
     var MMdoctitle = document.title;
 
@@ -112,8 +112,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 <tr height="40">
 	<td><img src="downloadIcon.png" width="32" height="32"/></td>
 	<td>
-		<a href="IFrameDemo.zip" class="downloadLink" target="_top">Download source (ZIP, 15K)</a><br/>
-		<a href="http://www.adobe.com/go/flex3_sdk" class="downloadLink" target="_top">Download Flex 3 SDK</a>
+		<a href="IFrameDemo.zip" class="downloadLink" target="_top">Télécharger la source (ZIP, 16 ko)</a><br/>
+		<a href="http://www.adobe.com/go/flex4_sdk_download " class="downloadLink" target="_top">Télécharger le SDK Flex </a>
 	</td>
 </tr>
 </table>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index>
-	<title>Source of SimpleHtml</title>
+	<title>Source de SimpleHtml</title>
 	<nodes>
 		<node label="html-template">
 			<node label="css">
@@ -18,7 +18,7 @@
 		</node>
 		<node label="libs">
 		</node>
-		<node label="src" icon="classpathIcon" expanded="true">
+		<node label="src">
 			<node selected="true" label="SimpleHtml.mxml" icon="mxmlAppIcon" url="source/SimpleHtml.mxml.html"/>
 		</node>
 	</nodes>

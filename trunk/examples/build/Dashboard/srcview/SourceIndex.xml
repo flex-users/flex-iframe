@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index>
-	<title>Source of Dashboard</title>
+	<title>Source de Dashboard</title>
 	<nodes>
 		<node label="html-template">
 			<node label="history">
@@ -15,7 +15,7 @@
 		<node label="libs">
 			<node label="libdashboard.swc" url="source/libs/libdashboard.swc"/>
 		</node>
-		<node label="src" icon="classpathIcon" expanded="true">
+		<node label="src">
 			<node label="assets">
 				<node label="application_background.png" icon="imageIcon" url="source/assets/application_background.png.html"/>
 				<node label="close_over.png" icon="imageIcon" url="source/assets/close_over.png.html"/>

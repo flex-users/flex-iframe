@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <index>
-	<title>Source of IFrameWithLoadIndicator</title>
+	<title>Source de IFrameWithLoadIndicator</title>
 	<nodes>
 		<node label="html-template">
 			<node label="history">
@@ -14,7 +14,7 @@
 		</node>
 		<node label="libs">
 		</node>
-		<node label="src" icon="classpathIcon" expanded="true">
+		<node label="src">
 			<node label="com.google.code.examples" icon="packageIcon" expanded="true">
 				<node label="SampleLoadIndicator.mxml" icon="mxmlIcon" url="source/com/google/code/examples/SampleLoadIndicator.mxml.html"/>
 			</node>
