@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - Copyright (c) 2009 flex-iframe
+ -
+ - Permission is hereby granted, free of charge, to any person obtaining a copy
+ - of this software and associated documentation files (the "Software"), to deal
+ - in the Software without restriction, including without limitation the rights
+ - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ - copies of the Software, and to permit persons to whom the Software is
+ - furnished to do so, subject to the following conditions:
+ -
+ - The above copyright notice and this permission notice shall be included in
+ - all copies or substantial portions of the Software.
+ -
+ - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ -  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ - THE SOFTWARE.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - $Id$
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ -->
+<!---
+    An example application showing an IFrame with a navigation tree.
+    
+    @author Alistair Rutherford
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+				xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
+                horizontalAlign="center"
+                verticalAlign="middle"
+				viewSourceURL="srcview/index.html">
+
+    <!-- Example project presentation -->
+    <mx:ApplicationControlBar dock="true">
+        <mx:Image source="http://flex-iframe.googlecode.com/svn/trunk/flexiframe/src/com/google/code/flexiframe/assets/flex-iframe-logo-48.png"
+                  width="48"
+                  height="48"/>
+        <mx:Text selectable="false">
+            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Navigation tree example</b><br>This example shows an IFrame with a navigation tree.</font>]]></mx:htmlText>
+        </mx:Text>
+    </mx:ApplicationControlBar>
+
+
+    <mx:HBox width="100%" height="100%">
+
+        <mx:Panel title="Tree" width="200" height="100%" roundedBottomCorners="true">
+             <mx:Tree id="tree" width="100%" height="100%" dataProvider="{treeData}"
+                     labelField="@label" showRoot="false"
+                     change="iFrame.source = (Tree(event.target).selectedItem.attribute('path').toString());"  />
+        </mx:Panel>
+
+        <mx:Panel width="100%" height="100%" title="Content" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" >
+			<flexiframe:IFrame id="iFrame" source="http://www.adobe.com/devnet/flex/" width="100%" height="100%"/>
+            <mx:ControlBar>
+                <mx:CheckBox id="cbVisible" label="IFrame Visible" selected="true" click="iFrame.visible=cbVisible.selected"/>
+            </mx:ControlBar>
+        </mx:Panel>
+
+    </mx:HBox>
+
+    <mx:XMLList id="treeData">
+        <node label="Flex Resources">
+            <node label="Flex Developer Center" path="http://www.adobe.com/devnet/flex/" />
+            <node label="Flex Team Blog" path="http://weblogs.macromedia.com/flexteam/" />
+            <node label="Flex Blogs on MXNA" path="http://weblogs.macromedia.com/mxna/FeedList.cfm#Flex" />
+        </node>
+        <node label="Search">
+            <node label="Google" path="http://www.google.com" />
+            <node label="Yahoo" path="http://www.yahoo.com" />
+        </node>
+        <node label="Flex-IFrame">
+            <node label="Home page" path="http://code.google.com/p/flex-iframe/" />
+            <node label="Google group" path="http://groups.google.com/group/flex-iframe" />
+        </node>
+    </mx:XMLList>
+
+</mx:Application>

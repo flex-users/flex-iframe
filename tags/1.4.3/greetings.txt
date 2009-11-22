@@ -1,0 +1,11 @@
+This component is based on the work of:
+ * Christophe Conraets - www.coenraets.org
+ * Brian Deitte - http://www.deitte.com/archives/2006/08/finally_updated.htm
+ 
+Contributors:
+ * Alistair Rutherford (www.netthreads.co.uk)
+ * Brian Deitte (http://www.deitte.com)
+ * Ryan Bell
+ * Max
+ * Julien Nicoulaud
+ * Several bug fixes by users (see changelog)
