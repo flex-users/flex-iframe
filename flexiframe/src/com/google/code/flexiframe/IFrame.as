@@ -997,6 +997,7 @@ package com.google.code.flexiframe
             if (_frameLoaded)
             {
                 // Call the function immediately
+                logger.info("frame id {0} now attempting to call internal iframe document function {1}", _frameId, functionName);
                 var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_CALLIFRAMEFUNCTION, _iframeId, functionName, args);
                 if (callback != null)
                 {
@@ -1012,6 +1013,19 @@ package com.google.code.flexiframe
                 return null;
             }
         }
+        
+        /**
+         * If you provide the name of JavaScript function here, that function will
+         * be called as a notification whenever the frame is hidden or shown due to
+         * tab index changes, overlay detection (if enabled), etc. It will be 
+         * passed an array containing 1 item, the value true (if being shown)
+         * or false (if being hidden).
+         * 
+         * This uses the same mechanism as callIFrameFunction, so the function
+         * should be defined the same way as others you want to call through
+         * this method
+         */
+        public var visibilityNotificationFunction:String;
 
 
         // =========================================================================================
@@ -1138,6 +1152,8 @@ package com.google.code.flexiframe
         protected function hideIFrame():void
         {
             logger.info("Hiding IFrame with id '{0}'.", _frameId);
+            if (visibilityNotificationFunction)
+            	callIFrameFunction(visibilityNotificationFunction, [false]);
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_HIDEIFRAME, _frameId, _iframeId);
         }
 
@@ -1148,6 +1164,8 @@ package com.google.code.flexiframe
         {
             logger.info("Showing IFrame with id '{0}'.", _frameId);
             ExternalInterface.call(IFrameExternalCalls.FUNCTION_SHOWIFRAME, _frameId, _iframeId);
+            if (visibilityNotificationFunction)
+            	callIFrameFunction(visibilityNotificationFunction, [true]);
         }
 
         /**
