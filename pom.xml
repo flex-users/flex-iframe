@@ -177,8 +177,8 @@
   <!-- Modules -->
   <modules>
     <module>library</module>
-<!--    <module>examples</module>-->
-<!--    <module>assemblies</module>-->
+    <module>examples</module>
+    <module>assemblies</module>
   </modules>
 
   <!-- Build -->
