@@ -177,8 +177,8 @@
   <!-- Modules -->
   <modules>
     <module>library</module>
-    <module>examples</module>
-    <module>assemblies</module>
+<!--    <module>examples</module>-->
+<!--    <module>assemblies</module>-->
   </modules>
 
   <!-- Build -->
@@ -205,24 +205,24 @@
     </pluginManagement>
 
     <!-- Default build -->
-    <plugins>
-
-      <!-- Clean the temporary directory after each artifact build -->
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <inherited>true</inherited>
-        <executions>
-          <execution>
-            <id>clean-tmp-directory</id>
-            <phase>install</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-    </plugins>
+<!--    <plugins>-->
+<!---->
+<!--       Clean the temporary directory after each artifact build -->
+<!--      <plugin>-->
+<!--        <artifactId>maven-clean-plugin</artifactId>-->
+<!--        <inherited>true</inherited>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>clean-tmp-directory</id>-->
+<!--            <phase>install</phase>-->
+<!--            <goals>-->
+<!--              <goal>clean</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+<!---->
+<!--    </plugins>-->
   </build>
 
   <!-- Profiles -->
