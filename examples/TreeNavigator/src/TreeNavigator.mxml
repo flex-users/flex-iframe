@@ -25,10 +25,10 @@
  -->
 <!---
     An example application showing an IFrame with a navigation tree.
-    
+
     @author Alistair Rutherford
 -->
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 				xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
                 horizontalAlign="center"
                 verticalAlign="middle"
