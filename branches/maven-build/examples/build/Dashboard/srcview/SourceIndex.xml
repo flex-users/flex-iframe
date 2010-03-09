@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source de Dashboard</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node label="index.template.html" icon="htmlIcon" url="source/html-template/index.template.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs">
+			<node label="libdashboard.swc" url="source/libs/libdashboard.swc"/>
+		</node>
+		<node label="src">
+			<node label="assets">
+				<node label="application_background.png" icon="imageIcon" url="source/assets/application_background.png.html"/>
+				<node label="close_over.png" icon="imageIcon" url="source/assets/close_over.png.html"/>
+				<node label="close_up.png" icon="imageIcon" url="source/assets/close_up.png.html"/>
+				<node label="dashboard.css" icon="cssIcon" url="source/assets/dashboard.css.html"/>
+				<node label="left_arrow_disabled.gif" icon="imageIcon" url="source/assets/left_arrow_disabled.gif.html"/>
+				<node label="left_arrow_over.gif" icon="imageIcon" url="source/assets/left_arrow_over.gif.html"/>
+				<node label="left_arrow_up.gif" icon="imageIcon" url="source/assets/left_arrow_up.gif.html"/>
+				<node label="maximize_over.png" icon="imageIcon" url="source/assets/maximize_over.png.html"/>
+				<node label="maximize_up.png" icon="imageIcon" url="source/assets/maximize_up.png.html"/>
+				<node label="minimize_over.png" icon="imageIcon" url="source/assets/minimize_over.png.html"/>
+				<node label="minimize_up.png" icon="imageIcon" url="source/assets/minimize_up.png.html"/>
+				<node label="restore_over.png" icon="imageIcon" url="source/assets/restore_over.png.html"/>
+				<node label="restore_up.png" icon="imageIcon" url="source/assets/restore_up.png.html"/>
+				<node label="right_arrow_disabled.gif" icon="imageIcon" url="source/assets/right_arrow_disabled.gif.html"/>
+				<node label="right_arrow_over.gif" icon="imageIcon" url="source/assets/right_arrow_over.gif.html"/>
+				<node label="right_arrow_up.gif" icon="imageIcon" url="source/assets/right_arrow_up.gif.html"/>
+				<node label="tab_selected.png" icon="imageIcon" url="source/assets/tab_selected.png.html"/>
+				<node label="tab_up.png" icon="imageIcon" url="source/assets/tab_up.png.html"/>
+			</node>
+			<node selected="true" label="dashboardsample.mxml" icon="mxmlAppIcon" url="source/dashboardsample.mxml.html"/>
+		</node>
+	</nodes>
+</index>
