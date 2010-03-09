@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009 flex-iframe
+ * Copyright (c) 2007-2010 flex-iframe contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1013,14 +1013,14 @@ package com.google.code.flexiframe
                 return null;
             }
         }
-        
+
         /**
          * If you provide the name of JavaScript function here, that function will
          * be called as a notification whenever the frame is hidden or shown due to
-         * tab index changes, overlay detection (if enabled), etc. It will be 
+         * tab index changes, overlay detection (if enabled), etc. It will be
          * passed an array containing 1 item, the value true (if being shown)
          * or false (if being hidden).
-         * 
+         *
          * This uses the same mechanism as callIFrameFunction, so the function
          * should be defined the same way as others you want to call through
          * this method
