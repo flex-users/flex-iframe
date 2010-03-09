@@ -61,7 +61,7 @@
         <version>${plugin.flex-mojos.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <addMavenDescriptor>true</addMavenDescriptor>
+          <addMavenDescriptor>false</addMavenDescriptor>
           <namespaces>
             <namespace>
               <uri>${flex-iframe.library.namespace}</uri>
