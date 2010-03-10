@@ -51,10 +51,12 @@
   <developers>
     <developer>
       <id>alistair.rutherford</id>
+      <name>alistair.rutherford</name>
       <roles><role>Owner</role></roles>
     </developer>
     <developer>
       <id>ryan2004</id>
+      <name>ryan2004</name>
       <roles><role>Owner</role></roles>
     </developer>
     <developer>
