@@ -144,6 +144,7 @@
     <!-- Plugins versions -->
     <plugin.flex-mojos.version>3.5.0</plugin.flex-mojos.version>
     <plugin.maven-resources-plugin.version>2.4.2</plugin.maven-resources-plugin.version>
+    <plugin.maven-assembly-plugin.version>2.2-beta-5</plugin.maven-assembly-plugin.version>
     <plugin.flex-pmd-maven-plugin.version>1.0.RC5</plugin.flex-pmd-maven-plugin.version>
     <plugin.maven-gpg-plugin.version>1.0-alpha-4</plugin.maven-gpg-plugin.version>
 
@@ -204,25 +205,6 @@
       </plugins>
     </pluginManagement>
 
-    <!-- Default build -->
-<!--    <plugins>-->
-<!---->
-<!--       Clean the temporary directory after each artifact build -->
-<!--      <plugin>-->
-<!--        <artifactId>maven-clean-plugin</artifactId>-->
-<!--        <inherited>true</inherited>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>clean-tmp-directory</id>-->
-<!--            <phase>install</phase>-->
-<!--            <goals>-->
-<!--              <goal>clean</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
-<!---->
-<!--    </plugins>-->
   </build>
 
   <!-- Profiles -->
@@ -256,6 +238,7 @@
         </plugins>
       </build>
     </profile>
+
   </profiles>
 
   <!-- Distribution management -->

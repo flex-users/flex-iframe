@@ -55,31 +55,80 @@
   <!-- Modules -->
   <modules>
     <module>SimpleHtml</module>
-<!--    <module>Dashboard</module>-->
     <module>IFrameWithLoadIndicator</module>
     <module>IFrameCommTest</module>
     <module>TabNavigator</module>
     <module>TreeNavigator</module>
+<!--    <module>Dashboard</module>-->
   </modules>
 
   <!-- Build -->
   <build>
 
+    <!-- Output name -->
+    <finalName>${artifactId}</finalName>
+
     <!-- Directories -->
     <sourceDirectory>${basedir}/src</sourceDirectory>
     <directory>${basedir}/bin-debug</directory>
 
+    <!-- Resources -->
+    <resources>
+      <resource>
+        <directory>${project.build.sourceDirectory}</directory>
+        <targetPath>${project.build.directory}</targetPath>
+        <excludes>
+          <exclude>**/*.as</exclude>
+          <exclude>**/*.mxml</exclude>
+        </excludes>
+      </resource>
+    </resources>
+
     <!-- Plugins management -->
-<!--    <pluginManagement>-->
-<!--      <plugins>-->
-<!--        <plugin>-->
-<!--          <groupId>org.sonatype.flexmojos</groupId>-->
-<!--          <artifactId>flexmojos-maven-plugin</artifactId>-->
-<!--          <version>${plugin.flex-mojos.version}</version>-->
-<!--          <extensions>true</extensions>-->
-<!--        </plugin>-->
-<!--      </plugins>-->
-<!--    </pluginManagement>-->
+    <pluginManagement>
+      <plugins>
+
+        <!-- Configuration for the Flex compiler plugin -->
+        <plugin>
+          <groupId>org.sonatype.flexmojos</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>${plugin.flex-mojos.version}</version>
+          <extensions>true</extensions>
+          <executions>
+            <execution>
+              <id>generate-html-wrapper</id>
+              <phase>generate-resources</phase>
+              <goals>
+                <goal>wrapper</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- Configuration for the assembly packager plugin -->
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${plugin.maven-assembly-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>create-example-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
+            <descriptors>
+              <descriptor>${basedir}/../example-assembly-sources.xml</descriptor>
+              <descriptor>${basedir}/../example-assembly-binaries.xml</descriptor>
+            </descriptors>
+          </configuration>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
 
   </build>
 
