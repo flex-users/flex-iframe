@@ -36,7 +36,7 @@
   </formats>
 
   <!-- Archive base directory -->
-  <baseDirectory>flex-iframe-example-${artifactId}-sources-${version}</baseDirectory>
+  <baseDirectory>flex-iframe-example-${artifactId}-${version}-sources</baseDirectory>
 
   <!-- Assembly description -->
   <fileSets>

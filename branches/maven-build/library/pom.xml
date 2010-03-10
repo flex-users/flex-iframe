@@ -80,7 +80,28 @@
             <keepAs3Metadata>Transient</keepAs3Metadata>
           </keepAs3Metadatas>
         </configuration>
-      </plugin>
+
+        <!-- Assemblies to package -->
+        </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${plugin.maven-assembly-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>create-library-assemblies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
+              <descriptors>
+                <descriptor>${basedir}/library-assembly-sources.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </plugin>
 
     </plugins>
   </build>
