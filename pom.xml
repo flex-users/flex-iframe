@@ -144,7 +144,7 @@
     <dependency.flex-sdk.version>${dependency.flex-sdk-3.5.version}</dependency.flex-sdk.version>
 
     <!-- Plugins versions -->
-    <plugin.flex-mojos.version>3.5.0</plugin.flex-mojos.version>
+    <plugin.flex-mojos.version>3.6-SNAPSHOT</plugin.flex-mojos.version>
     <plugin.maven-resources-plugin.version>2.4.2</plugin.maven-resources-plugin.version>
     <plugin.maven-assembly-plugin.version>2.2-beta-5</plugin.maven-assembly-plugin.version>
     <plugin.flex-pmd-maven-plugin.version>1.0.RC5</plugin.flex-pmd-maven-plugin.version>
