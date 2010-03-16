@@ -117,7 +117,7 @@
           <version>${plugin.maven-assembly-plugin.version}</version>
           <executions>
             <execution>
-              <id>create-example-assemblies</id>
+              <id>attach-example-source-and-binary-assemblies</id>
               <phase>package</phase>
               <goals>
                 <goal>single</goal>

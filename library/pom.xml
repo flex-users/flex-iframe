@@ -54,12 +54,20 @@
 
     <plugins>
 
-      <!-- Flex-IFrame SWC compilation -->
+      <!-- Flex-IFrame SWC compilation & Asdoc generation -->
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <version>${plugin.flex-mojos.version}</version>
         <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>attach-asdoc</id>
+            <goals>
+              <goal>attach-asdoc</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <addMavenDescriptor>false</addMavenDescriptor>
           <namespaces>
@@ -71,6 +79,12 @@
           <includeNamespaces>
             <namespace>${flex-iframe.library.namespace}</namespace>
           </includeNamespaces>
+          <docNamespaces>
+            <namespace>
+              <uri>${flex-iframe.library.namespace}</uri>
+              <manifest>${project.build.sourceDirectory}/manifest.xml</manifest>
+            </namespace>
+          </docNamespaces>
           <optimize>true</optimize>
           <keepAs3Metadatas>
             <keepAs3Metadata>Bindable</keepAs3Metadata>
@@ -89,7 +103,7 @@
         <version>${plugin.maven-assembly-plugin.version}</version>
         <executions>
           <execution>
-            <id>create-library-assemblies</id>
+            <id>attach-sources</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
