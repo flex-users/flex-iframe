@@ -42,4 +42,129 @@
   <name>Flex-IFrame :: Assemblies</name>
   <description><![CDATA[Assemblies for the Flex-IFrame library.]]></description>
 
+  <!-- Dependencies -->
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.flex-iframe</groupId>
+      <artifactId>flex-iframe</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe</groupId>
+      <artifactId>flex-iframe</artifactId>
+      <version>${project.version}</version>
+      <classifier>asdoc</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe</groupId>
+      <artifactId>flex-iframe</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>IFrameCommTest</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>IFrameWithLoadIndicator</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>SimpleHtml</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>TabNavigator</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>TreeNavigator</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>IFrameCommTest</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>IFrameWithLoadIndicator</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>SimpleHtml</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>TabNavigator</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>TreeNavigator</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+  </dependencies>
+
+  <!-- Build -->
+  <build>
+
+    <!-- Output name -->
+    <finalName>Flex-IFrame-${project.version}</finalName>
+
+    <plugins>
+
+      <!-- Assemblies to package -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${plugin.maven-assembly-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-assemblies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptors>
+            <descriptor>${basedir}/flex-iframe-assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>
