@@ -23,34 +23,69 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ]]>-->
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
 
   <!-- Assembly id -->
-  <id>binaries</id>
+  <id>assembly</id>
 
   <!-- Archive formats -->
   <formats>
     <format>zip</format>
+    <format>dir</format>
   </formats>
 
   <!-- Archive base directory -->
-  <includeBaseDirectory>false</includeBaseDirectory>
-  
-  <!-- Assembly description -->
-  <fileSets>
-    <fileSet>
-      <directory>${project.build.directory}</directory>
-      <excludes>
-        <exclude>template.zip</exclude>
-        <exclude>**/assemblies/</exclude>
-        <exclude>**/classes/</exclude>
-        <exclude>**/archive-tmp/</exclude>
-        <exclude>**/html-wrapper-template/</exclude>
-        <exclude>**/surefire-reports/</exclude>
-      </excludes>
-    </fileSet>
-  </fileSets>
+  <baseDirectory>flex-iframe-${project.version}</baseDirectory>
+
+  <!--  -->
+  <dependencySets>
+
+    <!-- Add the library SWC to the 'build' directory -->
+    <dependencySet>
+      <includes>
+        <include>com.google.code.flex-iframe:flex-iframe:*:swc:*</include>
+      </includes>
+      <outputDirectory>build</outputDirectory>
+    </dependencySet>
+
+    <!-- Add the asdoc to the 'asdoc' directory -->
+    <dependencySet>
+      <includes>
+        <include>com.google.code.flex-iframe:flex-iframe:*:*:asdoc</include>
+      </includes>
+      <unpack>true</unpack>
+      <outputDirectory>asdoc</outputDirectory>
+    </dependencySet>
+
+    <!--  -->
+    <dependencySet>
+      <includes>
+        <include>com.google.code.flex-iframe.examples:*:*:*:binaries</include>
+      </includes>
+      <unpack>true</unpack>
+      <outputDirectory>examples</outputDirectory>
+    </dependencySet>
+
+    <!--  -->
+    <dependencySet>
+      <includes>
+        <include>com.google.code.flex-iframe:*:*:*:sources</include>
+      </includes>
+      <unpack>true</unpack>
+      <outputDirectory>sources/library</outputDirectory>
+      <outputFileNameMapping>{artifact.artifactId}</outputFileNameMapping>
+    </dependencySet>
+
+    <!--  -->
+    <dependencySet>
+      <includes>
+        <include>com.google.code.flex-iframe.examples:*:*:*:sources</include>
+      </includes>
+      <unpack>true</unpack>
+      <outputDirectory>sources/examples</outputDirectory>
+    </dependencySet>
+
+  </dependencySets>
 
 </assembly>

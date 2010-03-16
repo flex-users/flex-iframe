@@ -36,15 +36,12 @@
   </formats>
 
   <!-- Archive base directory -->
-  <baseDirectory>flex-iframe-${project.artifactId}-${project.version}-sources</baseDirectory>
+  <includeBaseDirectory>false</includeBaseDirectory>
 
   <!-- Assembly description -->
   <fileSets>
     <fileSet>
-      <directory>${project.basedir}</directory>
-      <excludes>
-        <exclude>${project.build.directory}/**</exclude>
-      </excludes>
+      <directory>${project.build.sourceDirectory}</directory>
     </fileSet>
   </fileSets>
 
