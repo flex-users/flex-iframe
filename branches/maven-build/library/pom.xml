@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<!--<![CDATA[ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Copyright (c) 2007-2010 flex-iframe contributors
   -
   - Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,7 +22,7 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--->
+]]>-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -50,7 +50,7 @@
     <directory>${basedir}/bin</directory>
 
     <!-- Name of the output SWC -->
-    <finalName>${artifactId}</finalName>
+    <finalName>${project.artifactId}</finalName>
 
     <plugins>
 
@@ -81,27 +81,28 @@
           </keepAs3Metadatas>
         </configuration>
 
-        <!-- Assemblies to package -->
-        </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>${plugin.maven-assembly-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>create-library-assemblies</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
-              <descriptors>
-                <descriptor>${basedir}/library-assembly-sources.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </plugin>
+      </plugin>
+
+      <!-- Assemblies to package -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${plugin.maven-assembly-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>create-library-assemblies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
+          <descriptors>
+            <descriptor>${basedir}/library-assembly-sources.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
 
     </plugins>
   </build>

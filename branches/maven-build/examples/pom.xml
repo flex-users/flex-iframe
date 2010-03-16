@@ -66,7 +66,7 @@
   <build>
 
     <!-- Output name -->
-    <finalName>${artifactId}</finalName>
+    <finalName>${project.artifactId}</finalName>
 
     <!-- Directories -->
     <sourceDirectory>${basedir}/src</sourceDirectory>
@@ -100,6 +100,12 @@
               <phase>generate-resources</phase>
               <goals>
                 <goal>wrapper</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>add-source-view</id>
+              <goals>
+                <goal>source-view</goal>
               </goals>
             </execution>
           </executions>
