@@ -898,6 +898,9 @@ package com.google.code.flexiframe
          */
         protected function checkOverlay(displayObj:DisplayObject):void
         {
+            if (displayObj.parent != systemManager)
+            	return; // item has been removed since we heard it added
+            
             if (isInFrontOfMe(displayObj) && !isAncestor(displayObj) && hitTestStageObject(displayObj))
             {
                 if (displayObj.visible)
