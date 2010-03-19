@@ -31,10 +31,11 @@ package com.google.code.flexiframe
     import flash.geom.Point;
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
-
+    
     import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
+    import mx.core.IChildList;
     import mx.core.UIComponent;
     import mx.events.FlexEvent;
     import mx.events.IndexChangedEvent;
@@ -657,6 +658,11 @@ package com.google.code.flexiframe
          * The dictionnary of the child indexes in the hierarchy of the parent containers.
          */
         protected var settingDict:Object = null;
+        
+        /**
+         * The z-index of this component off the system root
+         */
+        protected var rootIndex:int = -1;
 
         /**
          * Build list of container objects on the display list path all the way down
@@ -702,6 +708,11 @@ package com.google.code.flexiframe
                         current.addEventListener(MoveEvent.MOVE, handleMove);
                     }
 
+                }
+                else if (current is ISystemManager)
+                {
+                	// remember where we are off the system manager root
+                	rootIndex = ISystemManager(current).rawChildren.getChildIndex(previous);
                 }
 
                 previous = current;
@@ -887,7 +898,7 @@ package com.google.code.flexiframe
          */
         protected function checkOverlay(displayObj:DisplayObject):void
         {
-            if (this.hitTestStageObject(displayObj) && !isAncestor(displayObj))
+            if (isInFrontOfMe(displayObj) && !isAncestor(displayObj) && hitTestStageObject(displayObj))
             {
                 if (displayObj.visible)
                 {
@@ -908,6 +919,17 @@ package com.google.code.flexiframe
                     UIComponent(displayObj).addEventListener(FlexEvent.SHOW, overlay_hideShowHandler, false, 0, true);
                 }
             }
+        }
+        
+        /**
+        * Checks whether a top-level object has a higher Z-index off
+        * the root than the Iframe container (in other words, 
+        * whether it's on a layer above this object)
+        */
+        protected function isInFrontOfMe(obj:DisplayObject):Boolean
+        {
+        	var rootItems:IChildList = systemManager.rawChildren;
+        	return (this.rootIndex < rootItems.getChildIndex(obj));
         }
 
         /**
