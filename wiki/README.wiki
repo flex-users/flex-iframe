@@ -1,0 +1,37 @@
+#labels Featured,Phase-Deploy,Phase-Implementation
+= How to use flex-iframe =
+
+ * First of all, read the [FAQ FAQ].
+ * Get the library, 3 solutions:
+    * Get a [http://code.google.com/p/flex-iframe/downloads/list swc build of the library].
+    * Build it from the sources (see "How to build flex-iframe from the sources")
+    * Use [http://code.google.com/p/flex-iframe/wiki/Maven Maven].
+ * Drop it on your Flex project's libs/ directory
+ * Start using it with the namespace
+ {{{
+ http://code.google.com/p/flex-iframe/
+ }}}
+ or by importing the package directly
+ {{{
+ import com.google.code.flexiframe.*;
+ }}}
+ * Modify your html template and add the parameter wmode="opaque" to the embeds. You can find examples by [http://code.google.com/p/flex-iframe/source/browse/trunk/examples/src/SimpleHtml/html-template/index.template.html viewing the source of the project's samples].
+
+
+= How to build flex-iframe from the sources =
+
+ * Check out the folder flexiframe/ as a project in Flex Builder/Eclipse.
+ * Build the project.
+ * The flexiframe.swc library file is in the build/ directory.
+
+
+= How to run the examples =
+
+ * First follow "How to build flex-iframe from the sources".
+ * Check out the folders in examples/ as separate projects. Each of them is preconfigured to use the "flexiframe" project swc build directly (they will look for WORKSPACE/flexiframe/build/flexiframe.swc).
+
+= For contributors =
+
+ * Checkout the projects flexiframe/ and all the examples in your workspace, and make sure all the examples work before committing any changes.
+ * There is a preconfigured launch configuration to generate the asdoc (asdoc.launch). Go to: Run > External Tools > External Tools Configurations, select "asdoc" and run it to update the documentation.
+ * Before tagging a release, please make sure to generate the asdoc, and update the example builds.

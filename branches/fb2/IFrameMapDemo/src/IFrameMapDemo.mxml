@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright 2008 -  Alistair Rutherford - www.netthreads.co.uk, Apr 2008
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+   	        	xmlns:vc="com.netthreads.view.controller.*" 
+   	        	xmlns:map="com.netthreads.view.mapView.*" 
+   	        	xmlns:data="com.netthreads.view.dataView.*" 
+				layout="absolute"
+				creationComplete="init()">
+				
+	<mx:Script>
+		<![CDATA[
+			import com.netthreads.view.aboutView.AboutView;
+		import com.netthreads.model.DataModel;
+		import com.netthreads.util.IFrame;
+		
+        // -------------------------------------------
+        // IMPORTANT - This is path to map control.
+        // -------------------------------------------
+        [Bindable]
+        public var mapFrame:IFrame = null;
+			
+		[Bindable]
+		private var boundStr:String = "";
+		
+		private function init():void
+		{
+            mapPane.mapView.visible=true;        
+		}		
+		
+
+	    /**
+	    * Open About view.
+	    *
+	    */
+	    private function onAbout(event:Event):void
+	    {
+	    	var about:AboutView = new AboutView();
+    	
+			mapPane.mapView.visible = false;
+					    	
+	    	about.open(this, onAboutClose);
+	    }			
+
+	    /**
+	    * Called when about is closed.
+	    *
+	    */
+		private function onAboutClose():void
+		{
+	    	mapPane.mapView.visible = true;
+		}
+		    		
+		/**
+		* Triggered when user selects item in the datagrid.
+		*
+		* For brevity I have implemented it this way. If I was writing a production app I would have
+		* defined a new event whose payload was the points.
+		*
+		*/
+		private function onCentre(ev:Event):void
+		{		
+			mapController.centre(dataPanelView.selected.latitude, dataPanelView.selected.longitude);
+		}
+		
+        /**
+        * [FABridge]
+        * Called from map view when map has been initialised and setup all handlers.
+        *
+        */
+        public function onMapReady():void
+        {
+            // Make a note of the mapview
+            mapFrame = mapPane.mapView;
+            
+            // Pull in the data
+            DataModel.getInstance().refresh();
+        }
+        
+        /**
+        * [FABridge]
+        * Called when map viewport changed.
+        *
+        */            
+        public function onMapViewChanged(topLeftLat:Number, topLeftLng:Number, botRightLat:Number, botRightLng:Number):void
+        {
+            boundStr = "Top Left: "+topLeftLat+","+topLeftLng+" BottomRight: "+botRightLat+","+botRightLng;
+            
+            trace("Top Left: "+topLeftLat+","+topLeftLng+" BottomRight: "+botRightLat+","+botRightLng);
+        }
+			
+		]]>
+	</mx:Script>	
+	
+	<!-- handles view events for the map -->
+	<vc:MapViewController id="mapController" map="{mapPane.mapView}"/>
+
+	<!-- initialises FABridge  -->
+	<fab:FABridge xmlns:fab="bridge.*" />
+
+	<mx:VBox width="100%" height="100%">
+
+		<mx:ApplicationControlBar width="100%" height="5%">
+
+			<mx:Button id="aboutButton" 
+				click="onAbout(event)" 
+			    upIcon="@Embed(source='assets/image/help.png')"
+			    overIcon="@Embed(source='assets/image/help.png')"
+			    downIcon="@Embed(source='assets/image/help.png')"
+			    disabledIcon="@Embed(source='assets/image/help.png')"
+			    icon="@Embed(source='assets/image/help.png')"
+				/>
+
+			<mx:Text text="{boundStr}"/>
+			
+		</mx:ApplicationControlBar>
+			
+		<mx:HDividedBox height="95%" width="100%"
+			dividerPress="mapPane.mapView.visible=false"
+			dividerRelease="mapPane.mapView.visible=true">
+	
+	        <mx:Panel id="mapPanel" 
+	    	     width="70%" 
+				 height="100%"
+				 headerHeight="5">
+					 
+				<map:MapView
+					id="mapPane"
+					width="100%" 
+					height="100%" 
+					label="Map"
+				    controller="{mapController}"
+				    creationComplete="mapFrame = mapPane.mapView"/>
+				    
+	        </mx:Panel>
+			    
+	        <mx:Panel id="dataPanel"
+				width="30%" 
+				height="100%"
+				headerHeight="5">
+					 
+				 <data:DataView
+				 	id="dataPanelView"
+				 	width="100%"
+				 	height="100%"
+				 	centre="{onCentre(event)}"/>
+				 	
+	        </mx:Panel>
+		
+		</mx:HDividedBox>
+		
+	</mx:VBox>
+	
+</mx:Application>

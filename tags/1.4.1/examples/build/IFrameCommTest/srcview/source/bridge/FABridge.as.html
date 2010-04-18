@@ -1,0 +1,924 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>FABridge.as</title>
+<link rel="stylesheet" type="text/css" href="../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright � 2006 Adobe Systems Incorporated
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;),
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/</span>
+
+
+<span class="ActionScriptComment">/*
+ * The Bridge class, responsible for navigating JS instances
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">bridge</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptComment">/*
+ * imports
+ */</span>
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">external</span>.<span class="ActionScriptDefault_Text">ExternalInterface</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Timer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">system</span>.<span class="ActionScriptDefault_Text">ApplicationDomain</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Dictionary</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">setTimeout</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">errors</span>.<span class="ActionScriptDefault_Text">ItemPendingError</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IMXMLObject</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">getQualifiedClassName</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">describeType</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">TimerEvent</span>;
+
+<span class="ActionScriptASDoc">/**
+ * The FABridge class, responsible for proxying AS objects into javascript
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">FABridge</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">EventDispatcher</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IMXMLObject</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+    <span class="ActionScriptComment">//holds a list of stuff to call later, to break the recurrence of the js &lt;&gt; as calls
+</span>    <span class="ActionScriptComment">//you must use the full class name, as returned by the getQualifiedClassName() function
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;mx.collections::ArrayCollection&quot;</span><span class="ActionScriptBracket/Brace">]</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;refresh,removeItemAt&quot;</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;mx.data.events::UnresolvedConflictsEvent&quot;</span><span class="ActionScriptBracket/Brace">]</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;true&quot;</span>;
+    <span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;mx.events::PropertyChangeEvent&quot;</span><span class="ActionScriptBracket/Brace">]</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;true&quot;</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">INITIALIZED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;bridgeInitialized&quot;</span>;
+
+    <span class="ActionScriptComment">// constructor
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">FABridge</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">initializeCallbacks</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">// private vars
+</span>
+    <span class="ActionScriptASDoc">/**
+     * stores a cache of descriptions of AS types suitable for sending to JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * stores an id-referenced dictionary of objects exported to JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * stores an id-referenced dictionary of functions exported to JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localFunctionMap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * stores an id-referenced dictionary of proxy functions imported from JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">remoteFunctionCache</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * stores a list of custom serialization functions
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">customSerializersMap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * stores a map of object ID&apos;s and their reference count
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptASDoc">/**
+     * a local counter for generating unique IDs
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">nextID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+
+    <span class="ActionScriptComment">/* values that can&apos;t be serialized natively across the bridge are packed and identified by type.
+       These constants represent different serialization types */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TYPE_ASINSTANCE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 1;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TYPE_ASFUNCTION</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 2;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TYPE_JSFUNCTION</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 3;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TYPE_ANONYMOUS</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 4;
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_initChecked</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+    <span class="ActionScriptComment">// properties
+</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">rootObject</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_rootObject</span>;<span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">rootObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_rootObject</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptDefault_Text">checkInitialized</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bridgeName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_registerComplete</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">//the object is being created; we now add it to the map and set its refCount = 1
+</span>            <span class="ActionScriptComment">//trace(&quot;adding object with id: &quot; + objId + &quot; to the refMap&quot;);
+</span>            <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> 1;
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">+</span>1;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptComment">//trace(&quot;increment:: refCount for &quot; + objId + &quot; is &quot; + refMap[objId] + &quot;, &quot; + getQualifiedClassName(resolveRef(objId)) + &quot;, &quot; + arguments.callee.toString());
+</span>    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newRefVal</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> 1;
+
+            <span class="ActionScriptComment">//trace(&quot;decrement:: refCount for &quot; + objId + &quot; is &quot; + newRefVal + &quot;, &quot; + getQualifiedClassName(resolveRef(objId)) + &quot;, &quot; + arguments.callee.toString());
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">newRefVal</span> <span class="ActionScriptOperator">&lt;=</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newRefVal</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * attaches the callbacks to external interface
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeCallbacks</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">available</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;getRoot&quot;</span>, <span class="ActionScriptDefault_Text">js_getRoot</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;getPropFromAS&quot;</span>, <span class="ActionScriptDefault_Text">js_getPropFromAS</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;setPropInAS&quot;</span>, <span class="ActionScriptDefault_Text">js_setPropertyInAS</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;invokeASMethod&quot;</span>, <span class="ActionScriptDefault_Text">js_invokeMethod</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;invokeASFunction&quot;</span>, <span class="ActionScriptDefault_Text">js_invokeFunction</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;releaseASObjects&quot;</span>, <span class="ActionScriptDefault_Text">js_releaseASObjects</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;create&quot;</span>, <span class="ActionScriptDefault_Text">js_create</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;releaseNamedASObject&quot;</span>,<span class="ActionScriptDefault_Text">js_releaseNamedASObject</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;incRef&quot;</span>, <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">addCallback</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;releaseRef&quot;</span>, <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_rootObject</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>;
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_document</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initialized</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">document</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_document</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">document</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_document</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">checkInitialized</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">baseObject</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rootObject</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">_document</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">rootObject</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkInitialized</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_initChecked</span><span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">_initChecked</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+        <span class="ActionScriptComment">// oops! timing error. Player team is working on it.
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Timer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Timer</span><span class="ActionScriptBracket/Brace">(</span>200,1<span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">imerEvent</span>.<span class="ActionScriptDefault_Text">TIMER</span>,<span class="ActionScriptDefault_Text">auxCheckInitialized</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">start</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">auxCheckInitialized</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bCanGetParams</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">params</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">baseObject</span>.<span class="ActionScriptDefault_Text">root</span>.<span class="ActionScriptDefault_Text">loaderInfo</span>.<span class="ActionScriptDefault_Text">parameters</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">bCanGetParams</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bCanGetParams</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Timer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Timer</span><span class="ActionScriptBracket/Brace">(</span>100<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timerFunc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptfunction">function</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TimerEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseObject</span>.<span class="ActionScriptDefault_Text">root</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">try</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">bCanGetParams</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">params</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">baseObject</span>.<span class="ActionScriptDefault_Text">root</span>.<span class="ActionScriptDefault_Text">loaderInfo</span>.<span class="ActionScriptDefault_Text">parameters</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">bCanGetParams</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bCanGetParams</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">imerEvent</span>.<span class="ActionScriptDefault_Text">TIMER</span>, <span class="ActionScriptDefault_Text">timerFunc</span><span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">()</span>;
+                        <span class="ActionScriptDefault_Text">dispatchInit</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">imerEvent</span>.<span class="ActionScriptDefault_Text">TIMER</span>, <span class="ActionScriptDefault_Text">timerFunc</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">start</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">dispatchInit</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">dispatchInit</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_registerComplete</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">available</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bridgeName</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">bridgeName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">baseObject</span>.<span class="ActionScriptDefault_Text">root</span>.<span class="ActionScriptDefault_Text">loaderInfo</span>.<span class="ActionScriptDefault_Text">parameters</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;bridgeName&quot;</span><span class="ActionScriptBracket/Brace">]</span>;
+
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bridgeName</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">bridgeName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;flash&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptDefault_Text">_registerComplete</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">call</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;FABridge__bridgeInitialized&quot;</span>, <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">bridgeName</span><span class="ActionScriptBracket/Brace">])</span>;
+        <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">INITIALIZED</span><span class="ActionScriptBracket/Brace">))</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">// serialization/deserialization
+</span>
+    <span class="ActionScriptASDoc">/** serializes a value for transfer across the bridge.  primitive types are left as is.  Arrays are left as arrays, but individual
+     * values in the array are serialized according to their type.  Functions and class instances are inserted into a hash table and sent
+     * across as keys into the table.
+     *
+     * For class instances, if the instance has been sent before, only its id is passed. If This is the first time the instance has been sent,
+     * a ref descriptor is sent associating the id with a type string. If this is the first time any instance of that type has been sent
+     * across, a descriptor indicating methods, properties, and variables of the type is also sent across
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span>, <span class="ActionScriptDefault_Text">keep_refs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>;
+        <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newTypes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newRefs</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span>  <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">uint</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">keep_refs</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// serialize a class
+</span>            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TYPE_ASFUNCTION</span>;
+            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getFunctionID</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getQualifiedClassName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;Object&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TYPE_ANONYMOUS</span>;
+            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// serialize a class
+</span>            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TYPE_ASINSTANCE</span>;
+            <span class="ActionScriptComment">// make sure the type info is available
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getQualifiedClassName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">serializer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">customSerializersMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+
+            <span class="ActionScriptComment">// try looking up the serializer under an alternate name
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializer</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;$&apos;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">split</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">className</span>.<span class="ActionScriptDefault_Text">lastIndexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;:&apos;</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">split</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">alternate</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">className</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">split</span><span class="ActionScriptOperator">+</span>1<span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptDefault_Text">serializer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">customSerializersMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">alternate</span><span class="ActionScriptBracket/Brace">]</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializer</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serializer</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptDefault_Text">keep_refs</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">try</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newTypes</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">implementsInterface</span>;
+                        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interf</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">interf</span>.@<span class="ActionScriptDefault_Text">type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">){</span>
+                                <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newTypes</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">))</span>;
+                            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end if push new data type
+</span>                       
+                        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end for going through interfaces
+</span>                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">baseClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>.@<span class="ActionScriptDefault_Text">base</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseClass</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">){</span>
+                            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newTypes</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseClass</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">))</span>;
+                        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end if push new data type
+</span>                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptComment">// make sure the reference is known
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">should_keep_ref</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">))</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">//create the reference if necessary
+</span>                    <span class="ActionScriptDefault_Text">objRef</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">should_keep_ref</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">newRefs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">className</span>;
+                <span class="ActionScriptComment">//trace(&quot;serializing new reference: &quot; + className + &quot; with value&quot; + value);
+</span>                
+                <span class="ActionScriptComment">//the result is a getProperty / invokeMethod call. How can we know how much you will need the object ? 
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">keep_refs</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">should_keep_ref</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">objRef</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">result</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * deserializes a value passed in from javascript. See serialize for details on how values are packed and
+     * unpacked for transfer across the bridge.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:*</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptOperator">===</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptOperator">===</span> <span class="ActionScriptReserved">undefined</span>  <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">uint</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">valuePackage</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">TYPE_JSFUNCTION</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRemoteFunctionProxy</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">TYPE_ASFUNCTION</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;as functions can&apos;t be passed back to as yet&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">TYPE_ASINSTANCE</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">TYPE_ANONYMOUS</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">valuePackage</span>.<span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">result</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addCustomSerialization</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">serializationFunction</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">customSerializersMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serializationFunction</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+
+    <span class="ActionScriptComment">// type management
+</span>
+    <span class="ActionScriptASDoc">/**
+     * retrieves a type description for the type indicated by className, building one and caching it if necessary
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">retrieveCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">createifNecessary</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">createifNecessary</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">buildTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addCachedTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">desc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">desc</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">localTypeMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * builds a type description for the type indiciated by className
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">buildTypeDescription</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">desc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>;
+
+        <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">className</span>.<span class="ActionScriptDefault_Text">replace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">/::/</span>,<span class="ActionScriptString">&quot;.&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">objClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Class</span><span class="ActionScriptBracket/Brace">(A</span><span class="ActionScriptDefault_Text">pplicationDomain</span>.<span class="ActionScriptDefault_Text">currentDomain</span>.<span class="ActionScriptDefault_Text">getDefinition</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">))</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xData</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objClass</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptDefault_Text">desc</span>.<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xData</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">methods</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xMethods</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xData</span>.<span class="ActionScriptDefault_Text">factory</span>.<span class="ActionScriptDefault_Text">method</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">xMethods</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">()</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">methods</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xMethods</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">())</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">desc</span>.<span class="ActionScriptDefault_Text">methods</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">methods</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">accessors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xAcc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xData</span>.<span class="ActionScriptDefault_Text">factory</span>.<span class="ActionScriptDefault_Text">accessor</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">xAcc</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">()</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">accessors</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xAcc</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">())</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">xAcc</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xData</span>.<span class="ActionScriptDefault_Text">factory</span>.<span class="ActionScriptDefault_Text">variable</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">xAcc</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">()</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">accessors</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xAcc</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">())</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">desc</span>.<span class="ActionScriptDefault_Text">accessors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">accessors</span>;
+
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">desc</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">// instance mgmt
+</span>
+    <span class="ActionScriptASDoc">/**
+     * resolves an instance id passed from JS to an instance previously cached for representing in JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">baseObject</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">baseObject</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * returns an id associated with the object provided for passing across the bridge to JS
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">createIfNecessary</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ref</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">createIfNecessary</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">nextID</span><span class="ActionScriptOperator">++</span>;
+                <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">newRef</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">obj</span>;
+                <span class="ActionScriptDefault_Text">ref</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newRef</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">===</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">ref</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">key</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+             <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ref</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+
+    <span class="ActionScriptComment">// function management
+</span>
+    <span class="ActionScriptASDoc">/**
+     * resolves a function ID passed from JS to a local function previously cached for representation in JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resolveFunctionID</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">funcID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">localFunctionMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">funcID</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * associates a unique ID with a local function suitable for passing across the bridge to proxy in Javascript
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFunctionID</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">f</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>, <span class="ActionScriptDefault_Text">createIfNecessary</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ref</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">createIfNecessary</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">nextID</span><span class="ActionScriptOperator">++</span>;
+            <span class="ActionScriptDefault_Text">localFunctionMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">newID</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">f</span>;
+            <span class="ActionScriptDefault_Text">ref</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newID</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">localFunctionMap</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localFunctionMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">===</span> <span class="ActionScriptDefault_Text">f</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">ref</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">key</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ref</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * returns a proxy function that represents a function defined in javascript. This function can be called syncrhonously, and will
+     * return any values returned by the JS function
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getRemoteFunctionProxy</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">functionID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">createIfNecessary</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">remoteFunctionCache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">functionID</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">remoteFunctionCache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">functionID</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptfunction">function</span><span class="ActionScriptBracket/Brace">(</span>...<span class="ActionScriptDefault_Text">args</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">externalArgs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">args</span>.<span class="ActionScriptDefault_Text">concat</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptDefault_Text">externalArgs</span>.<span class="ActionScriptDefault_Text">unshift</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">functionID</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptComment">//trace(&quot;eaLength &quot; + externalArgs.length);
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">externalArgs</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">checkToThrowLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">]))</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">setTimeout</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">{</span>   
+                            <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>                            
+                                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">retVal</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">call</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;FABridge__invokeJSFunction&quot;</span>, <span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">)</span>;
+                                <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">serializedArgs</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+                                <span class="ActionScriptBracket/Brace">{</span>
+                                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">typeof</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">])</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;object&quot;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]!</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> 
+                                    <span class="ActionScriptBracket/Brace">{</span>
+                                        <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+                                    <span class="ActionScriptBracket/Brace">}</span>
+                                <span class="ActionScriptBracket/Brace">}</span>
+                                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">retVal</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                            <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptBracket/Brace">}</span>,1<span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">retVal</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ExternalInterface</span>.<span class="ActionScriptDefault_Text">call</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;FABridge__invokeJSFunction&quot;</span>, <span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">serializedArgs</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">typeof</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">])</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;object&quot;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]!</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> 
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">serializedArgs</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">retVal</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">remoteFunctionCache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">functionID</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkToThrowLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getQualifiedClassName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptComment">//check if this class doesn&apos;t inherit from one of the entries in the table
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inheritanceInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">extendsClass</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">inheritanceInfo</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">inherit</span>.@<span class="ActionScriptDefault_Text">type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end for going through inheritance tree
+</span>        
+        <span class="ActionScriptComment">//if we&apos;re still here, check the interfaces as well
+</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">implementsInterface</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interf</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">interf</span>.@<span class="ActionScriptDefault_Text">type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">EventsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end for going through inheritance tree
+</span>
+        <span class="ActionScriptComment">//if nothing was found, return false, so the function gets executed
+</span>        <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;        
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">// callbacks exposed to JS
+</span>
+    <span class="ActionScriptASDoc">/**
+     * called to fetch a named property off the instanced associated with objID
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_getPropFromAS</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">propName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>; 
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ret</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">propName</span><span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ret</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ItemPendingError</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptComment">//ItemPendingError
+</span>            <span class="ActionScriptComment">//return serialize(&quot;an error occcured with&quot; + obj[propName]);
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;||&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>    
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * called to set a named property on the instance associated with objID
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_setPropertyInAS</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">propRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">propRef</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;||&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * accessor for retrieveing a proxy to the root object from JS
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_getRoot</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">//always get the root; this is the same as the get property, only it is the root object
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseObject</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">))</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">//create the reference if necessary
+</span>                <span class="ActionScriptDefault_Text">objRef</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseObject</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">baseObject</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/** 
+     * called to invoke a function or closure associated with funcID
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_invokeFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">funcID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">args</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:*</span>;
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">func</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveFunctionID</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">funcID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">func</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">func</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">args</span><span class="ActionScriptBracket/Brace">))</span>;
+
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">result</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;||&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * called to invoke a named method on the object associated with objID
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_invokeMethod</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">args</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resolveRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:*</span>;
+
+            <span class="ActionScriptComment">//check if the method is callable right now, or later
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">checkToExecuteLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span>, <span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Timer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Timer</span><span class="ActionScriptBracket/Brace">(</span>200, 1<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">imerEvent</span>.<span class="ActionScriptDefault_Text">TIMER</span>, <span class="ActionScriptfunction">function</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ret_inner</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">args</span><span class="ActionScriptBracket/Brace">))</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">})</span>;
+                <span class="ActionScriptDefault_Text">t</span>.<span class="ActionScriptDefault_Text">start</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ret</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">deserialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">args</span><span class="ActionScriptBracket/Brace">))</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ret</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ItemPendingError</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptComment">// ignore ItemPendingError
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">releaseRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objID</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;||&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkToExecuteLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">methods</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getQualifiedClassName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptComment">//trace(&quot;checking classs&quot; + className + &quot; with method &quot; + methodName + &quot;=&gt; result: &quot; + FABridge.MethodsToCallLater[className]);
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">methods</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptComment">//must call later
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methods</span>.<span class="ActionScriptDefault_Text">match</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">))</span> 
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptComment">//check if this class doesn&apos;t inherit from one of the entries in the table
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inheritanceInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">extendsClass</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">inheritanceInfo</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">inherit</span>.@<span class="ActionScriptDefault_Text">type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">methods</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptComment">//must call later
+</span>                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methods</span>.<span class="ActionScriptDefault_Text">match</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">))</span> 
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end for going through inheritance tree
+</span>        
+        <span class="ActionScriptComment">//if we&apos;re still here, check the interfaces as well
+</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">implementsInterface</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">interf</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">interfaceInfo</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">className</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">interf</span>.@<span class="ActionScriptDefault_Text">type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">methods</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">FABridge</span>.<span class="ActionScriptDefault_Text">MethodsToCallLater</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptComment">//must call later
+</span>                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methods</span>.<span class="ActionScriptDefault_Text">match</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">methodName</span><span class="ActionScriptBracket/Brace">))</span> 
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">//end for going through inheritance tree
+</span>
+        <span class="ActionScriptComment">//if nothing was found, return false, so the function gets executed
+</span>        <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;        
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_releaseASObjects</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">localTypeMap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">localInstanceMap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">localFunctionMap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+   
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_releaseNamedASObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+    <span class="ActionScriptBracket/Brace">{</span>  
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">retVal</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptComment">//trace(&quot;objID: &quot; + objId + &quot; with map entry: &quot; + localInstanceMap[objId] + &quot; or with type &quot; + localTypeMap[objId]);
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">refMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">localInstanceMap</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">objId</span><span class="ActionScriptBracket/Brace">]</span>;        
+            <span class="ActionScriptDefault_Text">retVal</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">retVal</span>;    
+    <span class="ActionScriptBracket/Brace">}</span>    
+
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">js_create</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:*</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">c</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Class</span><span class="ActionScriptBracket/Brace">(A</span><span class="ActionScriptDefault_Text">pplicationDomain</span>.<span class="ActionScriptDefault_Text">currentDomain</span>.<span class="ActionScriptDefault_Text">getDefinition</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">instance</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">c</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;__FLASHERROR__&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;||&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptComment">// make sure the reference is known
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">instance</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">incRef</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">objRef</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">serialize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">instance</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

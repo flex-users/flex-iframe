@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
+	creationComplete="init();" 
+	viewSourceURL="srcview/index.html"> 
+
+	<mx:Script>
+		<![CDATA[
+			private function init():void
+			{
+				iFrame.visible=true;
+			}
+		]]>
+	</mx:Script>
+    <mx:HBox width="100%" height="100%">
+
+        <mx:Panel title="Tree" width="200" height="100%" roundedBottomCorners="true">
+             <mx:Tree id="tree" width="100%" height="100%" dataProvider="{treeData}"
+                     labelField="@label" showRoot="false"
+                     change="iFrame.source = (Tree(event.target).selectedItem.attribute('path').toString());"  />
+        </mx:Panel>
+
+        <mx:Panel width="100%" height="100%" title="Content" paddingTop="1" paddingBottom="1" paddingLeft="1" paddingRight="1" >
+			<flexiframe:IFrame id="iFrame" source="http://www.adobe.com/devnet/flex/" width="100%" height="100%"/>
+            <mx:ControlBar>
+                <mx:CheckBox id="cbVisible" label="IFrame Visible" selected="true" click="iFrame.visible=cbVisible.selected"/>
+            </mx:ControlBar>
+        </mx:Panel>
+
+    </mx:HBox>
+
+    <mx:XMLList id="treeData">
+        <node label="Flex Resources">
+            <node label="Flex Developer Center" path="http://www.adobe.com/devnet/flex/" />
+            <node label="Flex Team Blog" path="http://weblogs.macromedia.com/flexteam/" />
+            <node label="Flex Blogs on MXNA" path="http://weblogs.macromedia.com/mxna/FeedList.cfm#Flex" />
+            <!-- these sites pop themselves out of a frame:
+            <node label="flex.org" path="http://www.flex.org" />
+            <node label="Adobe Labs" path="http://labs.adobe.com/wiki/index.php/Main_Page" />
+            -->
+        </node>
+        <node label="Search">
+            <node label="Google" path="http://www.google.com" />
+            <node label="Yahoo" path="http://www.yahoo.com" />
+        </node>
+    </mx:XMLList>
+
+</mx:Application>

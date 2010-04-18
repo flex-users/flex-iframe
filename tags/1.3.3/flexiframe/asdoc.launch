@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${folder_prompt:Enter the path to the Flex SDK:/home/nicoulaj/Apps/flex-builder/sdks}/bin/aasdoc"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-source-path src&#10;-doc-sources src&#10;-window-title &quot;Flex-IFrame&quot;&#10;-main-title &quot;Flex-IFrame - An IFrame which you can embed into Flex applications to show an html page. - http://code.google.com/p/flex-iframe/&quot;&#10;-output doc&#10;-footer  &quot;Flex-IFrame - http://code.google.com/p/flex-iframe/&quot;&#10;-namespace &quot;http://code.google.com/p/flex-iframe/&quot; &quot;src/manifest.xml&quot;&#10;-package com.google.code.flexiframe &quot;Flex-IFrame main package&quot;&#10;-left-frameset-width 250"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${project_loc}"/>
+</launchConfiguration>
