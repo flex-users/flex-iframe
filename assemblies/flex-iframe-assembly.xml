@@ -38,10 +38,10 @@
   <!-- Archive base directory -->
   <baseDirectory>flex-iframe-${project.version}</baseDirectory>
 
-  <!--  -->
+  <!-- Assembly artifacts -->
   <dependencySets>
 
-    <!-- Add the library SWC to the 'build' directory -->
+    <!-- Library SWC -->
     <dependencySet>
       <includes>
         <include>com.google.code.flex-iframe:flex-iframe:*:swc:*</include>
@@ -49,7 +49,7 @@
       <outputDirectory>build</outputDirectory>
     </dependencySet>
 
-    <!-- Add the asdoc to the 'asdoc' directory -->
+    <!-- Asdoc -->
     <dependencySet>
       <includes>
         <include>com.google.code.flex-iframe:flex-iframe:*:*:asdoc</include>
@@ -58,7 +58,7 @@
       <outputDirectory>asdoc</outputDirectory>
     </dependencySet>
 
-    <!--  -->
+    <!-- Examples binaries -->
     <dependencySet>
       <includes>
         <include>com.google.code.flex-iframe.examples:*:*:*:binaries</include>
@@ -67,7 +67,7 @@
       <outputDirectory>examples</outputDirectory>
     </dependencySet>
 
-    <!--  -->
+    <!-- Library sources -->
     <dependencySet>
       <includes>
         <include>com.google.code.flex-iframe:*:*:*:sources</include>
@@ -77,7 +77,7 @@
       <outputFileNameMapping>{artifact.artifactId}</outputFileNameMapping>
     </dependencySet>
 
-    <!--  -->
+    <!-- Examples sources -->
     <dependencySet>
       <includes>
         <include>com.google.code.flex-iframe.examples:*:*:*:sources</include>
@@ -87,5 +87,18 @@
     </dependencySet>
 
   </dependencySets>
+
+  <!-- Additional files -->
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}/..</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>CHANGELOG</include>
+        <include>GREETINGS</include>
+        <include>README</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 
 </assembly>

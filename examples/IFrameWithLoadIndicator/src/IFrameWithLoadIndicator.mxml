@@ -52,7 +52,7 @@
               height="80%">
 
         <flexiframe:IFrame id="slowLoadingIFrame"
-                           source="http://www.facebook.com"
+                           source="http://slashdot.org"
                            width="100%"
                            height="100%"/>
 
@@ -65,7 +65,7 @@
               height="80%">
 
         <flexiframe:IFrame id="slowLoadingIFrameWithLoadIndicator"
-                           source="http://www.facebook.com"
+                           source="http://slashdot.org"
                            loadIndicatorClass="com.google.code.examples.SampleLoadIndicator"
                            width="100%"
                            height="100%"/>
