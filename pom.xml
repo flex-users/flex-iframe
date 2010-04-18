@@ -23,14 +23,13 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ]]>-->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Project coordinates -->
   <groupId>com.google.code.flex-iframe</groupId>
   <artifactId>flex-iframe-parent</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.4.4</version>
   <packaging>pom</packaging>
 
   <!-- Project infos -->
@@ -143,9 +142,9 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/</connection>
-    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/</developerConnection>
-    <url>http://code.google.com/p/flex-iframe/source/browse/</url>
+    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/tags/1.4.4</connection>
+    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/tags/1.4.4</developerConnection>
+    <url>http://code.google.com/p/flex-iframe/source/browse/tags/1.4.4</url>
   </scm>
 
   <!-- Issues management -->
