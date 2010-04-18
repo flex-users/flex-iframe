@@ -52,17 +52,23 @@
     <developer>
       <id>alistair.rutherford</id>
       <name>alistair.rutherford</name>
-      <roles><role>Owner</role></roles>
+      <roles>
+        <role>Owner</role>
+      </roles>
     </developer>
     <developer>
       <id>ryan2004</id>
       <name>ryan2004</name>
-      <roles><role>Owner</role></roles>
+      <roles>
+        <role>Owner</role>
+      </roles>
     </developer>
     <developer>
       <id>Julien.Nicoulaud</id>
       <name>Julien Nicoulaud</name>
-      <roles><role>Owner</role></roles>
+      <roles>
+        <role>Owner</role>
+      </roles>
       <timezone>1</timezone>
       <url>http://www.ju-n.net</url>
     </developer>
@@ -70,39 +76,57 @@
   <contributors>
     <contributor>
       <name>jefferyfernandez</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>andr.fel</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>alan.plante</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>chrisr@instantobjects.com</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>bruce.schwartz</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>achim.alin.ion</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>google@alishomepage.com</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>artistinclosure</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
     <contributor>
       <name>andrei.ilin</name>
-      <roles><role>contributor</role></roles>
+      <roles>
+        <role>contributor</role>
+      </roles>
     </contributor>
   </contributors>
 
@@ -149,6 +173,7 @@
     <plugin.maven-assembly-plugin.version>2.2-beta-5</plugin.maven-assembly-plugin.version>
     <plugin.flex-pmd-maven-plugin.version>1.0.RC5</plugin.flex-pmd-maven-plugin.version>
     <plugin.maven-gpg-plugin.version>1.0-alpha-4</plugin.maven-gpg-plugin.version>
+    <plugin.maven-release-plugin.version>2.0-beta-9</plugin.maven-release-plugin.version>
 
     <!-- Miscellaneous settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -169,12 +194,12 @@
 
   <!-- Dependencies -->
   <dependencies>
-      <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
-        <artifactId>flex-framework</artifactId>
-        <version>${dependency.flex-sdk.version}</version>
-        <type>pom</type>
-      </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${dependency.flex-sdk.version}</version>
+      <type>pom</type>
+    </dependency>
   </dependencies>
 
   <!-- Modules -->
@@ -206,6 +231,20 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <!-- Plugins -->
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${plugin.maven-release-plugin.version}</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <tagBase>https://flex-iframe.googlecode.com/svn/tags</tagBase>
+          <remoteTagging>true</remoteTagging>
+        </configuration>
+      </plugin>
+    </plugins>
 
   </build>
 
