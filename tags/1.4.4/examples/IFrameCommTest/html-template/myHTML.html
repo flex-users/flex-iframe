@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+  
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+	<style type="text/css">v\:* {behavior:url(#default#VML);}</style>
+      
+    <script type="text/javascript">
+
+    //<![CDATA[
+	
+	function load()
+	{
+	    this.parent.FABridge.addInitializationCallback("flash", function()
+		{
+		    var flexApp = parent.FABridge.flash.root();
+		    
+		    // ---------------------------------------------------------------
+		    // Register event handler(s)
+		    // ---------------------------------------------------------------
+		    flexApp.addEventListener("DirectionEvent", function(event) {getDirection(event.getToValue(), event.getFromValue())});
+		});
+	}
+
+	function getDirection(to, from)
+	{
+		alert("Html page recieved data:"+to+", "+from);
+	}
+	
+	function onClick()
+	{
+		var flexApp = parent.FABridge.flash.root();
+		flexApp.onButtonClicked("IFrame hidden to allow Alert to be shown");
+	}
+    //]]>
+    </script>
+  </head><body onload="load()">
+    The purpose of this test is to show how to use FABridge to communicate from and to the hosted html page
+    in the Flex IFrame component.
+  	<div width="100%" height="100%">
+		<input value="Click me" onclick="onClick()" type="button">
+    </div>
+  </body>
+  </html>
