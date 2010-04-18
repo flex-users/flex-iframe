@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - Copyright (c) 2009 flex-iframe
+ -
+ - Permission is hereby granted, free of charge, to any person obtaining a copy
+ - of this software and associated documentation files (the "Software"), to deal
+ - in the Software without restriction, including without limitation the rights
+ - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ - copies of the Software, and to permit persons to whom the Software is
+ - furnished to do so, subject to the following conditions:
+ -
+ - The above copyright notice and this permission notice shall be included in
+ - all copies or substantial portions of the Software.
+ -
+ - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ -  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ - THE SOFTWARE.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - $Id$
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ -->
+<!---
+    A basic example application showing how to use the "loadIndicatorClass" property.
+    
+    @author Julien Nicoulaud
+    @see com.google.code.flexiframe.IFrame#loadIndicatorClass
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
+                horizontalAlign="center"
+                verticalAlign="middle"
+                viewSourceURL="srcview/index.html">
+
+    <!-- Example project presentation -->
+    <mx:ApplicationControlBar dock="true">
+        <mx:Text selectable="false">
+		    <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Load indicator example</b><br>This example shows the use of the <i>loadIndicatorClass</i> property.</font>]]></mx:htmlText>
+        </mx:Text>
+    </mx:ApplicationControlBar>
+
+    <!-- A first IFrame without load indicator -->
+    <mx:Panel id="iFramePanel"
+              title="IFrame without load indicator"
+              width="80%"
+              height="80%">
+
+        <flexiframe:IFrame id="slowLoadingIFrame"
+                           source="http://slashdot.org"
+                           width="100%"
+                           height="100%"/>
+
+    </mx:Panel>
+
+    <!-- A second IFrame with a load indicator -->
+    <mx:Panel id="iFramePanelWithLoadIndicator"
+              title="IFrame with load indicator"
+              width="80%"
+              height="80%">
+
+        <flexiframe:IFrame id="slowLoadingIFrameWithLoadIndicator"
+                           source="http://slashdot.org"
+                           loadIndicatorClass="com.google.code.examples.SampleLoadIndicator"
+                           width="100%"
+                           height="100%"/>
+
+    </mx:Panel>
+
+</mx:Application>
