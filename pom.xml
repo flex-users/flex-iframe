@@ -143,9 +143,9 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:svn:http://flex-iframe.googlecode.com/svn</connection>
-    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn</developerConnection>
-    <url>http://flex-iframe.googlecode.com/svn</url>
+    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/</connection>
+    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/</developerConnection>
+    <url>http://code.google.com/p/flex-iframe/source/browse/</url>
   </scm>
 
   <!-- Issues management -->
@@ -240,8 +240,6 @@
         <version>${plugin.maven-release-plugin.version}</version>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <tagBase>https://flex-iframe.googlecode.com/svn/tags</tagBase>
-          <remoteTagging>true</remoteTagging>
         </configuration>
       </plugin>
     </plugins>
