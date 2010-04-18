@@ -42,9 +42,41 @@
   <name>Flex-IFrame :: Examples :: Dashboard</name>
   <description><![CDATA[]]></description>
 
+  <!-- Dependencies -->
+  <dependencies>
+    <dependency>
+      <groupId>com.adobe.flex</groupId>
+      <artifactId>libdashboard</artifactId>
+      <version>1.0</version>
+      <type>swc</type>
+    </dependency>
+  </dependencies>
+
   <!-- Build -->
   <build>
     <plugins>
+
+      <!-- Make sure the libdashboard.swc is installed in the Maven repo -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <file>${project.basedir}/libs/libdashboard.swc</file>
+              <groupId>com.adobe.flex</groupId>
+              <artifactId>libdashboard</artifactId>
+              <version>1.0</version>
+              <packaging>swc</packaging>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <!-- Compile the SWF -->
       <plugin>
