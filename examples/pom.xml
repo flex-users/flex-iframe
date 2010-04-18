@@ -59,7 +59,7 @@
     <module>IFrameCommTest</module>
     <module>TabNavigator</module>
     <module>TreeNavigator</module>
-<!--    <module>Dashboard</module>-->
+    <!--    <module>Dashboard</module>-->
   </modules>
 
   <!-- Build -->
@@ -101,12 +101,29 @@
               <goals>
                 <goal>wrapper</goal>
               </goals>
+              <configuration>
+                <templateURI>folder:/${basedir}/html-template</templateURI>
+                <parameters>
+                  <wmode>opaque</wmode>
+                </parameters>
+              </configuration>
             </execution>
             <execution>
               <id>add-source-view</id>
               <goals>
                 <goal>source-view</goal>
               </goals>
+            </execution>
+            <execution>
+              <id>add-output-directory-to-flashplayer-trust-file</id>
+              <goals>
+                <goal>trust</goal>
+              </goals>
+              <configuration>
+                <filesToTrust>
+                  <fileToTrust>${project.build.directory}</fileToTrust>
+                </filesToTrust>
+              </configuration>
             </execution>
           </executions>
         </plugin>

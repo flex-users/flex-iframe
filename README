@@ -29,12 +29,16 @@
  ===================================================================================================
 
  * First of all, read the FAQ: http://code.google.com/p/flex-iframe/wiki/FAQ
+ 
  * Get the library, 3 solutions:
      - Get a swc build of the library on the project home page
-     - Build it from the sources (see "How to build flex-iframe from the sources")
+     - Build it from the sources
      - Use Maven (see http://code.google.com/p/flex-iframe/wiki/Maven)
+     
  * Drop it on your Flex project's libs/ directory
+ 
  * Start using it with the namespace ("http://code.google.com/p/flex-iframe/") or by importing the
-   package directly ("import com.google.code.flexiframe.*;").
+   package directly ("import com.google.code.flexiframe.IFrame;").
+   
  * Modify your html template and add the parameter wmode="opaque" to the embeds. You can find
    examples by viewing the source of the project's samples.
