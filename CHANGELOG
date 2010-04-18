@@ -185,3 +185,15 @@
 
  1.4.3     22/11/09  J. Nicoulaud  * Remove 'hidden' property which has no use anymore.
  ---------------------------------------------------------------------------------------------------
+
+           19/04/10  RAB           * Added check for stacking order in overlay detection. This prevents
+                                     the iframe from detecting floating items behind its own as
+                                     overlapping objects, and fixes a bug where it could not be used
+                                     in a modal pop-up (because it would detect the modalWindow shield
+                                     behind its pop-up as an overlapping object).
+                                     
+                                   * Fixed issue where overlay checks could run on an item that was
+                                     already removed from the display list. This issue could have
+                                     caused null errors in new isInFrontOfMe method.
+
+           18/05/10  J. Nicoulaud  * Mavenized the build process.
