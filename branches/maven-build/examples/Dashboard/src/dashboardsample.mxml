@@ -118,9 +118,6 @@
 
     <!-- Example project presentation -->
     <mx:ApplicationControlBar dock="true">
-        <mx:Image source="http://flex-iframe.googlecode.com/svn/trunk/flexiframe/src/com/google/code/flexiframe/assets/flex-iframe-logo-48.png"
-                  width="48"
-                  height="48"/>
         <mx:Text selectable="false">
             <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Dashboard example</b><br>This example shows several IFrames at the same time.</font>]]></mx:htmlText>
         </mx:Text>
