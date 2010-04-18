@@ -119,7 +119,7 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/trunk</connection>
+    <connection>scm:svn:https://flex-iframe.googlecode.com/svn/trunk</connection>
     <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/trunk</developerConnection>
     <url>http://flex-iframe.googlecode.com/svn/trunk</url>
   </scm>
