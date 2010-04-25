@@ -196,5 +196,8 @@
                                      already removed from the display list. This issue could have
                                      caused null errors in new isInFrontOfMe method.
 
-  1.4.4    18/05/10  J. Nicoulaud  * Mavenized the build process.
+ 1.4.4     18/05/10  J. Nicoulaud  * Mavenized the build process.
+ ---------------------------------------------------------------------------------------------------
+
+ 1.4.5     25/05/10  J. Nicoulaud  * Fixed component broken.
  ---------------------------------------------------------------------------------------------------
