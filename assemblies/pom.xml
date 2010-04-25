@@ -65,6 +65,13 @@
     </dependency>
     <dependency>
       <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>Dashboard</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
       <artifactId>IFrameCommTest</artifactId>
       <version>${project.version}</version>
       <classifier>sources</classifier>
@@ -96,6 +103,13 @@
       <artifactId>TreeNavigator</artifactId>
       <version>${project.version}</version>
       <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>Dashboard</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
       <type>zip</type>
     </dependency>
     <dependency>
