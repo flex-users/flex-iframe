@@ -261,6 +261,28 @@
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>verify-gpg-passphrase-set</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <fail>true</fail>
+                  <failFast>true</failFast>
+                  <rules>
+                    <requireProperty>
+                      <property>gpg.passphrase</property>
+                      <message>You must set the passphrase of the GPG key to use when signing artifacts. You can pass it with the option -Dgpg.passphrase=...</message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${plugin.maven-gpg-plugin.version}</version>
             <executions>
@@ -270,6 +292,9 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
+                <configuration>
+                  <passphrase>${gpg.passphrase}</passphrase>
+                </configuration>
               </execution>
             </executions>
           </plugin>
