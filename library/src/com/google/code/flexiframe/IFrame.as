@@ -712,7 +712,10 @@ package com.google.code.flexiframe
                 else if (current is ISystemManager)
                 {
                 	// remember where we are off the system manager root
-                	rootIndex = ISystemManager(current).rawChildren.getChildIndex(previous);
+					if (ISystemManager(current).rawChildren.contains(previous))
+					{
+                	   rootIndex = ISystemManager(current).rawChildren.getChildIndex(previous);
+					}
                 }
 
                 previous = current;
