@@ -239,7 +239,6 @@
         <version>${plugin.maven-release-plugin.version}</version>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <tag>${releaseVersion}</tag>
         </configuration>
       </plugin>
     </plugins>
