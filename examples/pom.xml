@@ -53,12 +53,12 @@
 
   <!-- Modules -->
   <modules>
-    <module>SimpleHtml</module>
-    <module>IFrameWithLoadIndicator</module>
+    <module>Dashboard</module>
     <module>IFrameCommTest</module>
+    <module>IFrameWithLoadIndicator</module>
+    <module>SimpleHtml</module>
     <module>TabNavigator</module>
     <module>TreeNavigator</module>
-    <!--    <module>Dashboard</module>-->
   </modules>
 
   <!-- Build -->
