@@ -29,7 +29,7 @@
   <!-- Project coordinates -->
   <groupId>com.google.code.flex-iframe</groupId>
   <artifactId>flex-iframe-parent</artifactId>
-  <version>1.4.5-SNAPSHOT</version>
+  <version>1.4.5</version>
   <packaging>pom</packaging>
 
   <!-- Project infos -->
@@ -142,9 +142,9 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://code.google.com/p/flex-iframe/source/browse/</url>
+    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/tags/1.4.5</connection>
+    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/tags/1.4.5</developerConnection>
+    <url>http://code.google.com/p/flex-iframe/source/browse/tags/1.4.5</url>
   </scm>
 
   <!-- Issues management -->
