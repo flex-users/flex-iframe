@@ -160,7 +160,6 @@
       <!-- Assemblies to package -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>${plugin.maven-assembly-plugin.version}</version>
         <executions>
           <execution>
             <id>attach-assemblies</id>

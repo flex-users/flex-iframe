@@ -49,14 +49,12 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>${plugin.flex-mojos.version}</version>
         <extensions>true</extensions>
       </plugin>
 
       <!-- Create assemblies of the example -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>${plugin.maven-assembly-plugin.version}</version>
       </plugin>
 
     </plugins>
