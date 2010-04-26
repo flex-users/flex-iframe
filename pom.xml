@@ -169,15 +169,15 @@
     <flex-sdk-4.version>${flex-sdk-4.0.version}</flex-sdk-4.version>
     <flex-sdk.version>${flex-sdk-3.version}</flex-sdk.version>
 
-    <!-- Miscellaneous settings -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
     <!-- Library settings -->
     <flex-iframe.library.namespace>http://code.google.com/p/flex-iframe/</flex-iframe.library.namespace>
     <flex-iframe.asdoc.windowTitle>Flex-IFrame ${project.version} asdoc</flex-iframe.asdoc.windowTitle>
     <flex-iframe.asdoc.mainTitle>Flex-IFrame ${project.version} API documentation</flex-iframe.asdoc.mainTitle>
     <flex-iframe.asdoc.footer>Flex-IFrame - http://code.google.com/p/flex-iframe</flex-iframe.asdoc.footer>
     <flex-iframe.asdoc.leftFramesetWidth>280</flex-iframe.asdoc.leftFramesetWidth>
+
+    <!-- Miscellaneous settings -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
   </properties>
 
@@ -198,43 +198,24 @@
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
-      <version>${flex-sdk.version}</version>
       <type>pom</type>
     </dependency>
   </dependencies>
 
-  <!-- Dependencies & plugins versions -->
+  <!-- Dependencies versions -->
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.4.2</version>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <version>${flex-sdk.version}</version>
+        <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-5</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.0-alpha-4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.0-beta-9</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>2.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.0-beta-1</version>
+        <groupId>com.google.code.flex-iframe</groupId>
+        <artifactId>flex-iframe</artifactId>
+        <version>${project.version}</version>
+        <type>swc</type>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -245,8 +226,6 @@
     <!-- Plugins management -->
     <pluginManagement>
       <plugins>
-
-        <!-- Flex compiler plugin -->
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
@@ -261,8 +240,6 @@
             </dependency>
           </dependencies>
         </plugin>
-
-        <!-- Release plugin -->
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
@@ -271,7 +248,36 @@
             <scmCommentPrefix>[release]</scmCommentPrefix>
           </configuration>
         </plugin>
-
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2-beta-5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.0-alpha-4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.0-beta-9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.0-beta-1</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 

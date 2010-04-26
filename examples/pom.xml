@@ -46,7 +46,6 @@
     <dependency>
       <groupId>com.google.code.flex-iframe</groupId>
       <artifactId>flex-iframe</artifactId>
-      <version>${project.version}</version>
       <type>swc</type>
     </dependency>
   </dependencies>
@@ -69,6 +68,7 @@
 
     <!-- Directories -->
     <sourceDirectory>${basedir}/src</sourceDirectory>
+    <testSourceDirectory>${basedir}/src-test</testSourceDirectory>
     <directory>${basedir}/bin-debug</directory>
 
     <!-- Resources -->

@@ -46,6 +46,7 @@
 
     <!-- Directories -->
     <sourceDirectory>${basedir}/src</sourceDirectory>
+    <testSourceDirectory>${basedir}/src-test</testSourceDirectory>
     <directory>${basedir}/bin</directory>
 
     <!-- Name of the output SWC -->
