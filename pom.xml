@@ -218,6 +218,8 @@
     <!-- Plugins management -->
     <pluginManagement>
       <plugins>
+
+        <!-- Flex compiler plugin -->
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
@@ -232,21 +234,21 @@
             </dependency>
           </dependencies>
         </plugin>
+
+        <!-- Release plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${plugin.maven-release-plugin.version}</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <arguments>-Dgpg.passphrase='${gpg.passphrase}'</arguments>
+            <scmCommentPrefix>[release]</scmCommentPrefix>
+          </configuration>
+        </plugin>
+
       </plugins>
     </pluginManagement>
-
-    <!-- Plugins -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>${plugin.maven-release-plugin.version}</version>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <arguments>-Dgpg.passphrase='${gpg.passphrase}'</arguments>
-        </configuration>
-      </plugin>
-    </plugins>
 
   </build>
 
