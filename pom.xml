@@ -163,8 +163,11 @@
     <dependency.flex-sdk-3.3.version>3.3.0.4852</dependency.flex-sdk-3.3.version>
     <dependency.flex-sdk-3.4.version>3.4.0.9271</dependency.flex-sdk-3.4.version>
     <dependency.flex-sdk-3.5.version>3.5.0.12683</dependency.flex-sdk-3.5.version>
-    <dependency.flex-sdk-4.0.version>4.0.0.13875</dependency.flex-sdk-4.0.version>
-    <dependency.flex-sdk.version>${dependency.flex-sdk-3.5.version}</dependency.flex-sdk.version>
+    <dependency.flex-sdk-4.0.version>4.0.0.14159</dependency.flex-sdk-4.0.version>
+    <dependency.flex-sdk-4.1.version>4.1.0.15646</dependency.flex-sdk-4.1.version>
+    <dependency.flex-sdk-3.version>${dependency.flex-sdk-3.5.version}</dependency.flex-sdk-3.version>
+    <dependency.flex-sdk-4.version>${dependency.flex-sdk-4.0.version}</dependency.flex-sdk-4.version>
+    <dependency.flex-sdk.version>${dependency.flex-sdk-3.version}</dependency.flex-sdk.version>
 
     <!-- Plugins versions -->
     <plugin.flex-mojos.version>3.6.1</plugin.flex-mojos.version>
