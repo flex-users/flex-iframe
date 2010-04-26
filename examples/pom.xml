@@ -91,7 +91,6 @@
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
-          <version>${plugin.flex-mojos.version}</version>
           <extensions>true</extensions>
           <executions>
             <execution>
@@ -130,7 +129,6 @@
         <!-- Configuration for the assembly packager plugin -->
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>${plugin.maven-assembly-plugin.version}</version>
           <executions>
             <execution>
               <id>attach-example-source-and-binary-assemblies</id>
