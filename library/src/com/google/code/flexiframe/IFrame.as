@@ -103,7 +103,7 @@ package com.google.code.flexiframe
      * @author Brian Deitte (http://www.deitte.com)
      * @author Ryan Bell
      * @author Max
-     * @author Julien Nicoulaud
+     * @author Julien Nicoulaud (http://www.ju-n.net)
      */
     public class IFrame extends Container
     {
@@ -111,7 +111,7 @@ package com.google.code.flexiframe
         /**
          * Build a new IFrame.
          *
-         * @param id: a String identifying the IFrame. Must be unique for every instance of the
+         * @param id a String identifying the IFrame. Must be unique for every instance of the
          *            IFrame class.
          *
          * @example Declare an IFrame in MXML.
@@ -159,6 +159,26 @@ package com.google.code.flexiframe
         // =========================================================================================
 
         // Variables
+
+        /**
+         * Value for the 'auto' scroll policy.
+         */
+        public static const SCROLL_POLICY_AUTO : String = "auto";
+
+        /**
+         * Value for the 'on' scroll policy.
+         */
+        public static const SCROLL_POLICY_ON : String = "yes";
+
+        /**
+         * Value for the 'off' scroll policy.
+         */
+        public static const SCROLL_POLICY_OFF : String = "no";
+
+        /**
+         * The scrolling policy applied to the iframe.
+         */
+        public var scrollPolicy : String = SCROLL_POLICY_AUTO;
 
         /**
          * Track IDs in use throughout the app for iframe instances in order to detect and
@@ -431,7 +451,7 @@ package com.google.code.flexiframe
 
             if (event is IndexChangedEvent)
             {
-                var changedEvent:IndexChangedEvent=IndexChangedEvent(event)
+                var changedEvent:IndexChangedEvent=IndexChangedEvent(event);
                 var newIndex:Number=changedEvent.newIndex;
 
                 var result:Boolean=updateFrameVisibility(checkDisplay(target, newIndex));
@@ -536,7 +556,7 @@ package com.google.code.flexiframe
         /**
          * Set source url
          *
-         * @param url Frame contents
+         * @param source Frame contents
          */
         public function set source(source:String):void
         {
@@ -598,7 +618,7 @@ package com.google.code.flexiframe
             // - overlay detection, if enabled, is not tracking any overlapping popups
             // - .visible has not explicitly been set to false (or .hidden to true) on this component
             // - if there's a load indicator defined, the iframe content has finished loading
-            if (value && _validForDisplay && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
+            if (value && _validForDisplay && (!overlayDetection || overlapCount == 0) && explicitVisibleValue && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
                 // if we have an iframe in the same domain as the app, call the
                 // specialized functions to update visibility inside the iframe
@@ -632,7 +652,7 @@ package com.google.code.flexiframe
         /**
          * Manually sets visibility of html iframe.
          *
-         * @param visible Boolean flag
+         * @param value Boolean flag
          */
         override public function set visible(value:Boolean):void
         {
@@ -1104,11 +1124,7 @@ package com.google.code.flexiframe
          */
         protected function checkObjectId(id:String, randomCode:Number):Boolean
         {
-            if (randomIdentificationString == randomCode)
-            {
-                return true;
-            }
-            return false;
+            return randomIdentificationString == randomCode ? true : false;
         }
 
 
@@ -1220,7 +1236,7 @@ package com.google.code.flexiframe
         protected function loadIFrame():void
         {
             logger.info("Loading IFrame with id '{0}', on SWF embed object with id '{1}'.", _frameId, applicationId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, _frameId, _iframeId, source, applicationId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_LOADIFRAME, _frameId, _iframeId, source, applicationId, scrollPolicy);
         }
 
         /**
