@@ -30,7 +30,12 @@ package com.google.code.flexiframe
     * A static class that holds the calls that can be made to the <code>ExternalInterface</code>
     * by the <code>IFrame</code> class.
     * 
-    * @author Julien Nicoulaud
+    * @author Alistair Rutherford (www.netthreads.co.uk)
+    * @author Christophe Conraets (http://coenraets.org)
+    * @author Brian Deitte (http://www.deitte.com)
+    * @author Ryan Bell
+    * @author Max
+    * @author Julien Nicoulaud (http://www.ju-n.net)
     */
     public class IFrameExternalCalls
     {
@@ -214,13 +219,14 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_LOADIFRAME + "==null)" +
                 "{" +
-                    FUNCTION_LOADIFRAME + " = function (frameID, iframeID, url, embedID)" +
+                    FUNCTION_LOADIFRAME + " = function (frameID, iframeID, url, embedID, scrollPolicy)" +
                     "{" +
                         "document.getElementById(frameID).innerHTML = " + 
                             "\"<iframe id='\"+iframeID+\"' " + 
                                       "src='\"+url+\"' " + 
                                       "name='\"+iframeID+\"' " + 
-                                      "onLoad='\"+embedID+\".\"+frameID+\"_load();' " + 
+                                      "onLoad='\"+embedID+\".\"+frameID+\"_load();' " +
+                                      "scrolling='\"+scrollPolicy+\"' " +
                                       "frameborder='0'>" + 
                               "</iframe>\";" + 
                     "}" +
