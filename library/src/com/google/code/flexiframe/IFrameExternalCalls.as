@@ -24,8 +24,6 @@
  */
 package com.google.code.flexiframe
 {
-    import mx.core.Application;
-
     /**
     * A static class that holds the calls that can be made to the <code>ExternalInterface</code>
     * by the <code>IFrame</code> class.
