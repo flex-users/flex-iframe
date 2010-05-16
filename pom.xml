@@ -241,7 +241,9 @@
           </dependencies>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
+          <version>2.0</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <arguments>-Dgpg.passphrase='${gpg.passphrase}'</arguments>
@@ -262,11 +264,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.0-alpha-4</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.0-beta-9</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
