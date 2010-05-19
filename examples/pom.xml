@@ -102,9 +102,6 @@
               </goals>
               <configuration>
                 <templateURI>folder:/${basedir}/html-template</templateURI>
-                <parameters>
-                  <wmode>opaque</wmode>
-                </parameters>
               </configuration>
             </execution>
             <execution>
