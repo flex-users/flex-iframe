@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <script type="text/javascript">
+
+        /**
+         * Show an alert message.
+         */
+        document.showAlert = function ()
+        {
+            alert("The 'showAlert()' method has been called.");
+        }
+
+        /**
+         * Show an alert message, with a parameter.
+         */
+        document.showAlertWithParameter = function (parameter)
+        {
+            alert("The 'showAlertWithParameter()' method has been called with the parameter '" + parameter + "'.");
+        }
+
+        /**
+         * Return the current date.
+         */
+        document.getCurrentDate = function ()
+        {
+            var  currentDate=new  Date();
+            return currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear();
+        }
+        
+    </script>
+    <strong>This is a web page with Javascript functions embedded.</strong><br/>
+    Click "View source to view the Javascript functions.
+  </body>
+</html>
