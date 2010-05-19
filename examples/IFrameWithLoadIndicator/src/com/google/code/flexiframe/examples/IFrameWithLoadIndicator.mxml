@@ -63,7 +63,7 @@
 
         <flexiframe:IFrame id="slowLoadingIFrameWithLoadIndicator"
                            source="http://slashdot.org"
-                           loadIndicatorClass="com.google.code.examples.SampleLoadIndicator"
+                           loadIndicatorClass="com.google.code.flexiframe.examples.SampleLoadIndicator"
                            width="100%"
                            height="100%"/>
 

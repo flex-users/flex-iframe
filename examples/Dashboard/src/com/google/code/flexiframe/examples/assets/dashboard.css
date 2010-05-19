@@ -1,0 +1,79 @@
+.maximizeRestoreButton
+{
+	up-skin:        	Embed("/com/google/code/flexiframe/examples/assets/maximize_up.png");
+	over-skin:      	Embed("/com/google/code/flexiframe/examples/assets/maximize_over.png");
+	down-skin:      	Embed("/com/google/code/flexiframe/examples/assets/maximize_up.png");
+	selected-up-skin:   Embed("/com/google/code/flexiframe/examples/assets/restore_up.png");
+	selected-over-skin: Embed("/com/google/code/flexiframe/examples/assets/restore_over.png");
+	selected-down-skin: Embed("/com/google/code/flexiframe/examples/assets/restore_up.png");
+}
+
+.minimizeButton
+{
+	up-skin:        Embed("/com/google/code/flexiframe/examples/assets/minimize_up.png");
+	over-skin:      Embed("/com/google/code/flexiframe/examples/assets/minimize_over.png");
+	down-skin:      Embed("/com/google/code/flexiframe/examples/assets/minimize_up.png");
+}
+
+.closeButton
+{
+	up-skin:        Embed("/com/google/code/flexiframe/examples/assets/close_up.png");
+	over-skin:      Embed("/com/google/code/flexiframe/examples/assets/close_over.png");
+	down-skin:      Embed("/com/google/code/flexiframe/examples/assets/close_up.png");
+}
+
+Pod
+{
+	border-thickness: 1;
+	border-style: solid;
+	border-color: #999999;
+	header-colors:  #999999, #cccccc;
+	border-thickness-left:2;
+	border-thickness-right:2;
+	highlight-alphas: .9, 0;
+	background-color: #ffffff;
+	corner-radius: 4px;
+	header-height: 22px;
+	drop-shadow-enabled: false;
+	rounded-bottom-corners:true;
+	title-style-name:"podTitle";
+}
+
+.podControls {
+	horizontal-align:	right;
+	vertical-align:		middle;
+	horizontal-gap:		3;
+	padding-right:		3;	
+}
+
+.podTitle
+{
+	font-size: 11px;
+	font-family: arial;
+	font-weight: bold;
+}
+
+.dragHighLight
+{
+	border-color: #CCCCCC;
+	border-thickness: 2px;
+	corner-radius:5;
+	border-style: solid;
+	background-color: #F3F3F3;
+}
+
+.leftArrowButton
+{
+	up-skin:		Embed("/com/google/code/flexiframe/examples/assets/left_arrow_up.gif");
+	over-skin:		Embed("/com/google/code/flexiframe/examples/assets/left_arrow_over.gif");
+	down-skin:		Embed("/com/google/code/flexiframe/examples/assets/left_arrow_up.gif");
+	disabled-skin:	Embed("/com/google/code/flexiframe/examples/assets/left_arrow_disabled.gif");
+}
+
+.rightArrowButton
+{
+	up-skin:		Embed("/com/google/code/flexiframe/examples/assets/right_arrow_up.gif");
+	over-skin:		Embed("/com/google/code/flexiframe/examples/assets/right_arrow_over.gif");
+	down-skin:		Embed("/com/google/code/flexiframe/examples/assets/right_arrow_up.gif");
+	disabled-skin:	Embed("/com/google/code/flexiframe/examples/assets/right_arrow_disabled.gif");
+}

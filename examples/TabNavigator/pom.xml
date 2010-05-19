@@ -50,6 +50,9 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <extensions>true</extensions>
+        <configuration>
+            <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/TabNavigator.mxml</sourceFile>
+        </configuration>
       </plugin>
 
       <!-- Create assemblies of the example -->
