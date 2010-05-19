@@ -41,16 +41,48 @@
         </mx:Text>
     </mx:ApplicationControlBar>
 
-    <!-- A local Html page embedded -->
-    <mx:Panel title="A simple Html page embedded"
+    <!-- HTML content stored in a String -->
+    <mx:String id="iFrameHTMLContent">
+        <![CDATA[
+            <html>
+                <head>
+                    <title>About</title>
+                </head>
+                <body>
+                    <div>About</div>
+                    <p>Simple HTML Test application. This test app loads a page of html locally.</p>
+                    <div>Credits</div>
+                    <p> </p>
+                    <p>IFrame.as is based on the work of</p>
+                    <ul>
+                      <li><a href="http://coenraets.org/" target="_top">Christophe Coenraets</a></li>
+                      <li><a href="http://www.deitte.com/" target="_top">Brian Deitte</a></li>
+                    </ul>
+                </body>
+            </html>
+        ]]>
+    </mx:String>
+    
+    <!-- Example using the 'source' property -->
+    <mx:Panel title="A simple Html page embedded with the 'source' property"
               width="80%"
               height="80%">
 
-        <flexiframe:IFrame id="myFrame"
+        <flexiframe:IFrame id="iFrameBySource"
                            width="100%"
                            height="100%"
                            source="about.html"/>
+    </mx:Panel>
 
+    <!-- Example using the 'content' property -->
+    <mx:Panel title="A simple Html page embedded with the 'content' property"
+              width="80%"
+              height="80%">
+
+        <flexiframe:IFrame id="iFrameByContent"
+                           width="100%"
+                           height="100%"
+                           content="{iFrameHTMLContent}"/>
     </mx:Panel>
 
 </mx:Application>
