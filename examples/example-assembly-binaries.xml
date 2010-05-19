@@ -48,6 +48,7 @@
         <exclude>**/archive-tmp/</exclude>
         <exclude>**/html-wrapper-template/</exclude>
         <exclude>**/surefire-reports/</exclude>
+        <exclude>${project.artifactId}-config-report.xml</exclude>
       </excludes>
     </fileSet>
   </fileSets>
