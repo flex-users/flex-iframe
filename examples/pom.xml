@@ -69,8 +69,8 @@
     <finalName>${project.artifactId}</finalName>
 
     <!-- Directories -->
-    <sourceDirectory>${basedir}/src</sourceDirectory>
-    <testSourceDirectory>${basedir}/src-test</testSourceDirectory>
+    <sourceDirectory>${project.basedir}/src</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src-test</testSourceDirectory>
     <directory>${basedir}/bin-debug</directory>
 
     <!-- Resources -->
@@ -108,7 +108,7 @@
             <execution>
               <id>add-source-view</id>
               <goals>
-                <goal>source-view</goal>
+                  <goal>source-view</goal>
               </goals>
             </execution>
             <execution>

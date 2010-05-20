@@ -43,6 +43,9 @@
       <directory>${project.basedir}</directory>
       <excludes>
         <exclude>${project.build.directory}/**</exclude>
+        <exclude>*.iml</exclude>
+        <exclude>*.ipr</exclude>
+        <exclude>*.iws</exclude>
       </excludes>
     </fileSet>
   </fileSets>
