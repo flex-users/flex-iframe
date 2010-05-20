@@ -30,11 +30,11 @@
   <parent>
     <groupId>com.google.code.flex-iframe</groupId>
     <artifactId>flex-iframe-parent</artifactId>
-    <version>1.4.6-SNAPSHOT</version>
+    <version>1.4.6</version>
   </parent>
   <groupId>com.google.code.flex-iframe</groupId>
   <artifactId>assemblies</artifactId>
-  <version>1.4.6-SNAPSHOT</version>
+  <version>1.4.6</version>
   <packaging>pom</packaging>
 
   <!-- Project infos -->
