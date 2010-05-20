@@ -56,6 +56,7 @@
     <module>Dashboard</module>
     <module>IFrameCommTest</module>
     <module>IFrameWithLoadIndicator</module>
+    <module>MultipleTabNavigators</module>
     <module>SimpleHtml</module>
     <module>TabNavigator</module>
     <module>TreeNavigator</module>
