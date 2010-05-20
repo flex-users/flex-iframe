@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - Copyright (c) 2007-2010 flex-iframe contributors
+ -
+ - Permission is hereby granted, free of charge, to any person obtaining a copy
+ - of this software and associated documentation files (the "Software"), to deal
+ - in the Software without restriction, including without limitation the rights
+ - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ - copies of the Software, and to permit persons to whom the Software is
+ - furnished to do so, subject to the following conditions:
+ -
+ - The above copyright notice and this permission notice shall be included in
+ - all copies or substantial portions of the Software.
+ -
+ - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ -  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ - AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ - THE SOFTWARE.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - $Id$
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ -->
+<!---
+    Stress test with iframes in a hierarchy of containers.
+
+    @author Julien Nicoulaud
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:flexiframe="http://code.google.com/p/flex-iframe/"
+                horizontalAlign="center"
+                verticalAlign="middle"
+                viewSourceURL="srcview/index.html">
+
+    <!-- Example project presentation -->
+    <mx:ApplicationControlBar dock="true">
+        <mx:Text selectable="false">
+            <mx:htmlText>
+                <![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Mulitple tab navigators example</b><br>This example shows how the component behaves in a hierarchy of tab navigators.</font>]]></mx:htmlText>
+        </mx:Text>
+    </mx:ApplicationControlBar>
+
+    <!-- Styles -->
+    <mx:Style>
+
+        Panel {
+            paddingBottom: 15px;
+            paddingLeft: 15px;
+            paddingRight: 15px;
+            paddingTop: 15px;
+        }
+
+        TabNavigator {
+            paddingBottom: 15px;
+            paddingLeft: 15px;
+            paddingRight: 15px;
+            paddingTop: 15px;
+        }
+
+        .delimitedContainer {
+            paddingBottom: 5px;
+            paddingLeft: 5px;
+            paddingRight: 5px;
+            paddingTop: 5px;
+            cornerRadius: 4px;
+            borderColor: gray;
+            borderStyle: solid;
+        }
+
+    </mx:Style>
+
+    <!-- The containers -->
+    <mx:Panel title="iFrames in multiple TabNavigators"
+              width="80%"
+              height="80%">
+        <mx:VBox width="100%"
+                 height="100%"
+                 styleName="delimitedContainer">
+            <mx:TabNavigator id="parentTabNavigator"
+                             width="100%"
+                             height="100%">
+                <mx:VBox label="TabNavigator-1"
+                         width="100%"
+                         height="100%"
+                         styleName="delimitedContainer">
+                    <mx:TabNavigator id="tabNavigator_1"
+                                     width="100%"
+                                     height="100%">
+                        <mx:VBox width="100%"
+                                 height="100%"
+                                 label="iFrame-1-1"
+                                 styleName="delimitedContainer">
+                            <flexiframe:IFrame id="iFrame_1_1"
+                                               source="http://www.google.com"
+                                               width="100%"
+                                               height="100%"/>
+                            <mx:Button label="Toogle visibility"
+                                       click="{iFrame_1_1.visible = !iFrame_1_1.visible}"
+                                       width="100%"/>
+                        </mx:VBox>
+                        <mx:VBox width="100%"
+                                 height="100%"
+                                 label="iFrame-1-2"
+                                 styleName="delimitedContainer">
+                            <flexiframe:IFrame id="iFrame_1_2"
+                                               source="http://www.yahoo.com"
+                                               width="100%"
+                                               height="100%"/>
+                            <mx:Button label="Toogle visibility"
+                                       click="{iFrame_1_2.visible = !iFrame_1_2.visible}"
+                                       width="100%"/>
+                        </mx:VBox>
+                    </mx:TabNavigator>
+                    <mx:Button label="Toogle visibility"
+                               click="{tabNavigator_1.visible = !tabNavigator_1.visible}"
+                               width="100%"/>
+                </mx:VBox>
+                <mx:VBox label="TabNavigator-2"
+                         width="100%"
+                         height="100%"
+                         styleName="delimitedContainer">
+                    <mx:TabNavigator id="tabNavigator_2"
+                                     width="100%"
+                                     height="100%">
+                        <mx:VBox width="100%"
+                                 height="100%"
+                                 label="iFrame-2-1"
+                                 styleName="delimitedContainer">
+                            <flexiframe:IFrame id="iFrame_2_1"
+                                               source="http://www.bing.com"
+                                               width="100%"
+                                               height="100%"/>
+                            <mx:Button label="Toogle visibility"
+                                       click="{iFrame_2_1.visible = !iFrame_2_1.visible}"
+                                       width="100%"/>
+                        </mx:VBox>
+                        <mx:VBox width="100%"
+                                 height="100%"
+                                 label="iFrame-2-2"
+                                 styleName="delimitedContainer">
+                            <flexiframe:IFrame id="iFrame_2_2"
+                                               source="http://www.wikipedia.org"
+                                               width="100%"
+                                               height="100%"/>
+                            <mx:Button label="Toogle visibility"
+                                       click="{iFrame_2_2.visible = !iFrame_2_2.visible}"
+                                       width="100%"/>
+                        </mx:VBox>
+                    </mx:TabNavigator>
+                    <mx:Button label="Toogle visibility"
+                               click="{tabNavigator_2.visible = !tabNavigator_2.visible}"
+                               width="100%"/>
+                </mx:VBox>
+            </mx:TabNavigator>
+            <mx:Button label="Toogle visibility"
+                       click="{parentTabNavigator.visible = !parentTabNavigator.visible}"
+                       width="100%"/>
+        </mx:VBox>
+    </mx:Panel>
+
+</mx:Application>

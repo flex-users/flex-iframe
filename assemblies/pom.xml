@@ -93,6 +93,13 @@
     </dependency>
     <dependency>
       <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>MultipleTabNavigators</artifactId>
+      <version>${project.version}</version>
+      <classifier>sources</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
       <artifactId>SimpleHtml</artifactId>
       <version>${project.version}</version>
       <classifier>sources</classifier>
@@ -136,6 +143,13 @@
     <dependency>
       <groupId>com.google.code.flex-iframe.examples</groupId>
       <artifactId>IFrameWithLoadIndicator</artifactId>
+      <version>${project.version}</version>
+      <classifier>binaries</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.flex-iframe.examples</groupId>
+      <artifactId>MultipleTabNavigators</artifactId>
       <version>${project.version}</version>
       <classifier>binaries</classifier>
       <type>zip</type>

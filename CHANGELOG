@@ -29,6 +29,7 @@
    * Added 'scrollPolicy' attribute.
    * Added an example for callIFrameFunction().
    * Added an example for the 'content' property.
+   * Added an example with iframes in a hierarchy of TabNavigators.
 
 
  flex-iframe 1.4.5 - 25/04/2010
