@@ -23,7 +23,7 @@
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
- flex-iframe UNRELEASED
+ flex-iframe 1.4.6 - 20/05/2010
 
    [ J. Nicoulaud ]
    * Added 'scrollPolicy' attribute.
