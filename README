@@ -1,4 +1,4 @@
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - Copyright (c) 2007-2010 flex-iframe contributors
  -
  - Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,27 +18,9 @@
  - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  - THE SOFTWARE.
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - $Id$
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- Find more documentation at the project home page: http://code.google.com/p/flex-iframe/
-
- ===================================================================================================
-  How to use flex-iframe
- ===================================================================================================
-
- * First of all, read the FAQ: http://code.google.com/p/flex-iframe/wiki/FAQ
- 
- * Get the library, 3 solutions:
-     - Get a swc build of the library on the project home page
-     - Build it from the sources
-     - Use Maven (see http://code.google.com/p/flex-iframe/wiki/Maven)
-     
- * Drop it on your Flex project's libs/ directory
- 
- * Start using it with the namespace ("http://code.google.com/p/flex-iframe/") or by importing the
-   package directly ("import com.google.code.flexiframe.IFrame;").
-   
- * Modify your html template and add the parameter wmode="opaque" to the embeds. You can find
-   examples by viewing the source of the project's samples.
+ All the documentation is available at the project home page: http://code.google.com/p/flex-iframe/.
+ Read the users guide to get started: http://code.google.com/p/flex-iframe/wiki/UsersGuide.

@@ -1,4 +1,4 @@
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - Copyright (c) 2007-2010 flex-iframe contributors
  -
  - Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,9 +18,9 @@
  - LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  - OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  - THE SOFTWARE.
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - $Id$
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
  This component is based on the work of:
    * Christophe Conraets - www.coenraets.org
@@ -32,4 +32,6 @@
    * Ryan Bell
    * Max
    * Julien Nicoulaud
-   * Several bug fixes by users (see changelog)
+   * Several bug fixes by users (see CHANGELOG)
+
+ Many thanks to everyone who has contributed feedback over time.
