@@ -315,7 +315,8 @@ package com.google.code.flexiframe
             {
                 logger.info("No load indicator class specified.");
             }
-
+			
+			updateFrameVisibility(true);
         }
 
 
