@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2007-2010 flex-iframe contributors
+ * Copyright (c) 2007-2011 flex-iframe contributors
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,9 +18,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * -------------------------------------------------------------------------------------------------
- * $Id$
- * -------------------------------------------------------------------------------------------------
  */
 package com.google.code.flexiframe
 {
@@ -33,7 +30,7 @@ package com.google.code.flexiframe
     * @author Brian Deitte (http://www.deitte.com)
     * @author Ryan Bell
     * @author Max
-    * @author Julien Nicoulaud (http://www.ju-n.net)
+    * @author Julien Nicoulaud (http://www.twitter.com/nicoulaj)
     */
     public class IFrameExternalCalls
     {
