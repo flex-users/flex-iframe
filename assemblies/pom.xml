@@ -37,8 +37,8 @@
   <packaging>pom</packaging>
 
   <!-- Project infos -->
-  <name>Flex-IFrame :: Assemblies</name>
-  <description><![CDATA[Assemblies for the Flex-IFrame library.]]></description>
+  <name>flex-iframe :: Assemblies</name>
+  <description><![CDATA[Assemblies for the flex-iframe library.]]></description>
 
   <!-- Dependencies -->
   <dependencies>
@@ -180,7 +180,7 @@
   <build>
 
     <!-- Output name -->
-    <finalName>Flex-IFrame-${project.version}</finalName>
+    <finalName>flex-iframe-${project.version}</finalName>
 
     <plugins>
 
@@ -198,7 +198,7 @@
         </executions>
         <configuration>
           <descriptors>
-            <descriptor>${basedir}/flex-iframe-assembly.xml</descriptor>
+            <descriptor>${project.basedir}/flex-iframe-assembly.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>

@@ -37,8 +37,7 @@
   <artifactId>Dashboard</artifactId>
   <version>1.4.7-SNAPSHOT</version>
   <packaging>swf</packaging>
-  <name>Flex-IFrame :: Examples :: Dashboard</name>
-  <description />
+  <name>flex-iframe :: Examples :: Dashboard</name>
 
   <!-- Dependencies -->
   <dependencies>
@@ -80,7 +79,7 @@
         <artifactId>flexmojos-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-            <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/Dashboard.mxml</sourceFile>
+          <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/Dashboard.mxml</sourceFile>
         </configuration>
       </plugin>
 

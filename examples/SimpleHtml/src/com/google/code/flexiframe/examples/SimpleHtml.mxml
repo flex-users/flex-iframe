@@ -36,7 +36,7 @@
     <!-- Example project presentation -->
     <mx:ApplicationControlBar dock="true">
         <mx:Text selectable="false">
-            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Simple html example</b><br>This example shows how to embed a simple Html page in a Flex application.</font>]]></mx:htmlText>
+            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>flex-iframe - Simple html example</b><br>This example shows how to embed a simple Html page in a Flex application.</font>]]></mx:htmlText>
         </mx:Text>
     </mx:ApplicationControlBar>
 

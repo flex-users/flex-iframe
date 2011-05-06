@@ -38,23 +38,23 @@
   <packaging>swc</packaging>
 
   <!-- Project infos -->
-  <name>Flex-IFrame :: Library</name>
-  <description><![CDATA[The Flex-IFrame component allows developers to embed an html page inside a Flex application.]]></description>
+  <name>flex-iframe :: Library</name>
+  <description><![CDATA[The flex-iframe component allows developers to embed an html page inside a Flex application.]]></description>
 
   <!-- Build -->
   <build>
 
     <!-- Directories -->
-    <sourceDirectory>${basedir}/src</sourceDirectory>
-    <testSourceDirectory>${basedir}/src-test</testSourceDirectory>
-    <directory>${basedir}/bin</directory>
+    <sourceDirectory>${project.basedir}/src</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src-test</testSourceDirectory>
+    <directory>${project.basedir}/bin</directory>
 
     <!-- Name of the output SWC -->
     <finalName>${project.artifactId}</finalName>
 
     <plugins>
 
-      <!-- Flex-IFrame SWC compilation & Asdoc generation -->
+      <!-- flex-iframe SWC compilation & Asdoc generation -->
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
@@ -111,7 +111,7 @@
         <configuration>
           <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
           <descriptors>
-            <descriptor>${basedir}/library-assembly-sources.xml</descriptor>
+            <descriptor>${project.basedir}/library-assembly-sources.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>

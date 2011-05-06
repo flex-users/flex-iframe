@@ -36,7 +36,7 @@
     <!-- Example project presentation -->
     <mx:ApplicationControlBar dock="true">
         <mx:Text selectable="false">
-            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - Navigation tree example</b><br>This example shows an IFrame with a navigation tree.</font>]]></mx:htmlText>
+            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>flex-iframe - Navigation tree example</b><br>This example shows an IFrame with a navigation tree.</font>]]></mx:htmlText>
         </mx:Text>
     </mx:ApplicationControlBar>
 
@@ -68,7 +68,7 @@
             <node label="Google" path="http://www.google.com" />
             <node label="Yahoo" path="http://www.yahoo.com" />
         </node>
-        <node label="Flex-IFrame">
+        <node label="flex-iframe">
             <node label="Home page" path="http://code.google.com/p/flex-iframe/" />
             <node label="Google group" path="http://groups.google.com/group/flex-iframe" />
         </node>

@@ -37,8 +37,7 @@
   <artifactId>IFrameCommTest</artifactId>
   <version>1.4.7-SNAPSHOT</version>
   <packaging>swf</packaging>
-  <name>Flex-IFrame :: Examples :: IFrameCommTest</name>
-  <description />
+  <name>flex-iframe :: Examples :: IFrameCommTest</name>
 
   <!-- Build -->
   <build>
@@ -50,7 +49,7 @@
         <artifactId>flexmojos-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-            <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/IFrameCommTest.mxml</sourceFile>
+          <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/IFrameCommTest.mxml</sourceFile>
         </configuration>
       </plugin>
 

@@ -32,9 +32,9 @@
   <packaging>pom</packaging>
 
   <!-- Project infos -->
-  <name>Flex-IFrame</name>
+  <name>flex-iframe</name>
   <inceptionYear>2007</inceptionYear>
-  <description><![CDATA[The Flex-IFrame component allows developers to embed an html page inside a Flex application.]]></description>
+  <description><![CDATA[The flex-iframe component allows developers to embed an html page inside a Flex application.]]></description>
   <url>https://github.com/nicoulaj/flex-iframe</url>
 
   <!-- License -->
@@ -162,17 +162,19 @@
     <flex-sdk-3.3.version>3.3.0.4852</flex-sdk-3.3.version>
     <flex-sdk-3.4.version>3.4.0.9271</flex-sdk-3.4.version>
     <flex-sdk-3.5.version>3.5.0.12683</flex-sdk-3.5.version>
+    <flex-sdk-3.6.version>3.6.0.16321</flex-sdk-3.6.version>
     <flex-sdk-4.0.version>4.0.0.14159</flex-sdk-4.0.version>
-    <flex-sdk-4.1.version>4.1.0.15646</flex-sdk-4.1.version>
-    <flex-sdk-3.version>${flex-sdk-3.5.version}</flex-sdk-3.version>
+    <flex-sdk-4.1.version>4.1.0.16248</flex-sdk-4.1.version>
+    <flex-sdk-4.5.version>4.5.0.19786</flex-sdk-4.5.version>
+    <flex-sdk-3.version>${flex-sdk-3.6.version}</flex-sdk-3.version>
     <flex-sdk-4.version>${flex-sdk-4.0.version}</flex-sdk-4.version>
     <flex-sdk.version>${flex-sdk-3.version}</flex-sdk.version>
 
     <!-- Library settings -->
     <flex-iframe.library.namespace>http://code.google.com/p/flex-iframe/</flex-iframe.library.namespace>
-    <flex-iframe.asdoc.windowTitle>Flex-IFrame ${project.version} asdoc</flex-iframe.asdoc.windowTitle>
-    <flex-iframe.asdoc.mainTitle>Flex-IFrame ${project.version} API documentation</flex-iframe.asdoc.mainTitle>
-    <flex-iframe.asdoc.footer>Flex-IFrame - ${project.url}</flex-iframe.asdoc.footer>
+    <flex-iframe.asdoc.windowTitle>flex-iframe ${project.version} asdoc</flex-iframe.asdoc.windowTitle>
+    <flex-iframe.asdoc.mainTitle>flex-iframe ${project.version} API documentation</flex-iframe.asdoc.mainTitle>
+    <flex-iframe.asdoc.footer>flex-iframe - ${project.url}</flex-iframe.asdoc.footer>
     <flex-iframe.asdoc.leftFramesetWidth>280</flex-iframe.asdoc.leftFramesetWidth>
 
     <!-- Miscellaneous settings -->
@@ -228,7 +230,7 @@
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
-          <version>3.6.1</version>
+          <version>3.8</version>
           <extensions>true</extensions>
           <dependencies>
             <dependency>
@@ -244,32 +246,26 @@
         </plugin>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.0</version>
+          <version>2.1</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
-            <arguments>-Dgpg.passphrase='${gpg.passphrase}'</arguments>
-            <scmCommentPrefix>[release]</scmCommentPrefix>
           </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>2.4.2</version>
+          <version>2.5</version>
         </plugin>
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2-beta-5</version>
+          <version>2.2.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.0-alpha-4</version>
+          <version>1.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.3</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.0-beta-1</version>
+          <version>2.3.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -290,28 +286,6 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>verify-gpg-passphrase-set</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <fail>true</fail>
-                  <failFast>true</failFast>
-                  <rules>
-                    <requireProperty>
-                      <property>gpg.passphrase</property>
-                      <message>You must set the passphrase of the GPG key to use when signing artifacts. You can pass it with the option -Dgpg.passphrase=...</message>
-                    </requireProperty>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <artifactId>maven-gpg-plugin</artifactId>
             <executions>
@@ -345,5 +319,19 @@
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
   </distributionManagement>
+
+  <!-- Repositories -->
+  <repositories>
+    <repository>
+      <id>flexmojos-repository</id>
+      <url>https://repository.sonatype.org/content/groups/flexgroup/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>flexmojos-plugin-repository</id>
+      <url>https://repository.sonatype.org/content/groups/flexgroup/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
 </project>

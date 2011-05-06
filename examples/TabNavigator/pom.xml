@@ -37,8 +37,7 @@
   <artifactId>TabNavigator</artifactId>
   <version>1.4.7-SNAPSHOT</version>
   <packaging>swf</packaging>
-  <name>Flex-IFrame :: Examples :: TabNavigator</name>
-  <description />
+  <name>flex-iframe :: Examples :: TabNavigator</name>
 
   <!-- Build -->
   <build>
@@ -50,7 +49,7 @@
         <artifactId>flexmojos-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-            <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/TabNavigator.mxml</sourceFile>
+          <sourceFile>${project.build.sourceDirectory}/com/google/code/flexiframe/examples/TabNavigator.mxml</sourceFile>
         </configuration>
       </plugin>
 

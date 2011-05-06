@@ -1332,7 +1332,7 @@ package com.google.code.flexiframe
         /**
          * The class logger.
          */
-        protected var logger:ILogger=Log.getLogger("Flex-IFrame");
+        protected var logger:ILogger=Log.getLogger("flex-iframe");
 
         /**
          * Get the state of the debug mode.
@@ -1358,7 +1358,7 @@ package com.google.code.flexiframe
                     logTarget.includeLevel=true;
                     logTarget.includeTime=true;
                     logTarget.level=LogEventLevel.ALL;
-                    logTarget.filters=["Flex-IFrame"];
+                    logTarget.filters=["flex-iframe"];
                 }
                 logTarget.addLogger(logger);
             }

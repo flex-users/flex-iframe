@@ -72,7 +72,7 @@
     <!-- Example project presentation -->
     <mx:ApplicationControlBar dock="true">
         <mx:Text selectable="false">
-            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>Flex-IFrame - IFrame communication example</b><br>This example shows how to communicate between the application and the frame. It illustrates the overlay detection feature too.</font>]]></mx:htmlText>
+            <mx:htmlText><![CDATA[<font color="#000000" size="12"><b>flex-iframe - IFrame communication example</b><br>This example shows how to communicate between the application and the frame. It illustrates the overlay detection feature too.</font>]]></mx:htmlText>
         </mx:Text>
     </mx:ApplicationControlBar>
 

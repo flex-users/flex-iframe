@@ -37,8 +37,8 @@
   <packaging>pom</packaging>
 
   <!-- Project infos -->
-  <name>Flex-IFrame :: Examples</name>
-  <description><![CDATA[Examples for the Flex-IFrame component.]]></description>
+  <name>flex-iframe :: Examples</name>
+  <description><![CDATA[Examples for the flex-iframe component.]]></description>
 
   <!-- Dependencies -->
   <dependencies>
@@ -70,7 +70,7 @@
     <!-- Directories -->
     <sourceDirectory>${project.basedir}/src</sourceDirectory>
     <testSourceDirectory>${project.basedir}/src-test</testSourceDirectory>
-    <directory>${basedir}/bin-debug</directory>
+    <directory>${project.basedir}/bin-debug</directory>
 
     <!-- Resources -->
     <resources>
@@ -101,13 +101,13 @@
                 <goal>wrapper</goal>
               </goals>
               <configuration>
-                <templateURI>folder:/${basedir}/html-template</templateURI>
+                <templateURI>folder:/${project.basedir}/html-template</templateURI>
               </configuration>
             </execution>
             <execution>
               <id>add-source-view</id>
               <goals>
-                  <goal>source-view</goal>
+                <goal>source-view</goal>
               </goals>
             </execution>
             <execution>
@@ -139,8 +139,8 @@
           <configuration>
             <outputDirectory>${project.build.directory}/assemblies</outputDirectory>
             <descriptors>
-              <descriptor>${basedir}/../example-assembly-sources.xml</descriptor>
-              <descriptor>${basedir}/../example-assembly-binaries.xml</descriptor>
+              <descriptor>${project.basedir}/../example-assembly-sources.xml</descriptor>
+              <descriptor>${project.basedir}/../example-assembly-binaries.xml</descriptor>
             </descriptors>
           </configuration>
         </plugin>

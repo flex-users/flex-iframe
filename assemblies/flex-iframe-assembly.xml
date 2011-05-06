@@ -31,7 +31,6 @@
   <!-- Archive formats -->
   <formats>
     <format>zip</format>
-    <format>dir</format>
   </formats>
 
   <!-- Archive base directory -->
@@ -43,15 +42,24 @@
     <!-- Library SWC -->
     <dependencySet>
       <includes>
-        <include>com.google.code.flex-iframe:flex-iframe:*:swc:*</include>
+        <include>${project.groupId}:flex-iframe:swc</include>
       </includes>
-      <outputDirectory>build</outputDirectory>
+      <outputDirectory>bin</outputDirectory>
     </dependencySet>
 
-    <!-- Asdoc -->
+    <!-- Library sources -->
     <dependencySet>
       <includes>
-        <include>com.google.code.flex-iframe:flex-iframe:*:*:asdoc</include>
+        <include>${project.groupId}:flex-iframe:*:sources</include>
+      </includes>
+      <unpack>true</unpack>
+      <outputDirectory>sources/library</outputDirectory>
+    </dependencySet>
+
+    <!-- Library asdoc -->
+    <dependencySet>
+      <includes>
+        <include>${project.groupId}:flex-iframe:*:asdoc</include>
       </includes>
       <unpack>true</unpack>
       <outputDirectory>asdoc</outputDirectory>
@@ -60,26 +68,16 @@
     <!-- Examples binaries -->
     <dependencySet>
       <includes>
-        <include>com.google.code.flex-iframe.examples:*:*:*:binaries</include>
+        <include>${project.groupId}.examples:*:*:binaries</include>
       </includes>
       <unpack>true</unpack>
       <outputDirectory>examples</outputDirectory>
     </dependencySet>
 
-    <!-- Library sources -->
-    <dependencySet>
-      <includes>
-        <include>com.google.code.flex-iframe:*:*:*:sources</include>
-      </includes>
-      <unpack>true</unpack>
-      <outputDirectory>sources/library</outputDirectory>
-      <outputFileNameMapping>{artifact.artifactId}</outputFileNameMapping>
-    </dependencySet>
-
     <!-- Examples sources -->
     <dependencySet>
       <includes>
-        <include>com.google.code.flex-iframe.examples:*:*:*:sources</include>
+        <include>${project.groupId}.examples:*:*:sources</include>
       </includes>
       <unpack>true</unpack>
       <outputDirectory>sources/examples</outputDirectory>
@@ -90,13 +88,8 @@
   <!-- Additional files -->
   <fileSets>
     <fileSet>
-      <directory>${project.basedir}/..</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>CHANGELOG</include>
-        <include>GREETINGS</include>
-        <include>README</include>
-      </includes>
+      <directory>${project.basedir}/resources</directory>
+      <outputDirectory>.</outputDirectory>
     </fileSet>
   </fileSets>
 
