@@ -35,7 +35,7 @@
   <name>Flex-IFrame</name>
   <inceptionYear>2007</inceptionYear>
   <description><![CDATA[The Flex-IFrame component allows developers to embed an html page inside a Flex application.]]></description>
-  <url>http://code.google.com/p/flex-iframe</url>
+  <url>https://github.com/nicoulaj/flex-iframe</url>
 
   <!-- License -->
   <licenses>
@@ -68,7 +68,7 @@
         <role>Owner</role>
       </roles>
       <timezone>1</timezone>
-      <url>http://www.ju-n.net</url>
+      <url>http://www.twitter.com/nicoulaj</url>
     </developer>
   </developers>
   <contributors>
@@ -141,15 +141,15 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:svn:http://flex-iframe.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://flex-iframe.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://code.google.com/p/flex-iframe/source/browse/</url>
+    <connection>scm:git:git@github.com:nicoulaj/flex-iframe.git</connection>
+    <developerConnection>scm:git:git@github.com:nicoulaj/flex-iframe.git</developerConnection>
+    <url>https://github.com/nicoulaj/flex-iframe</url>
   </scm>
 
   <!-- Issues management -->
   <issueManagement>
-    <system>Google code</system>
-    <url>http://code.google.com/p/flex-iframe/issues/list</url>
+    <system>Github</system>
+    <url>https://github.com/nicoulaj/flex-iframe/issues</url>
   </issueManagement>
 
   <!-- Properties -->
@@ -172,7 +172,7 @@
     <flex-iframe.library.namespace>http://code.google.com/p/flex-iframe/</flex-iframe.library.namespace>
     <flex-iframe.asdoc.windowTitle>Flex-IFrame ${project.version} asdoc</flex-iframe.asdoc.windowTitle>
     <flex-iframe.asdoc.mainTitle>Flex-IFrame ${project.version} API documentation</flex-iframe.asdoc.mainTitle>
-    <flex-iframe.asdoc.footer>Flex-IFrame - http://code.google.com/p/flex-iframe</flex-iframe.asdoc.footer>
+    <flex-iframe.asdoc.footer>Flex-IFrame - ${project.url}</flex-iframe.asdoc.footer>
     <flex-iframe.asdoc.leftFramesetWidth>280</flex-iframe.asdoc.leftFramesetWidth>
 
     <!-- Miscellaneous settings -->
@@ -243,7 +243,6 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.0</version>
           <configuration>
@@ -253,27 +252,22 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>2.4.2</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>2.2-beta-5</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.0-alpha-4</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.3</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>1.0-beta-1</version>
         </plugin>
