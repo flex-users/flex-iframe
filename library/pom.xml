@@ -63,12 +63,11 @@
           <execution>
             <id>attach-asdoc</id>
             <goals>
-              <goal>attach-asdoc</goal>
+              <goal>asdoc</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
-          <addMavenDescriptor>false</addMavenDescriptor>
           <namespaces>
             <namespace>
               <uri>${flex-iframe.library.namespace}</uri>
@@ -79,10 +78,7 @@
             <namespace>${flex-iframe.library.namespace}</namespace>
           </includeNamespaces>
           <docNamespaces>
-            <namespace>
-              <uri>${flex-iframe.library.namespace}</uri>
-              <manifest>${project.build.sourceDirectory}/manifest.xml</manifest>
-            </namespace>
+            <namespace>${flex-iframe.library.namespace}</namespace>
           </docNamespaces>
           <optimize>true</optimize>
           <keepAs3Metadatas>
