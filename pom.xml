@@ -253,6 +253,7 @@
           <artifactId>maven-release-plugin</artifactId>
           <version>2.1</version>
           <configuration>
+            <mavenExecutorId>forked-path</mavenExecutorId>
             <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
         </plugin>
@@ -267,6 +268,9 @@
         <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.2</version>
+          <configuration>
+            <useAgent>true</useAgent>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -282,7 +286,7 @@
 
     <!-- Profile to sign artifacts with GPG on releases -->
     <profile>
-      <id>gpg-sign</id>
+      <id>release</id>
       <activation>
         <property>
           <name>performRelease</name>
