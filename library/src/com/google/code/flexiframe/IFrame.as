@@ -225,6 +225,13 @@ package com.google.code.flexiframe
         protected var _validForDisplay:Boolean=true;
 
         /**
+         * The visibility of parent containers.
+         *
+         * @default true
+         */
+        protected var _parentVisibility:Boolean = true;
+
+        /**
          * Wether the frame is loaded or not.
          *
          * @default false
@@ -312,7 +319,7 @@ package com.google.code.flexiframe
             {
                 logger.info("No load indicator class specified.");
             }
-			
+
 			updateFrameVisibility(true);
         }
 
@@ -615,7 +622,7 @@ package com.google.code.flexiframe
             // - overlay detection, if enabled, is not tracking any overlapping popups
             // - .visible has not explicitly been set to false (or .hidden to true) on this component
             // - if there's a load indicator defined, the iframe content has finished loading
-            if (value && _validForDisplay && (!overlayDetection || overlapCount == 0) && explicitVisibleValue && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
+            if (value && _validForDisplay && _parentVisibility && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
                 // if we have an iframe in the same domain as the app, call the
                 // specialized functions to update visibility inside the iframe
@@ -723,6 +730,8 @@ package com.google.code.flexiframe
                         // Tag on a change listener
                         current.addEventListener(IndexChangedEvent.CHANGE, handleChange);
                         current.addEventListener(MoveEvent.MOVE, handleMove);
+                        current.addEventListener(FlexEvent.SHOW, handleShowHide);
+                        current.addEventListener(FlexEvent.HIDE, handleShowHide);
                     }
 
                 }
@@ -739,6 +748,28 @@ package com.google.code.flexiframe
                 current=current.parent;
             }
         }
+
+        /**
+         * Triggered by one of our listeners seeded all the way up the display
+         * list to catch a 'show' and 'hide' events which might hide or display this object.
+         *
+         * @param event Event trigger
+         */
+        protected function handleShowHide(event:FlexEvent):void
+        {
+            var valid:Boolean = true;
+
+            for (var item:Object in containerDict)
+            {
+                valid = valid && item.visible;
+            }
+
+            _parentVisibility = valid;
+
+            var result:Boolean = updateFrameVisibility(valid);
+            logger.debug("Frame {0} set visible to {1} on {2} event", _frameId, result, event.type);
+        }
+
 
         /**
          * Return index of child item on path down to this object. If not
