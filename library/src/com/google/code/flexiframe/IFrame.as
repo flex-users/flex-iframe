@@ -533,8 +533,7 @@ package com.google.code.flexiframe
          */
         protected function adjustPosition(recalculateBrowserScaling:Boolean=false):void
         {
-            var localPt:Point=new Point(0, 0);
-            var globalPt:Point=this.localToGlobal(localPt);
+            var globalPt:Point=localToGlobal(new Point());
 
             // If needed, recalculate the browser zoom
             if (recalculateBrowserScaling)
