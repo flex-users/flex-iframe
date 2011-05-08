@@ -9,7 +9,7 @@
         /**
          * Show an alert message.
          */
-        document.showAlert = function ()
+        function showAlert()
         {
             alert("The 'showAlert()' method has been called.");
         }
@@ -17,7 +17,7 @@
         /**
          * Show an alert message, with a parameter.
          */
-        document.showAlertWithParameter = function (parameter)
+        function showAlertWithParameter(parameter)
         {
             alert("The 'showAlertWithParameter()' method has been called with the parameter '" + parameter + "'.");
         }
@@ -25,12 +25,12 @@
         /**
          * Return the current date.
          */
-        document.getCurrentDate = function ()
+        function getCurrentDate()
         {
             var  currentDate=new  Date();
             return currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear();
         }
-        
+
     </script>
     <strong>This is a web page with Javascript functions embedded.</strong><br/>
     Click "View source to view the Javascript functions.

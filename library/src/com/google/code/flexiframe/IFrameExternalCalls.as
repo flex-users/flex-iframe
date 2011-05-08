@@ -260,7 +260,7 @@ package com.google.code.flexiframe
         * The JavaScript code to call to insert the function that calls a function on an IFrame in
         * the DOM.
         */
-        public static var INSERT_FUNCTION_CALLIFRAMEFUNCTION:String = 
+        public static var INSERT_FUNCTION_CALLIFRAMEFUNCTION:String =
             "document.insertScript = function ()" +
             "{ " +
                 "if (document." + FUNCTION_CALLIFRAMEFUNCTION + "==null)" +
@@ -268,18 +268,18 @@ package com.google.code.flexiframe
                     FUNCTION_CALLIFRAMEFUNCTION + " = function (iframeID, functionName, args)" +
                     "{" +
                         "var iframeRef=document.getElementById(iframeID);" +
-                        "var iframeDoc;" +
-                        "if (iframeRef.contentDocument) {" +
-                            "iframeDoc = iframeRef.contentDocument;" +
-                        "} else if (iframeRef.contentWindow) {" +
-                            "iframeDoc = iframeRef.contentWindow.document;" +
-                        "} else if (iframeRef.document) {" +
-                            "iframeDoc = iframeRef.document;" +
+						"var iframeWin;" +
+                        "if (iframeRef.contentWindow) {" +
+                            "iframeWin = iframeRef.contentWindow;" +
+                        "} else if (iframeRef.contentDocument) {" +
+                            "iframeWin = iframeRef.contentDocument.window;" +
+                        "} else if (iframeRef.window) {" +
+                            "iframeWin = iframeRef.window;" +
                         "}" +
-                        "if (iframeDoc.wrappedJSObject != undefined) {" +
-                            "iframeDoc = iframeDoc.wrappedJSObject;" +
+                        "if (iframeWin.wrappedJSObject != undefined) {" +
+                            "iframeWin = iframeDoc.wrappedJSObject;" +
                         "}" +
-                        "return iframeDoc[functionName](args);" +
+                        "return iframeWin[functionName](args);" +
                     "}" +
                 "}" +
             "}";
