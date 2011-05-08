@@ -428,12 +428,31 @@ package com.google.code.flexiframe
         {
             logger.debug("The component for the IFrame with id '{0}' has been removed from the stage.", _frameId);
 
+            // Remove listeners on own events
+            removeEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
+            removeEventListener(Event.ADDED_TO_STAGE, handleAdd);
+
+            // Remove listeners on parent containers
+            var current:DisplayObjectContainer=parent;
+            var previous:DisplayObjectContainer=this;
+            while (current != null)
+            {
+                if (current is Container && current.contains(previous))
+                {
+                    current.removeEventListener(IndexChangedEvent.CHANGE, handleChange);
+                    current.removeEventListener(MoveEvent.MOVE, handleMove);
+                }
+                previous=current;
+                current=current.parent;
+            }
+
             // Remove systemManager hooks for overlay detection
             if (overlayDetection)
             {
                 systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
                 systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
             }
+
             updateFrameVisibility(false);
         }
 
