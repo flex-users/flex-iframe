@@ -32,6 +32,7 @@ package com.google.code.flexiframe
     import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
+    import mx.core.FlexGlobals;
     import mx.core.IChildList;
     import mx.core.UIComponent;
     import mx.events.FlexEvent;
@@ -198,6 +199,11 @@ package com.google.code.flexiframe
         protected var _iframeContentHost:String;
 
         /**
+         * The top level Flex application.
+         */
+        protected var _application;
+
+        /**
          * The source of the IFrame.
          */
         protected var _source:String;
@@ -272,10 +278,20 @@ package com.google.code.flexiframe
                 throw new Error("ExternalInterface is not available in this container. Internet " + "Explorer ActiveX, Firefox, Mozilla 1.7.5 and greater, or other " + "browsers that support NPRuntime are required.");
             }
 
+            // Resolve the top level Flex application.
+            if(Application.application != null)
+            {
+                _application = Application.application;
+            }
+            else
+            {
+                _application = FlexGlobals.topLevelApplication;
+            }
+
             // Get the host info to check for cross-domain issues
             if (!_appHost)
             {
-                var url:String=Application.application.url;
+                var url:String=_application.url;
                 if (url)
                 {
                     _appHost=URLUtil.getProtocol(url) + "://" + URLUtil.getServerNameWithPort(url);
@@ -549,7 +565,7 @@ package com.google.code.flexiframe
 
                 if (browserMeasuredWidth > 0)
                 {
-                    _browserScaling=browserMeasuredWidth / Application.application.width;
+                    _browserScaling=browserMeasuredWidth / _application.width;
                 }
             }
 
