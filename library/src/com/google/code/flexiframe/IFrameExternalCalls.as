@@ -48,7 +48,7 @@ package com.google.code.flexiframe
             "{ " +
                 "if (document." + FUNCTION_CREATEIFRAME + "==null)" + 
                 "{" + 
-                    FUNCTION_CREATEIFRAME + " = function (frameID)" +
+                    FUNCTION_CREATEIFRAME + " = function (frameID, overflowAssignment)" +
                     "{ " +
                         "var bodyID = document.getElementsByTagName(\"body\")[0];" +
                         "var newDiv = document.createElement('div');" +
@@ -56,7 +56,7 @@ package com.google.code.flexiframe
                         "newDiv.style.position ='absolute';" +
                         "newDiv.style.backgroundColor = '#FFFFFF';" + 
                         "newDiv.style.border = '0px';" +
-                        "newDiv.style.overflow = 'auto';" +
+                        "newDiv.style.overflow = overflowAssignment;" +
                         "newDiv.style.display = 'none';" +
                         "bodyID.appendChild(newDiv);" +
                     "}" +

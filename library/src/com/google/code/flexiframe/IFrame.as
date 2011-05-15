@@ -1206,7 +1206,7 @@ package com.google.code.flexiframe
         protected function createIFrame():void
         {
             logger.info("Creating IFrame with id '{0}'.", _frameId);
-            ExternalInterface.call(IFrameExternalCalls.FUNCTION_CREATEIFRAME, _frameId);
+            ExternalInterface.call(IFrameExternalCalls.FUNCTION_CREATEIFRAME, _frameId, (scrollPolicy == SCROLL_POLICY_OFF)?"hidden":"auto");
         }
 
         /**
