@@ -28,7 +28,7 @@
   <!-- Project coordinates -->
   <groupId>com.google.code.flex-iframe</groupId>
   <artifactId>flex-iframe-parent</artifactId>
-  <version>1.4.7-SNAPSHOT</version>
+  <version>1.5</version>
   <packaging>pom</packaging>
 
   <!-- Project infos -->
