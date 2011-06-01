@@ -236,6 +236,13 @@ package com.google.code.flexiframe
          * @default true
          */
         protected var _parentVisibility:Boolean = true;
+        
+        /**
+         * Wether the frame is added or not.
+         *
+         * @default false
+         */
+        protected var _frameAdded:Boolean=false;
 
         /**
          * Wether the frame is loaded or not.
@@ -439,6 +446,8 @@ package com.google.code.flexiframe
                 systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
                 systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
             }
+
+            _frameAdded = true;
             updateFrameVisibility(true);
         }
 
@@ -457,6 +466,8 @@ package com.google.code.flexiframe
                 systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
                 systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
             }
+            
+            _frameAdded = false;
             updateFrameVisibility(false);
         }
 
@@ -635,10 +646,11 @@ package com.google.code.flexiframe
             // all of the following must be true for the iframe/div to be displayed:
             // - the calling code is trying to show it
             // - all parent navigators are set to correct index for this child to show
+            // - the frame has been added
             // - overlay detection, if enabled, is not tracking any overlapping popups
             // - .visible has not explicitly been set to false (or .hidden to true) on this component
             // - if there's a load indicator defined, the iframe content has finished loading
-            if (value && _validForDisplay && _parentVisibility && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
+            if (value && _validForDisplay && _parentVisibility && _frameAdded && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
                 // if we have an iframe in the same domain as the app, call the
                 // specialized functions to update visibility inside the iframe
