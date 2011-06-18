@@ -35,7 +35,7 @@
   <name>flex-iframe</name>
   <inceptionYear>2007</inceptionYear>
   <description><![CDATA[The flex-iframe component allows developers to embed an html page inside a Flex application.]]></description>
-  <url>https://github.com/nicoulaj/flex-iframe</url>
+  <url>https://github.com/flex-users/flex-iframe</url>
 
   <!-- License -->
   <licenses>
@@ -141,15 +141,15 @@
 
   <!-- Version control system -->
   <scm>
-    <connection>scm:git:git@github.com:nicoulaj/flex-iframe.git</connection>
-    <developerConnection>scm:git:git@github.com:nicoulaj/flex-iframe.git</developerConnection>
-    <url>https://github.com/nicoulaj/flex-iframe</url>
+    <connection>scm:git:git@github.com:flex-users/flex-iframe.git</connection>
+    <developerConnection>scm:git:git@github.com:flex-users/flex-iframe.git</developerConnection>
+    <url>https://github.com/flex-users/flex-iframe</url>
   </scm>
 
   <!-- Issues management -->
   <issueManagement>
     <system>Github</system>
-    <url>https://github.com/nicoulaj/flex-iframe/issues</url>
+    <url>https://github.com/flex-users/flex-iframe/issues</url>
   </issueManagement>
 
   <!-- Properties -->
