@@ -537,30 +537,33 @@ package com.google.code.flexiframe
          * @param newIndex Number index from target object.
          *
          */
-        protected function checkDisplay(target:Object, newIndex:Number):Boolean
-        {
-            var valid:Boolean=false;
-            if (target is Container)
-            {
-                var container:DisplayObjectContainer=DisplayObjectContainer(target);
+		protected function checkDisplay(target:Object = null, newIndex:Number = -1):Boolean
+		{
 
-                // Update current setting
-                settingDict[container]=newIndex;
+			if (target is Container)
+			{
 
-                valid=true;
+				var container:DisplayObjectContainer=DisplayObjectContainer(target);
 
-                for (var item:Object in containerDict)
-                {
-                    var index:Number=lookupIndex(item as Container);
-                    var setting:Number=lookupSetting(item as Container);
-                    valid=valid && (index == setting);
-                }
-            }
+				// Update current setting
+				settingDict[container]=newIndex;
 
-            // Remember this state so we can re-check later without a new IndexChangedEvent
-            _validForDisplay=valid;
-            return valid;
-        }
+			}
+
+			var valid:Boolean=true;
+
+			for (var item:Object in containerDict)
+			{
+				var index:Number=lookupIndex(item as Container);
+				var setting:Number=lookupSetting(item as Container);
+				valid=valid && (index == setting);
+			}
+
+
+			// Remember this state so we can re-check later without a new IndexChangedEvent
+			_validForDisplay=valid;
+			return valid;
+		}
 
         /**
          * Adjust frame position to match the exposed area in the application.
@@ -643,6 +646,9 @@ package com.google.code.flexiframe
         {
             logger.debug("IFrame with id '{0}' visibility set to '{1}'", _frameId, value);
 
+			// Check that this frame should currently be visible
+			var isCurrentlyVisible:Boolean = checkDisplay();
+
             // all of the following must be true for the iframe/div to be displayed:
             // - the calling code is trying to show it
             // - all parent navigators are set to correct index for this child to show
@@ -650,7 +656,7 @@ package com.google.code.flexiframe
             // - overlay detection, if enabled, is not tracking any overlapping popups
             // - .visible has not explicitly been set to false (or .hidden to true) on this component
             // - if there's a load indicator defined, the iframe content has finished loading
-            if (value && _validForDisplay && _parentVisibility && _frameAdded && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
+            if (isCurrentlyVisible && value && _validForDisplay && _parentVisibility && _frameAdded && (!overlayDetection || overlapCount == 0) && explicitVisibleValue == true && (_frameLoaded || (!_frameLoaded && loadIndicatorClass == null)))
             {
                 // if we have an iframe in the same domain as the app, call the
                 // specialized functions to update visibility inside the iframe
