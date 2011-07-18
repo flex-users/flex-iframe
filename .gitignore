@@ -9,6 +9,7 @@ bin-release/
 *.iml
 *.ipr
 *.iws
+*.DS_Store
 
 # Eclipse/Flex/Flash Builder project files
 .actionScriptProperties
