@@ -29,13 +29,13 @@
   <parent>
     <groupId>com.google.code.flex-iframe</groupId>
     <artifactId>examples</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2-SNAPSHOT</version>
   </parent>
 
   <!-- Artifact -->
   <groupId>com.google.code.flex-iframe.examples</groupId>
   <artifactId>TabNavigator</artifactId>
-  <version>1.5.1</version>
+  <version>1.5.2-SNAPSHOT</version>
   <packaging>swf</packaging>
   <name>flex-iframe :: Examples :: TabNavigator</name>
 
