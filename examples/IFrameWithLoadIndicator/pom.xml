@@ -29,13 +29,13 @@
   <parent>
     <groupId>com.google.code.flex-iframe</groupId>
     <artifactId>examples</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.1</version>
   </parent>
 
   <!-- Artifact -->
   <groupId>com.google.code.flex-iframe.examples</groupId>
   <artifactId>IFrameWithLoadIndicator</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.1</version>
   <packaging>swf</packaging>
   <name>flex-iframe :: Examples :: IFrameWithLoadIndicator</name>
 
