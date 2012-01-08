@@ -28,7 +28,7 @@ package com.google.code.flexiframe
     import flash.geom.Point;
     import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
-
+    
     import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
@@ -519,7 +519,14 @@ package com.google.code.flexiframe
                 logger.debug("frame id {0} calling queued function {1}", _frameId, queuedCall.functionName);
                 this.callIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
             }
-            dispatchEvent(new Event("frameLoad"));
+			
+			var newSource:String = getBrowserSource();
+			if (newSource && newSource != "" && newSource != source) {
+				_source = newSource;
+				dispatchEvent(new Event("browserSourceChanged"));
+			}
+
+			dispatchEvent(new Event("frameLoad"));
 
             invalidateDisplayList();
         }
@@ -597,6 +604,7 @@ package com.google.code.flexiframe
             if (source)
             {
                 _source=source;
+				dispatchEvent(new Event("browserSourceChanged"));
 
                 // mark unloaded now so calls in this frame will be queued
                 _frameLoaded=false;
@@ -610,6 +618,7 @@ package com.google.code.flexiframe
         /**
          * Return url of frame contents
          */
+		[Bindable (event="browserSourceChanged")]
         public function get source():String
         {
             return _source;
@@ -1217,6 +1226,7 @@ package com.google.code.flexiframe
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_PRINT_IFRAME);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_HISTORY_BACK);
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_HISTORY_FORWARD);
+			ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_GET_SOURCE);
 
             // Resolve the SWF embed object id in the DOM.
             ExternalInterface.call(IFrameExternalCalls.INSERT_FUNCTION_ASK_FOR_EMBED_OBJECT_ID);
@@ -1341,6 +1351,20 @@ package com.google.code.flexiframe
             }
             return new Number(0);
         }
+		
+		/**
+		 * Get the browser source.
+		 */
+		protected function getBrowserSource():String 
+		{
+			logger.info("Get browser source.");
+			var result:Object = ExternalInterface.call(IFrameExternalCalls.FUNCTION_GET_SOURCE, _iframeId);
+			if (result != null)
+			{
+				return result as String;
+			}
+			return "";
+		}
 
         /**
          * Setup the Browser resize event listener.
