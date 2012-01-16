@@ -528,6 +528,29 @@ package com.google.code.flexiframe
                    "}" +
                 "}" +
             "}";
+		
+		
+		
+		/**
+		 * The name of the JavaScript function that hides a Div.
+		 */
+		public static var FUNCTION_GET_SOURCE:String = "getSource";
+
+		
+		/**
+		 * The Javascript code to call to insert the function that returns the IFrame's source.
+		 */
+		public static var INSERT_FUNCTION_GET_SOURCE:String =
+			"document.insertScript = function () " +
+			"{ " +
+				"if (document." + FUNCTION_GET_SOURCE + "==null) " +
+				"{ " +
+					FUNCTION_GET_SOURCE + " = function(iframeID) " + 
+					"{ " + 
+						"return document.getElementById(iframeID).contentDocument.URL; " +
+					"} " +
+				"} " + 
+			"}";
 
     }
 }
