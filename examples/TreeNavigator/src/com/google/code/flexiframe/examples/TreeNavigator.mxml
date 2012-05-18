@@ -43,7 +43,7 @@
 
     <mx:HBox width="100%" height="100%">
 
-        <mx:Panel title="Tree" width="200" height="100%" roundedBottomCorners="true">
+        <mx:Panel title="Tree" width="200" height="100%">
              <mx:Tree id="tree" width="100%" height="100%" dataProvider="{treeData}"
                      labelField="@label" showRoot="false"
                      change="iFrame.source = (Tree(event.target).selectedItem.attribute('path').toString());"  />
