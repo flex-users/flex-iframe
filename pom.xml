@@ -166,8 +166,9 @@
     <flex-sdk-4.0.version>4.0.0.14159</flex-sdk-4.0.version>
     <flex-sdk-4.1.version>4.1.0.16248</flex-sdk-4.1.version>
     <flex-sdk-4.5.version>4.5.0.19786</flex-sdk-4.5.version>
+    <flex-sdk-4.6.version>4.6.b.23201</flex-sdk-4.6.version>
     <flex-sdk-3.version>${flex-sdk-3.6.version}</flex-sdk-3.version>
-    <flex-sdk-4.version>${flex-sdk-4.5.version}</flex-sdk-4.version>
+    <flex-sdk-4.version>${flex-sdk-4.6.version}</flex-sdk-4.version>
     <flex-sdk.version>${flex-sdk-4.version}</flex-sdk.version>
 
     <!-- Library settings -->
