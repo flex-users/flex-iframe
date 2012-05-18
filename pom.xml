@@ -353,6 +353,11 @@
       <id>flexmojos-repository</id>
       <url>https://repository.sonatype.org/content/groups/flexgroup/</url>
     </repository>
+    <!-- FIXME See repository/README.md -->
+    <repository>
+      <id>repository-project-internal</id>
+      <url>${project.baseUri}/repository</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
