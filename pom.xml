@@ -152,6 +152,11 @@
     <url>https://github.com/flex-users/flex-iframe/issues</url>
   </issueManagement>
 
+  <ciManagement>
+    <system>Cloudbees BuildHive</system>
+    <url>https://buildhive.cloudbees.com/job/flex-users/job/flex-iframe</url>
+  </ciManagement>
+
   <!-- Properties -->
   <properties>
 
