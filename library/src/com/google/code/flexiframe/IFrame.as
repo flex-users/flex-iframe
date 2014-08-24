@@ -30,7 +30,6 @@ package com.google.code.flexiframe
     import flash.utils.getQualifiedClassName;
     
     import mx.controls.ToolTip;
-    import mx.core.Application;
     import mx.core.Container;
     import mx.core.FlexGlobals;
     import mx.core.IChildList;
@@ -201,7 +200,7 @@ package com.google.code.flexiframe
         /**
          * The top level Flex application.
          */
-        protected var _application;
+        protected var _application : *;
 
         /**
          * The source of the IFrame.
@@ -286,13 +285,15 @@ package com.google.code.flexiframe
             }
 
             // Resolve the top level Flex application.
-            if(Application.application != null)
+            if ( FlexGlobals.topLevelApplication != null )
             {
-                _application = Application.application;
+                _application = FlexGlobals.topLevelApplication;
             }
             else
             {
-                _application = FlexGlobals.topLevelApplication;
+				// TCOZ: mx.core.Application.application is deprecated, so making FlexGlobals.topLevelApplication primary assignment
+				// and using explicit import for mx.core here. Bracketed form removes deprecation warning.
+                _application = mx.core.Application [ "application" ];
             }
 
             // Get the host info to check for cross-domain issues
